@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, AlertCircle, Info, AlertTriangle, X } from 'lucide-react';
+import { IconCheck, IconEscalation, IconClose } from '@/components/ui/Icons';
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
@@ -51,13 +51,13 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const getToastIcon = (type: ToastType) => {
     switch (type) {
       case 'success':
-        return <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />;
+        return <IconCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />;
       case 'error':
-        return <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />;
+        return <IconEscalation className="w-3.5 h-3.5 text-rose-600 shrink-0" />;
       case 'warning':
-        return <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />;
+        return <IconEscalation className="w-3.5 h-3.5 text-amber-600 shrink-0" />;
       default:
-        return <Info className="w-4 h-4 text-blue-600 shrink-0" />;
+        return <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0 mt-1" />;
     }
   };
 
@@ -101,7 +101,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 onClick={() => removeToast(t.id)}
                 className="text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer transition-colors shrink-0"
               >
-                <X className="w-3.5 h-3.5" />
+                <IconClose className="w-3.5 h-3.5" />
               </button>
             </motion.div>
           ))}
