@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { UserRole } from '@/types';
 import {
   IconPlus,
@@ -77,33 +77,54 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Right Action Controls */}
           <div className="flex items-center space-x-2.5">
-            {/* Minimal Role Switcher */}
-            <div className="flex items-center border border-slate-200 rounded-xs overflow-hidden text-xs">
-              {(['Admin', 'User'] as const).map((role) => (
-                <button
-                  key={role}
-                  onClick={() => setUserRole(role)}
-                  className={`px-3 py-1.5 text-xs font-bold tracking-wide transition-colors cursor-pointer ${
-                    userRole === role
-                      ? 'bg-black text-white'
-                      : 'bg-white text-slate-500 hover:text-black'
-                  }`}
+            {/* Admin New Project CTA (to the left of the Admin/User toggle) */}
+            <AnimatePresence mode="popLayout">
+              {userRole === 'Admin' && (
+                <motion.button
+                  key="new-project-btn"
+                  initial={{ opacity: 0, scale: 0.95, x: -6 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, x: -6 }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                  onClick={onOpenCreateModal}
+                  className="flex items-center space-x-1.5 px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white font-bold rounded-xs text-xs sm:text-sm transition-colors cursor-pointer shadow-xs shrink-0"
                 >
-                  {role}
-                </button>
-              ))}
-            </div>
+                  <IconPlus className="w-3.5 h-3.5" />
+                  <span>New Project</span>
+                </motion.button>
+              )}
+            </AnimatePresence>
 
-            {/* Admin New Project CTA */}
-            {userRole === 'Admin' && (
-              <button
-                onClick={onOpenCreateModal}
-                className="flex items-center space-x-1.5 px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white font-bold rounded-xs text-xs sm:text-sm transition-colors cursor-pointer shadow-xs"
-              >
-                <IconPlus className="w-3.5 h-3.5" />
-                <span>New Project</span>
-              </button>
-            )}
+            {/* Animated Role Switcher (to the right of New Project) */}
+            <div className="relative flex items-center bg-slate-100 p-0.5 rounded-xs border border-slate-200">
+              {(['Admin', 'User'] as const).map((role) => {
+                const isSelected = userRole === role;
+
+                return (
+                  <button
+                    key={role}
+                    onClick={() => setUserRole(role)}
+                    className={`relative z-10 px-3 py-1 text-xs font-bold tracking-wide transition-colors duration-150 cursor-pointer ${
+                      isSelected ? 'text-white' : 'text-slate-500 hover:text-black'
+                    }`}
+                  >
+                    {/* Animated Sliding Pill Background */}
+                    {isSelected && (
+                      <motion.div
+                        layoutId="activeRoleIndicator"
+                        className="absolute inset-0 bg-black rounded-xs shadow-xs"
+                        transition={{
+                          type: 'spring',
+                          stiffness: 500,
+                          damping: 35,
+                        }}
+                      />
+                    )}
+                    <span className="relative z-20">{role}</span>
+                  </button>
+                );
+              })}
+            </div>
 
             {/* Export Excel Button */}
             <button
