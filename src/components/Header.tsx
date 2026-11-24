@@ -50,23 +50,19 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Corporate Brand Identity */}
-          <div className="flex items-center space-x-3.5">
-            <div className="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center font-bold text-white text-sm tracking-wider shadow-xs">
-              IM
+          <div className="flex items-center space-x-3">
+            <div className="flex items-baseline space-x-2">
+              <span className="font-bold text-base text-slate-950 tracking-tight">
+                INCHEON MOBILITY
+              </span>
+              <span className="text-xs font-medium text-slate-300 font-mono">/</span>
+              <span className="text-xs font-semibold text-slate-600 tracking-tight">
+                River EV Rollout
+              </span>
             </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <span className="font-bold text-sm sm:text-base text-slate-900 tracking-tight">
-                  INCHEON MOBILITY
-                </span>
-                <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200 uppercase tracking-wide">
-                  River EV Projects
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-500 font-medium">
-                Kerala Dealership Expansion Program • {totalProjects} Active Tracks
-              </p>
-            </div>
+            <span className="text-[10px] font-mono text-slate-500 px-2 py-0.5 bg-slate-100 rounded-md border border-slate-200">
+              {totalProjects} tracks
+            </span>
           </div>
 
           {/* Clean Segmented Pill Navigation */}

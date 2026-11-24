@@ -61,19 +61,6 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  const getBorderColor = (type: ToastType) => {
-    switch (type) {
-      case 'success':
-        return 'border-l-4 border-l-emerald-600 border-slate-200';
-      case 'error':
-        return 'border-l-4 border-l-rose-600 border-slate-200';
-      case 'warning':
-        return 'border-l-4 border-l-amber-500 border-slate-200';
-      default:
-        return 'border-l-4 border-l-blue-600 border-slate-200';
-    }
-  };
-
   return (
     <ToastContext.Provider value={{ showToast, success, error, info, warning }}>
       {children}
@@ -88,9 +75,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className={`pointer-events-auto bg-white border p-3.5 rounded-lg shadow-lg flex items-start space-x-3 text-xs text-slate-800 ${getBorderColor(
-                t.type
-              )}`}
+              className="pointer-events-auto bg-white border border-slate-200/90 p-3.5 rounded-xl shadow-lg flex items-start space-x-3 text-xs text-slate-800"
             >
               <div className="mt-0.5">{getToastIcon(t.type)}</div>
               <div className="flex-1 min-w-0 pr-1">
