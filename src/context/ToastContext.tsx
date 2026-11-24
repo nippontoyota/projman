@@ -57,7 +57,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       case 'warning':
         return <IconEscalation className="w-3.5 h-3.5 text-amber-600 shrink-0" />;
       default:
-        return <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0 mt-1" />;
+        return <span className="w-2 h-2 rounded-full bg-black shrink-0 mt-1" />;
     }
   };
 
@@ -75,7 +75,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="pointer-events-auto bg-white border border-slate-200/90 p-3.5 rounded-xl shadow-lg flex items-start space-x-3 text-xs text-slate-800"
+              className="pointer-events-auto bg-white border border-slate-200 p-3.5 rounded-xs shadow-lg flex items-start space-x-3 text-xs text-slate-800"
             >
               <div className="mt-0.5">{getToastIcon(t.type)}</div>
               <div className="flex-1 min-w-0 pr-1">
@@ -84,7 +84,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               </div>
               <button
                 onClick={() => removeToast(t.id)}
-                className="text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer transition-colors shrink-0"
+                className="text-slate-400 hover:text-black p-0.5 rounded-xs cursor-pointer transition-colors shrink-0"
               >
                 <IconClose className="w-3.5 h-3.5" />
               </button>

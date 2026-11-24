@@ -12,9 +12,9 @@ export const TopLoader: React.FC<TopLoaderProps> = ({ isLoading }) => {
     <AnimatePresence>
       {isLoading && (
         <div className="fixed top-0 left-0 right-0 z-[9999] h-[3px] bg-slate-100 overflow-hidden pointer-events-none">
-          {/* Main animated progress bar with corporate red/blue accent */}
+          {/* Main animated progress bar with sleek black accent */}
           <motion.div
-            className="h-full bg-gradient-to-r from-red-600 via-rose-500 to-indigo-600 shadow-[0_0_8px_rgba(225,29,72,0.6)]"
+            className="h-full bg-black shadow-[0_0_8px_rgba(0,0,0,0.3)]"
             initial={{ x: '-100%' }}
             animate={{
               x: ['-100%', '0%', '100%'],
