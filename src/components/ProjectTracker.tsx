@@ -51,18 +51,89 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [facilityFilter, setFacilityFilter] = useState('ALL');
   const [phaseIndex, setPhaseIndex] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [visiblePhaseTitle, setVisiblePhaseTitle] = useState('All Phases (21 Milestones)');
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
   const selectedPhase = PHASES[phaseIndex].id;
 
+  const handleSelectPhase = (idx: number) => {
+    setPhaseIndex(idx);
+    const targetPhase = PHASES[idx];
+    if (targetPhase.id === 'ALL') {
+      setVisiblePhaseTitle('All Phases (21 Milestones)');
+      setScrollProgress(0);
+      if (tableContainerRef.current) {
+        tableContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+      }
+    } else {
+      setVisiblePhaseTitle(targetPhase.title);
+    }
+  };
+
+  const handleSmoothScrollLeft = () => {
+    if (tableContainerRef.current) {
+      tableContainerRef.current.scrollBy({ left: -240, behavior: 'smooth' });
+    }
+  };
+
+  const handleSmoothScrollRight = () => {
+    if (tableContainerRef.current) {
+      tableContainerRef.current.scrollBy({ left: 240, behavior: 'smooth' });
+    }
+  };
+
   const handlePrevPhase = () => {
-    if (phaseIndex > 0) {
-      setPhaseIndex(phaseIndex - 1);
+    if (selectedPhase === 'ALL') {
+      handleSmoothScrollLeft();
+    } else {
+      if (phaseIndex > 0) {
+        handleSelectPhase(phaseIndex - 1);
+      }
     }
   };
 
   const handleNextPhase = () => {
-    if (phaseIndex < PHASES.length - 1) {
-      setPhaseIndex(phaseIndex + 1);
+    if (selectedPhase === 'ALL') {
+      handleSmoothScrollRight();
+    } else {
+      if (phaseIndex < PHASES.length - 1) {
+        handleSelectPhase(phaseIndex + 1);
+      }
+    }
+  };
+
+  const handleSliderDrag = (val: number) => {
+    if (selectedPhase === 'ALL') {
+      setScrollProgress(val);
+      if (!tableContainerRef.current) return;
+      const { scrollWidth, clientWidth } = tableContainerRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      if (maxScroll > 0) {
+        tableContainerRef.current.scrollLeft = (val / 100) * maxScroll;
+      }
+    } else {
+      handleSelectPhase(val);
+    }
+  };
+
+  const handleTableScroll = () => {
+    if (!tableContainerRef.current || selectedPhase !== 'ALL') return;
+    const { scrollLeft, scrollWidth, clientWidth } = tableContainerRef.current;
+    const maxScroll = scrollWidth - clientWidth;
+    if (maxScroll > 0) {
+      const progress = Math.round((scrollLeft / maxScroll) * 100);
+      setScrollProgress(progress);
+
+      if (scrollLeft < 144) {
+        setVisiblePhaseTitle('Phase 1: Property & Agreement');
+      } else if (scrollLeft < 384) {
+        setVisiblePhaseTitle('Phase 2: Design & GFC Approval');
+      } else if (scrollLeft < 624) {
+        setVisiblePhaseTitle('Phase 3: BOQ & PO Release');
+      } else {
+        setVisiblePhaseTitle('Phase 4: Site Execution & Handover');
+      }
     }
   };
 
@@ -146,22 +217,22 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-50 border border-black rounded-xs px-3 py-2 text-xs">
         <div className="flex items-center space-x-2 shrink-0">
           <span className="text-[11px] font-black uppercase tracking-wider text-black">
-            Active Phase:
+            {selectedPhase === 'ALL' ? 'Showing:' : 'Active Phase:'}
           </span>
           <span className="text-xs font-bold text-slate-800">
-            {PHASES[phaseIndex].title}
+            {selectedPhase === 'ALL' ? visiblePhaseTitle : PHASES[phaseIndex].title}
           </span>
         </div>
 
         {/* Phase Arrow Buttons & Navigator */}
         <div className="flex items-center space-x-2">
-          {/* Previous Phase Arrow Button */}
+          {/* Previous Phase / Scroll Left Arrow Button */}
           <button
             type="button"
             onClick={handlePrevPhase}
-            disabled={phaseIndex === 0}
+            disabled={selectedPhase === 'ALL' ? scrollProgress === 0 : phaseIndex === 0}
             className="flex items-center justify-center w-7 h-7 rounded-xs bg-white border border-slate-300 hover:border-black hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-2xs"
-            title="Slide to Previous Phase"
+            title={selectedPhase === 'ALL' ? 'Smooth scroll left' : 'Previous phase'}
           >
             <IconChevronLeft className="w-3.5 h-3.5 text-black" />
           </button>
@@ -172,7 +243,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
               <button
                 key={phase.id}
                 type="button"
-                onClick={() => setPhaseIndex(idx)}
+                onClick={() => handleSelectPhase(idx)}
                 className={`px-2.5 py-1 rounded-xs text-[11px] font-bold transition-all cursor-pointer ${
                   phaseIndex === idx
                     ? 'bg-black text-white shadow-xs'
@@ -184,39 +255,63 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
             ))}
           </div>
 
-          {/* Next Phase Arrow Button */}
+          {/* Next Phase / Scroll Right Arrow Button */}
           <button
             type="button"
             onClick={handleNextPhase}
-            disabled={phaseIndex === PHASES.length - 1}
+            disabled={selectedPhase === 'ALL' ? scrollProgress === 100 : phaseIndex === PHASES.length - 1}
             className="flex items-center justify-center w-7 h-7 rounded-xs bg-white border border-slate-300 hover:border-black hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-2xs"
-            title="Slide to Next Phase"
+            title={selectedPhase === 'ALL' ? 'Smooth scroll right' : 'Next phase'}
           >
             <IconChevronRight className="w-3.5 h-3.5 text-black" />
           </button>
         </div>
 
-        {/* Slider Range Control */}
+        {/* Smooth Slider Range Control */}
         <div className="flex items-center space-x-2 shrink-0">
-          <input
-            type="range"
-            min={0}
-            max={PHASES.length - 1}
-            step={1}
-            value={phaseIndex}
-            onChange={(e) => setPhaseIndex(Number(e.target.value))}
-            className="w-24 accent-black cursor-pointer"
-            title="Slide milestone phases"
-          />
-          <span className="text-[10px] font-mono text-slate-500 font-semibold w-14 text-right">
-            {phaseIndex === 0 ? 'All (21)' : `${phaseIndex} of 4`}
-          </span>
+          {selectedPhase === 'ALL' ? (
+            <>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                step={1}
+                value={scrollProgress}
+                onChange={(e) => handleSliderDrag(Number(e.target.value))}
+                className="w-28 accent-black cursor-pointer"
+                title="Smoothly slide across milestone phases"
+              />
+              <span className="text-[10px] font-mono text-slate-500 font-semibold w-10 text-right">
+                {scrollProgress}%
+              </span>
+            </>
+          ) : (
+            <>
+              <input
+                type="range"
+                min={0}
+                max={PHASES.length - 1}
+                step={1}
+                value={phaseIndex}
+                onChange={(e) => handleSliderDrag(Number(e.target.value))}
+                className="w-28 accent-black cursor-pointer"
+                title="Select phase"
+              />
+              <span className="text-[10px] font-mono text-slate-500 font-semibold w-12 text-right">
+                {phaseIndex} of 4
+              </span>
+            </>
+          )}
         </div>
       </div>
 
       {/* Main Table */}
       <div className="bg-white border border-black rounded-xs overflow-hidden">
-        <div className="overflow-x-auto max-h-[750px]">
+        <div
+          ref={tableContainerRef}
+          onScroll={handleTableScroll}
+          className="overflow-x-auto max-h-[750px]"
+        >
           <table
             className={`w-full text-left border-collapse text-xs ${
               selectedPhase === 'ALL'
