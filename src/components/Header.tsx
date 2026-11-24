@@ -39,17 +39,17 @@ export const Header: React.FC<HeaderProps> = ({
   ] as const;
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-slate-200 text-slate-900">
+    <header className="sticky top-0 z-40 bg-white text-slate-900">
       <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-13">
+        <div className="flex items-center justify-between h-14">
           {/* Brand */}
-          <div className="flex items-center space-x-6">
-            <span className="font-bold text-sm text-slate-950 tracking-tight">
+          <div className="flex items-center space-x-8">
+            <span className="font-black text-base sm:text-lg text-black tracking-tight">
               Incheon Mobility
             </span>
 
             {/* Seamless Navigation Tabs */}
-            <nav className="hidden md:flex items-center space-x-5 h-13">
+            <nav className="hidden md:flex items-center space-x-6 h-14">
               {tabs.map((tab) => {
                 const isActive = currentTab === tab.id;
 
@@ -57,15 +57,15 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     key={tab.id}
                     onClick={() => setCurrentTab(tab.id)}
-                    className={`relative h-full flex items-center text-xs transition-colors cursor-pointer ${
-                      isActive ? 'text-slate-950 font-semibold' : 'text-slate-500 hover:text-slate-800'
+                    className={`relative h-full flex items-center text-sm transition-colors cursor-pointer ${
+                      isActive ? 'text-black font-bold' : 'text-slate-500 hover:text-black font-semibold'
                     }`}
                   >
                     <span>{tab.label}</span>
                     {isActive && (
                       <motion.div
                         layoutId="activeTabUnderline"
-                        className="absolute bottom-0 left-0 right-0 h-[2px] bg-slate-950"
+                        className="absolute bottom-0 left-0 right-0 h-[2px] bg-black"
                         transition={{ type: 'spring', stiffness: 500, damping: 35 }}
                       />
                     )}
@@ -76,17 +76,17 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Right Action Controls */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2.5">
             {/* Minimal Role Switcher */}
-            <div className="flex items-center border border-slate-200 rounded-md overflow-hidden text-xs">
+            <div className="flex items-center border border-slate-200 rounded-xs overflow-hidden text-xs">
               {(['Admin', 'User'] as const).map((role) => (
                 <button
                   key={role}
                   onClick={() => setUserRole(role)}
-                  className={`px-2.5 py-1 text-xs font-medium transition-colors cursor-pointer ${
+                  className={`px-3 py-1.5 text-xs font-bold tracking-wide transition-colors cursor-pointer ${
                     userRole === role
-                      ? 'bg-slate-950 text-white'
-                      : 'bg-white text-slate-500 hover:text-slate-900'
+                      ? 'bg-black text-white'
+                      : 'bg-white text-slate-500 hover:text-black'
                   }`}
                 >
                   {role}
@@ -98,7 +98,7 @@ export const Header: React.FC<HeaderProps> = ({
             {userRole === 'Admin' && (
               <button
                 onClick={onOpenCreateModal}
-                className="flex items-center space-x-1.5 px-3 py-1 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-md text-xs transition-colors cursor-pointer shadow-2xs"
+                className="flex items-center space-x-1.5 px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white font-bold rounded-xs text-xs sm:text-sm transition-colors cursor-pointer shadow-xs"
               >
                 <IconPlus className="w-3.5 h-3.5" />
                 <span>New Project</span>
@@ -108,7 +108,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Export Excel Button */}
             <button
               onClick={onExportExcel}
-              className="p-1 rounded-md text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-50 transition-colors border border-slate-200 cursor-pointer"
+              className="p-1.5 rounded-xs text-slate-600 hover:text-black bg-white hover:bg-slate-50 transition-colors border border-slate-200 cursor-pointer"
               title="Export Excel (.xlsx)"
             >
               <IconDownload className="w-3.5 h-3.5" />
@@ -118,7 +118,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={onResetData}
               disabled={isResetting}
-              className="p-1 rounded-md text-slate-400 hover:text-rose-600 bg-white hover:bg-slate-50 transition-colors border border-slate-200 disabled:opacity-50 cursor-pointer"
+              className="p-1.5 rounded-xs text-slate-400 hover:text-rose-600 bg-white hover:bg-slate-50 transition-colors border border-slate-200 disabled:opacity-50 cursor-pointer"
               title="Reset Dataset"
             >
               <IconSync className={`w-3.5 h-3.5 ${isResetting ? 'animate-spin' : ''}`} />
@@ -127,15 +127,15 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Mobile Navigation */}
-        <div className="flex md:hidden items-center space-x-4 py-2 border-t border-slate-100 overflow-x-auto text-xs">
+        <div className="flex md:hidden items-center space-x-5 py-2.5 overflow-x-auto text-sm">
           {tabs.map((tab) => {
             const isActive = currentTab === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => setCurrentTab(tab.id)}
-                className={`py-1 whitespace-nowrap font-medium transition-colors cursor-pointer ${
-                  isActive ? 'text-slate-950 font-bold border-b border-slate-950' : 'text-slate-500'
+                className={`py-1 whitespace-nowrap font-bold transition-colors cursor-pointer ${
+                  isActive ? 'text-black border-b-2 border-black' : 'text-slate-500'
                 }`}
               >
                 {tab.label}

@@ -102,7 +102,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans antialiased selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans antialiased selection:bg-black selection:text-white">
       {/* Sleek Global Modern TopLoader */}
       <TopLoader isLoading={isLoading || isResetting} />
 
@@ -123,7 +123,7 @@ export default function Home() {
       <main className="flex-1 max-w-[1720px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-5">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-3">
-            <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-black border-t-transparent rounded-full animate-spin" />
             <p className="text-xs text-slate-500 font-medium">
               Loading Incheon Mobility master tracker...
             </p>
