@@ -242,10 +242,10 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
             <div className="p-4 sm:p-5 border-b border-slate-200 bg-white flex items-center justify-between">
               <div>
                 <div className="flex items-center space-x-2">
-                  <h2 className="text-base font-semibold text-slate-900 tracking-tight">
+                  <h2 className="text-base font-bold text-black tracking-tight">
                     {project.location.name} – {project.facilityType}
                   </h2>
-                  <span className="text-xs px-2 py-0.5 rounded font-mono bg-slate-50 text-slate-600 border border-slate-200">
+                  <span className="text-xs px-2 py-0.5 rounded-xs font-mono bg-slate-50 text-slate-700 border border-slate-200 font-semibold">
                     {project.code}
                   </span>
                 </div>
@@ -258,7 +258,7 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                 {userRole === 'Admin' && (
                   <button
                     onClick={handleDeleteProject}
-                    className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                    className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xs transition-colors cursor-pointer"
                     title="Delete Project"
                   >
                     <IconTrash className="w-4 h-4" />
@@ -266,7 +266,7 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                 )}
                 <button
                   onClick={onClose}
-                  className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                  className="p-1.5 text-slate-400 hover:text-black hover:bg-slate-100 rounded-xs transition-colors cursor-pointer"
                 >
                   <IconClose className="w-4 h-4" />
                 </button>
@@ -291,8 +291,8 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as any)}
-                    className={`relative py-3 font-medium transition-colors flex items-center space-x-1.5 cursor-pointer ${
-                      isActive ? 'text-slate-900 font-semibold' : 'text-slate-500 hover:text-slate-800'
+                    className={`relative py-3 font-semibold transition-colors flex items-center space-x-1.5 cursor-pointer ${
+                      isActive ? 'text-black font-bold' : 'text-slate-500 hover:text-black'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -300,7 +300,7 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                     {isActive && (
                       <motion.div
                         layoutId="drawerTabIndicator"
-                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-900"
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-black"
                         transition={{ type: 'spring', stiffness: 500, damping: 35 }}
                       />
                     )}
@@ -310,11 +310,11 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
             </div>
 
             {/* Body */}
-            <div className="flex-1 overflow-y-auto p-5 space-y-5">
+            <div className="flex-1 overflow-y-auto p-5 space-y-4">
               {/* Settings Card */}
-              <div className="bg-white p-4 rounded-lg border border-slate-200 space-y-3.5 text-xs">
+              <div className="bg-white p-4 rounded-xs border border-slate-200 space-y-3.5 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-slate-900">Project Settings</span>
+                  <span className="font-bold text-black">Project Settings</span>
                   <span className="text-[11px] text-slate-400 font-mono">
                     Role: {userRole}
                   </span>
@@ -344,37 +344,37 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                   </div>
 
                   <div>
-                    <label className="text-[11px] font-medium text-slate-600 block mb-1">Progress %</label>
+                    <label className="text-[11px] font-semibold text-slate-700 block mb-1">Progress %</label>
                     <input
                       type="number"
                       min="0"
                       max="100"
                       value={workPercentage}
                       onChange={(e) => setWorkPercentage(Number(e.target.value))}
-                      className="w-full bg-white border border-slate-200 rounded-lg p-2 text-slate-900 font-mono focus:outline-none focus:border-slate-400 shadow-2xs"
+                      className="w-full bg-white border border-slate-200 rounded-xs p-2 text-slate-900 font-mono focus:outline-none focus:border-black shadow-2xs"
                     />
                   </div>
 
                   <div>
-                    <label className="text-[11px] font-medium text-slate-600 block mb-1">Target Completion</label>
+                    <label className="text-[11px] font-semibold text-slate-700 block mb-1">Target Completion</label>
                     <input
                       type="date"
                       disabled={userRole !== 'Admin'}
                       value={fixedTargetDate}
                       onChange={(e) => setFixedTargetDate(e.target.value)}
-                      className="w-full bg-white border border-slate-200 rounded-lg p-2 text-slate-900 font-mono focus:outline-none focus:border-slate-400 disabled:bg-slate-50 disabled:text-slate-400 shadow-2xs"
+                      className="w-full bg-white border border-slate-200 rounded-xs p-2 text-slate-900 font-mono focus:outline-none focus:border-black disabled:bg-slate-50 disabled:text-slate-400 shadow-2xs"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-medium text-slate-600 block mb-1">Notes</label>
+                  <label className="text-[11px] font-semibold text-slate-700 block mb-1">Notes</label>
                   <textarea
                     rows={2}
                     value={keyRemarks}
                     onChange={(e) => setKeyRemarks(e.target.value)}
                     placeholder="Progress notes..."
-                    className="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs text-slate-900 focus:outline-none focus:border-slate-400 shadow-2xs"
+                    className="w-full bg-white border border-slate-200 rounded-xs p-2 text-xs text-slate-900 focus:outline-none focus:border-black shadow-2xs"
                   />
                 </div>
 
@@ -382,7 +382,7 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                   <button
                     onClick={handleSaveProject}
                     disabled={isSaving}
-                    className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-900 hover:bg-black text-white font-medium rounded-md text-xs transition-colors disabled:opacity-50 cursor-pointer"
+                    className="flex items-center space-x-1.5 px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white font-bold rounded-xs text-xs transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
                   >
                     <IconSave className="w-3.5 h-3.5" />
                     <span>{isSaving ? 'Saving...' : 'Save'}</span>
@@ -394,8 +394,8 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
               {activeTab === 'milestones' && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs">
-                    <h3 className="font-semibold text-slate-900">Milestones</h3>
-                    <span className="text-slate-400 font-mono">
+                    <h3 className="font-bold text-black">Milestones</h3>
+                    <span className="text-slate-500 font-mono font-semibold">
                       {project.milestones.filter((m) => m.status === 'Completed').length} /{' '}
                       {project.milestones.length} completed
                     </span>
@@ -412,8 +412,8 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                     ];
 
                     return (
-                      <div key={phaseNum} className="border border-slate-200 rounded-lg overflow-hidden bg-white">
-                        <div className="bg-slate-50 px-3.5 py-1.5 text-xs font-semibold text-slate-700 border-b border-slate-200">
+                      <div key={phaseNum} className="border border-slate-200 rounded-xs overflow-hidden bg-white">
+                        <div className="bg-slate-50 px-3.5 py-1.5 text-xs font-bold text-slate-800 border-b border-slate-200">
                           {phaseNames[phaseNum]}
                         </div>
 
@@ -431,14 +431,14 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                                     type="checkbox"
                                     checked={isDone}
                                     onChange={(e) => handleMilestoneUpdate(m, e.target.checked)}
-                                    className="w-4 h-4 text-slate-900 bg-white border-slate-300 rounded focus:ring-slate-400 cursor-pointer"
+                                    className="w-4 h-4 text-black bg-white border-slate-300 rounded-xs focus:ring-black cursor-pointer accent-black"
                                   />
                                   <div>
-                                    <div className={`font-medium ${isDone ? 'text-slate-900' : 'text-slate-600'}`}>
+                                    <div className={`font-medium ${isDone ? 'text-black font-semibold' : 'text-slate-600'}`}>
                                       {m.title}
                                     </div>
                                     {m.actualDate && (
-                                      <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                                      <div className="text-[10px] text-slate-500 font-mono mt-0.5">
                                         Completed: {m.actualDate.split('T')[0]}
                                       </div>
                                     )}
@@ -447,9 +447,9 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
 
                                 <div className="flex items-center space-x-2">
                                   <span
-                                    className={`px-2 py-0.5 rounded text-[10px] font-medium border ${
+                                    className={`px-2 py-0.5 rounded-xs text-[10px] font-semibold border ${
                                       isDone
-                                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                        ? 'bg-slate-100 text-black border-slate-300'
                                         : 'bg-slate-50 text-slate-500 border-slate-200'
                                     }`}
                                   >
@@ -470,10 +470,10 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
               {activeTab === 'blockers' && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-slate-900 text-xs">Issues</h3>
+                    <h3 className="font-bold text-black text-xs">Issues</h3>
                     <button
                       onClick={() => setShowBlockerForm(!showBlockerForm)}
-                      className="flex items-center space-x-1 px-2.5 py-1 rounded text-xs font-medium bg-slate-900 text-white hover:bg-black transition-colors cursor-pointer"
+                      className="flex items-center space-x-1 px-3 py-1.5 rounded-xs text-xs font-bold bg-black text-white hover:bg-neutral-800 transition-colors cursor-pointer shadow-xs"
                     >
                       <IconPlus className="w-3 h-3" />
                       <span>Add Issue</span>
@@ -483,9 +483,9 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                   {showBlockerForm && (
                     <form
                       onSubmit={handleAddBlocker}
-                      className="bg-white p-4 rounded-lg border border-slate-200 space-y-3 text-xs"
+                      className="bg-white p-4 rounded-xs border border-slate-200 space-y-3 text-xs"
                     >
-                      <div className="font-semibold text-slate-900">New Issue</div>
+                      <div className="font-bold text-black">New Issue</div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
                           <CustomSelect
@@ -509,25 +509,25 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                       </div>
 
                       <div>
-                        <label className="text-[11px] font-medium text-slate-600 block mb-1">Title</label>
+                        <label className="text-[11px] font-semibold text-slate-700 block mb-1">Title</label>
                         <input
                           type="text"
                           placeholder="e.g. Landlord delay in lease draft signing"
                           value={blockerTitle}
                           onChange={(e) => setBlockerTitle(e.target.value)}
                           required
-                          className="w-full bg-white border border-slate-200 rounded-lg p-2 text-slate-900 focus:outline-none focus:border-slate-400 shadow-2xs"
+                          className="w-full bg-white border border-slate-200 rounded-xs p-2 text-slate-900 focus:outline-none focus:border-black shadow-2xs"
                         />
                       </div>
 
                       <div>
-                        <label className="text-[11px] font-medium text-slate-600 block mb-1">Details</label>
+                        <label className="text-[11px] font-semibold text-slate-700 block mb-1">Details</label>
                         <textarea
                           rows={2}
                           placeholder="Describe the issue and next steps..."
                           value={blockerDesc}
                           onChange={(e) => setBlockerDesc(e.target.value)}
-                          className="w-full bg-white border border-slate-200 rounded-lg p-2 text-slate-900 focus:outline-none focus:border-slate-400 shadow-2xs"
+                          className="w-full bg-white border border-slate-200 rounded-xs p-2 text-slate-900 focus:outline-none focus:border-black shadow-2xs"
                         />
                       </div>
 
@@ -535,13 +535,13 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                         <button
                           type="button"
                           onClick={() => setShowBlockerForm(false)}
-                          className="px-3 py-1.5 rounded-md bg-white border border-slate-200 text-slate-600 hover:text-slate-900 cursor-pointer"
+                          className="px-3 py-1.5 rounded-xs bg-white border border-slate-200 text-slate-600 hover:text-black font-semibold cursor-pointer"
                         >
                           Cancel
                         </button>
                         <button
                           type="submit"
-                          className="px-3 py-1.5 rounded-md bg-slate-900 text-white font-medium hover:bg-black cursor-pointer"
+                          className="px-3.5 py-1.5 rounded-xs bg-black text-white font-bold hover:bg-neutral-800 cursor-pointer shadow-xs"
                         >
                           Save Issue
                         </button>
@@ -553,7 +553,7 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                     {project.blockers.map((blk) => (
                       <div
                         key={blk.id}
-                        className={`p-3 rounded-lg border text-xs space-y-1.5 ${
+                        className={`p-3 rounded-xs border text-xs space-y-1.5 ${
                           blk.status === 'Resolved'
                             ? 'bg-slate-50 border-slate-200 opacity-60'
                             : 'bg-white border-slate-200'
@@ -561,12 +561,12 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2">
-                            <span className="font-semibold text-slate-900">{blk.title}</span>
-                            <span className="px-1.5 py-0.5 rounded text-[10px] font-medium uppercase bg-slate-100 text-slate-600 border border-slate-200">
+                            <span className="font-bold text-black">{blk.title}</span>
+                            <span className="px-1.5 py-0.5 rounded-xs text-[10px] font-semibold uppercase bg-slate-100 text-slate-700 border border-slate-200">
                               {blk.category}
                             </span>
                           </div>
-                          <span className="text-[10px] font-mono text-slate-400">
+                          <span className="text-[10px] font-mono text-slate-500 font-semibold">
                             {blk.severity}
                           </span>
                         </div>
@@ -574,11 +574,11 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                         <p className="text-[11px] text-slate-500">{blk.description}</p>
 
                         <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                          <span>Status: <strong className={blk.status === 'Resolved' ? 'text-emerald-700' : 'text-slate-800'}>{blk.status}</strong></span>
+                          <span>Status: <strong className={blk.status === 'Resolved' ? 'text-black' : 'text-slate-800'}>{blk.status}</strong></span>
                           {blk.status !== 'Resolved' && (
                             <button
                               onClick={() => handleResolveBlocker(blk.id)}
-                              className="px-2 py-0.5 rounded bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 font-medium cursor-pointer"
+                              className="px-2 py-0.5 rounded-xs bg-white text-black border border-slate-300 hover:bg-slate-100 font-semibold cursor-pointer"
                             >
                               Mark Resolved
                             </button>
@@ -599,15 +599,15 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
               {/* TAB 3: AUDIT */}
               {activeTab === 'audit' && (
                 <div className="space-y-2.5">
-                  <h3 className="font-semibold text-slate-900 text-xs">Activity</h3>
+                  <h3 className="font-bold text-black text-xs">Activity</h3>
                   <div className="space-y-2">
                     {project.auditLogs?.map((log) => (
-                      <div key={log.id} className="p-3 rounded-lg bg-white border border-slate-200 text-xs">
+                      <div key={log.id} className="p-3 rounded-xs bg-white border border-slate-200 text-xs">
                         <div className="flex items-center justify-between text-slate-400 text-[10px] mb-1">
-                          <span className="font-semibold text-slate-700 font-mono">{log.userRole}</span>
+                          <span className="font-bold text-black font-mono">{log.userRole}</span>
                           <span className="font-mono">{new Date(log.timestamp).toLocaleString()}</span>
                         </div>
-                        <div className="text-slate-700">{log.details}</div>
+                        <div className="text-slate-800">{log.details}</div>
                       </div>
                     ))}
 

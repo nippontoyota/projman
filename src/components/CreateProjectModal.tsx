@@ -96,25 +96,25 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 8 }}
             transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-            className="relative z-10 bg-white border border-slate-200 rounded-lg w-full max-w-lg p-5 shadow-xl overflow-hidden text-slate-900"
+            className="relative z-10 bg-white border border-slate-200 rounded-xs w-full max-w-lg p-5 shadow-xl overflow-hidden text-slate-900"
           >
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="absolute top-5 right-5 text-slate-400 hover:text-slate-700 p-1 rounded-md hover:bg-slate-100 transition-colors cursor-pointer"
+              className="absolute top-5 right-5 text-slate-400 hover:text-black p-1 rounded-xs hover:bg-slate-100 transition-colors cursor-pointer"
             >
               <IconClose className="w-4 h-4" />
             </button>
 
             {/* Modal Header */}
             <div className="mb-4">
-              <h2 className="text-sm font-semibold text-slate-900 tracking-tight">
+              <h2 className="text-sm font-bold text-black tracking-tight">
                 New Project
               </h2>
             </div>
 
             {error && (
-              <div className="mb-4 p-2.5 rounded-md bg-rose-50 border border-rose-200 text-rose-700 text-xs">
+              <div className="mb-4 p-2.5 rounded-xs bg-rose-50 border border-rose-200 text-rose-700 text-xs">
                 {error}
               </div>
             )}
@@ -133,7 +133,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 
               {/* Location */}
               <div>
-                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center space-x-1.5">
+                <label className="block text-xs font-semibold text-slate-800 mb-1 flex items-center space-x-1.5">
                   <IconLocation className="w-3.5 h-3.5 text-slate-400" />
                   <span>Location</span>
                 </label>
@@ -143,13 +143,13 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                   value={locationName}
                   onChange={(e) => setLocationName(e.target.value)}
                   required
-                  className="w-full bg-white border border-slate-200 rounded-md px-3 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-400 shadow-2xs"
+                  className="w-full bg-white border border-slate-200 rounded-xs px-3 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-black shadow-2xs"
                 />
               </div>
 
               {/* Facility Type */}
               <div>
-                <label className="block text-xs font-medium text-slate-700 mb-1 flex items-center space-x-1.5">
+                <label className="block text-xs font-semibold text-slate-800 mb-1 flex items-center space-x-1.5">
                   <IconFacility className="w-3.5 h-3.5 text-slate-400" />
                   <span>Facility Type</span>
                 </label>
@@ -160,10 +160,10 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                         key={type}
                         type="button"
                         onClick={() => setFacilityType(type)}
-                        className={`py-1.5 px-3 rounded-md text-xs font-medium border transition-colors text-left cursor-pointer ${
+                        className={`py-1.5 px-3 rounded-xs text-xs font-semibold border transition-colors text-left cursor-pointer ${
                           facilityType === type
-                            ? 'bg-slate-900 text-white border-slate-900'
-                            : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+                            ? 'bg-black text-white border-black'
+                            : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400'
                         }`}
                       >
                         {type}
@@ -175,20 +175,20 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 
               {/* Target Date */}
               <div>
-                <label className="block text-xs font-medium text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-800 mb-1">
                   Target Completion Date
                 </label>
                 <input
                   type="date"
                   value={targetDate}
                   onChange={(e) => setTargetDate(e.target.value)}
-                  className="w-full bg-white border border-slate-200 rounded-md px-3 py-1.5 text-xs text-slate-900 font-mono focus:outline-none focus:border-slate-400 shadow-2xs"
+                  className="w-full bg-white border border-slate-200 rounded-xs px-3 py-1.5 text-xs text-slate-900 font-mono focus:outline-none focus:border-black shadow-2xs"
                 />
               </div>
 
               {/* Initial Remarks */}
               <div>
-                <label className="block text-xs font-medium text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-800 mb-1">
                   Notes
                 </label>
                 <textarea
@@ -196,7 +196,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                   placeholder="e.g. Commercial negotiations in progress"
                   value={initialRemarks}
                   onChange={(e) => setInitialRemarks(e.target.value)}
-                  className="w-full bg-white border border-slate-200 rounded-md px-3 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-400 shadow-2xs"
+                  className="w-full bg-white border border-slate-200 rounded-xs px-3 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-black shadow-2xs"
                 />
               </div>
 
@@ -205,14 +205,14 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900 bg-white border border-slate-200 transition-colors cursor-pointer"
+                  className="px-3 py-1.5 rounded-xs text-xs font-semibold text-slate-600 hover:text-black bg-white border border-slate-200 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-3.5 py-1.5 rounded-md text-xs font-medium bg-slate-900 hover:bg-black text-white transition-colors disabled:opacity-50 cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-xs text-xs font-bold bg-black hover:bg-neutral-800 text-white transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
                 >
                   {isSubmitting ? 'Creating...' : 'Create Project'}
                 </button>
