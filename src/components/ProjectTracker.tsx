@@ -1,8 +1,13 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { Project, UserRole } from '@/types';
-import { IconSearch, IconMatrix, IconExternal } from '@/components/ui/Icons';
+import {
+  IconSearch,
+  IconExternal,
+  IconChevronLeft,
+  IconChevronRight,
+} from '@/components/ui/Icons';
 import { CustomSelect, SelectOption } from '@/components/ui/CustomSelect';
 
 interface ProjectTrackerProps {
@@ -11,6 +16,13 @@ interface ProjectTrackerProps {
   onSelectProject: (p: Project) => void;
   onRefresh: () => void;
 }
+
+const PHASES = [
+  { num: 1, title: 'Phase 1: Property & Agreement', shortName: 'Phase 1: Property', count: 6, scrollOffset: 0 },
+  { num: 2, title: 'Phase 2: Design & GFC Approval', shortName: 'Phase 2: Design', count: 5, scrollOffset: 288 },
+  { num: 3, title: 'Phase 3: BOQ & PO Release', shortName: 'Phase 3: BOQ & PO', count: 5, scrollOffset: 528 },
+  { num: 4, title: 'Phase 4: Site Execution & Handover', shortName: 'Phase 4: Execution', count: 5, scrollOffset: 768 },
+] as const;
 
 const STATUS_OPTIONS: SelectOption[] = [
   { value: 'ALL', label: 'All Statuses' },
@@ -37,15 +49,43 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [facilityFilter, setFacilityFilter] = useState('ALL');
-  const [expandedPhases, setExpandedPhases] = useState<Record<number, boolean>>({
-    1: true,
-    2: true,
-    3: true,
-    4: true,
-  });
+  const [activePhaseIndex, setActivePhaseIndex] = useState(0);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
-  const togglePhase = (phaseNum: number) => {
-    setExpandedPhases((prev) => ({ ...prev, [phaseNum]: !prev[phaseNum] }));
+  const scrollToPhase = (index: number) => {
+    setActivePhaseIndex(index);
+    if (tableContainerRef.current) {
+      tableContainerRef.current.scrollTo({
+        left: PHASES[index].scrollOffset,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const handlePrevPhase = () => {
+    if (activePhaseIndex > 0) {
+      scrollToPhase(activePhaseIndex - 1);
+    }
+  };
+
+  const handleNextPhase = () => {
+    if (activePhaseIndex < PHASES.length - 1) {
+      scrollToPhase(activePhaseIndex + 1);
+    }
+  };
+
+  const handleScroll = () => {
+    if (!tableContainerRef.current) return;
+    const sl = tableContainerRef.current.scrollLeft;
+    if (sl < 144) {
+      setActivePhaseIndex(0);
+    } else if (sl < 408) {
+      setActivePhaseIndex(1);
+    } else if (sl < 648) {
+      setActivePhaseIndex(2);
+    } else {
+      setActivePhaseIndex(3);
+    }
   };
 
   const filteredProjects = useMemo(() => {
@@ -124,74 +164,131 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
         </div>
       </div>
 
-      {/* Phase Toggle Controls */}
-      <div className="flex flex-wrap items-center gap-1.5 pb-1">
-        {[
-          { num: 1, name: 'Phase 1: Property (6)' },
-          { num: 2, name: 'Phase 2: Design (5)' },
-          { num: 3, name: 'Phase 3: BOQ & PO (5)' },
-          { num: 4, name: 'Phase 4: Site Execution (5)' },
-        ].map((phase) => (
+      {/* Dedicated Phase Slider Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-50 border border-black rounded-xs px-3 py-2 text-xs">
+        <div className="flex items-center space-x-2 shrink-0">
+          <span className="text-[11px] font-black uppercase tracking-wider text-black">
+            Phases:
+          </span>
+          <span className="text-xs font-bold text-slate-800">
+            {PHASES[activePhaseIndex].title}
+          </span>
+        </div>
+
+        {/* Phase Arrow Buttons & Navigator */}
+        <div className="flex items-center space-x-2">
+          {/* Previous Phase Arrow Button */}
           <button
-            key={phase.num}
-            onClick={() => togglePhase(phase.num)}
-            className={`px-2.5 py-1 rounded-xs text-xs font-bold border transition-colors cursor-pointer ${
-              expandedPhases[phase.num]
-                ? 'bg-black text-white border-black'
-                : 'bg-white text-slate-600 border-slate-200 hover:text-black'
-            }`}
+            type="button"
+            onClick={handlePrevPhase}
+            disabled={activePhaseIndex === 0}
+            className="flex items-center justify-center w-7 h-7 rounded-xs bg-white border border-slate-300 hover:border-black hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-2xs"
+            title="Slide to Previous Phase"
           >
-            {phase.name}
+            <IconChevronLeft className="w-3.5 h-3.5 text-black" />
           </button>
-        ))}
+
+          {/* Phase Segmented Buttons */}
+          <div className="flex items-center bg-white p-0.5 rounded-xs border border-slate-300">
+            {PHASES.map((phase, idx) => (
+              <button
+                key={phase.num}
+                type="button"
+                onClick={() => scrollToPhase(idx)}
+                className={`px-2.5 py-1 rounded-xs text-[11px] font-bold transition-all cursor-pointer ${
+                  activePhaseIndex === idx
+                    ? 'bg-black text-white shadow-xs'
+                    : 'text-slate-600 hover:text-black hover:bg-slate-100'
+                }`}
+              >
+                {phase.shortName}
+              </button>
+            ))}
+          </div>
+
+          {/* Next Phase Arrow Button */}
+          <button
+            type="button"
+            onClick={handleNextPhase}
+            disabled={activePhaseIndex === PHASES.length - 1}
+            className="flex items-center justify-center w-7 h-7 rounded-xs bg-white border border-slate-300 hover:border-black hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-2xs"
+            title="Slide to Next Phase"
+          >
+            <IconChevronRight className="w-3.5 h-3.5 text-black" />
+          </button>
+        </div>
+
+        {/* Slider Range Control */}
+        <div className="flex items-center space-x-2 shrink-0">
+          <input
+            type="range"
+            min={0}
+            max={PHASES.length - 1}
+            step={1}
+            value={activePhaseIndex}
+            onChange={(e) => scrollToPhase(Number(e.target.value))}
+            className="w-24 accent-black cursor-pointer"
+            title="Slide milestone phases"
+          />
+          <span className="text-[10px] font-mono text-slate-500 font-semibold w-12 text-right">
+            {activePhaseIndex + 1} / 4
+          </span>
+        </div>
       </div>
 
       {/* Main Table */}
       <div className="bg-white border border-black rounded-xs overflow-hidden">
-        <div className="overflow-x-auto max-h-[750px]">
-          <table className="w-full text-left border-collapse min-w-[2040px] text-xs">
+        <div
+          ref={tableContainerRef}
+          onScroll={handleScroll}
+          className="overflow-x-auto max-h-[750px]"
+        >
+          <table className="w-full text-left border-collapse min-w-[2032px] text-xs">
             <thead className="sticky top-0 z-30 bg-slate-100 border-b-2 border-slate-400">
               <tr>
-                <th className="p-3 sticky left-0 z-40 bg-slate-100 w-14 min-w-[56px] max-w-[56px] border-r border-slate-300 text-center text-black font-extrabold text-[11px] font-mono uppercase tracking-wider">
+                {/* Sl. No. - Constant */}
+                <th className="px-2 py-3 sticky left-0 z-40 bg-slate-100 w-16 min-w-[64px] max-w-[64px] border-r border-slate-300 text-center text-black font-black text-[11px] font-mono tracking-tight whitespace-nowrap">
                   Sl. No.
                 </th>
-                <th className="p-3 sticky left-14 z-40 bg-slate-100 w-64 min-w-[256px] max-w-[256px] border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
+
+                {/* Location & Code - Constant */}
+                <th className="p-3 sticky left-16 z-40 bg-slate-100 w-60 min-w-[240px] max-w-[240px] border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Location & Code
                 </th>
-                <th className="p-3 sticky left-[312px] z-40 bg-slate-100 w-36 min-w-[144px] max-w-[144px] border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
+
+                {/* Facility - Constant */}
+                <th className="p-3 sticky left-[304px] z-40 bg-slate-100 w-36 min-w-[144px] max-w-[144px] border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Facility
                 </th>
-                <th className="p-3 sticky left-[456px] z-40 bg-slate-100 w-56 min-w-[224px] max-w-[224px] border-r-2 border-slate-400 text-black font-extrabold text-[11px] uppercase tracking-wider shadow-xs">
+
+                {/* Status - Constant */}
+                <th className="p-3 sticky left-[448px] z-40 bg-slate-100 w-52 min-w-[208px] max-w-[208px] border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Status
                 </th>
-                <th className="p-3 w-28 min-w-[112px] border-r border-slate-300 text-center text-black font-extrabold text-[11px] uppercase tracking-wider">
+
+                {/* Progress % - Constant */}
+                <th className="p-3 sticky left-[656px] z-40 bg-slate-100 w-28 min-w-[112px] max-w-[112px] border-r border-slate-300 text-center text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Progress %
                 </th>
-                <th className="p-3 w-72 min-w-[220px] border-r-2 border-slate-400 text-black font-extrabold text-[11px] uppercase tracking-wider">
+
+                {/* Remarks / Notes - Constant with Divider Border */}
+                <th className="p-3 sticky left-[768px] z-40 bg-slate-100 w-64 min-w-[256px] max-w-[256px] border-r-2 border-slate-500 text-black font-extrabold text-[11px] uppercase tracking-wider shadow-md">
                   Remarks / Notes
                 </th>
 
-                {/* Milestone Headers */}
-                {expandedPhases[1] && (
-                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[288px] max-w-[288px]" colSpan={6}>
-                    Phase 1: Property & Agreement
-                  </th>
-                )}
-                {expandedPhases[2] && (
-                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
-                    Phase 2: Design & GFC Approval
-                  </th>
-                )}
-                {expandedPhases[3] && (
-                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
-                    Phase 3: BOQ & PO Release
-                  </th>
-                )}
-                {expandedPhases[4] && (
-                  <th className="p-3 bg-slate-200/80 text-black text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
-                    Phase 4: Site Execution & Handover
-                  </th>
-                )}
+                {/* Milestone Headers - Slidable */}
+                <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[288px] max-w-[288px]" colSpan={6}>
+                  Phase 1: Property & Agreement
+                </th>
+                <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
+                  Phase 2: Design & GFC Approval
+                </th>
+                <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
+                  Phase 3: BOQ & PO Release
+                </th>
+                <th className="p-3 bg-slate-200/80 text-black text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
+                  Phase 4: Site Execution & Handover
+                </th>
               </tr>
             </thead>
 
@@ -202,11 +299,13 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                   onClick={() => onSelectProject(p)}
                   className="hover:bg-slate-50 transition-colors group cursor-pointer"
                 >
-                  <td className="p-3 sticky left-0 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-black font-extrabold font-mono text-center text-xs w-14 min-w-[56px] max-w-[56px]">
+                  {/* Sl. No. - Constant */}
+                  <td className="px-2 py-2.5 sticky left-0 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-black font-extrabold font-mono text-center text-xs w-16 min-w-[64px] max-w-[64px] whitespace-nowrap">
                     {idx + 1}
                   </td>
 
-                  <td className="p-3 sticky left-14 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-bold text-black w-64 min-w-[256px] max-w-[256px]">
+                  {/* Location & Code - Constant */}
+                  <td className="p-3 sticky left-16 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-bold text-black w-60 min-w-[240px] max-w-[240px]">
                     <div className="flex items-center space-x-1.5 whitespace-nowrap">
                       <span className="truncate">{p.location.name}</span>
                       <IconExternal className="w-3 h-3 text-slate-400 group-hover:text-black transition-colors shrink-0" />
@@ -214,13 +313,15 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                     <div className="text-[10px] text-slate-500 font-mono font-semibold mt-0.5">{p.code}</div>
                   </td>
 
-                  <td className="p-3 sticky left-[312px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-slate-800 w-36 min-w-[144px] max-w-[144px]">
+                  {/* Facility - Constant */}
+                  <td className="p-3 sticky left-[304px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-slate-800 w-36 min-w-[144px] max-w-[144px]">
                     <span className="px-2 py-0.5 rounded-xs text-[11px] bg-slate-100 font-bold border border-slate-200 whitespace-nowrap inline-block">
                       {p.facilityType}
                     </span>
                   </td>
 
-                  <td className="p-3 sticky left-[456px] z-20 bg-white group-hover:bg-slate-50 border-r-2 border-slate-400 shadow-xs w-56 min-w-[224px] max-w-[224px]">
+                  {/* Status - Constant */}
+                  <td className="p-3 sticky left-[448px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 w-52 min-w-[208px] max-w-[208px]">
                     <span
                       className={`inline-block px-2 py-0.5 rounded-xs text-[10px] font-bold border whitespace-nowrap ${getStatusBadge(
                         p.currentStatus
@@ -230,7 +331,8 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                     </span>
                   </td>
 
-                  <td className="p-3 border-r border-slate-200 text-center">
+                  {/* Progress % - Constant */}
+                  <td className="p-3 sticky left-[656px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-center w-28 min-w-[112px] max-w-[112px]">
                     <div className="flex items-center justify-center space-x-2">
                       <span className="font-extrabold text-black text-xs font-mono">{p.workPercentage}%</span>
                       <div className="w-12 bg-slate-200 h-1.5 rounded-full overflow-hidden">
@@ -244,16 +346,15 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                     </div>
                   </td>
 
-                  <td className="p-3 border-r-2 border-slate-400 min-w-[220px] max-w-sm text-[11px] text-slate-800">
+                  {/* Remarks / Notes - Constant with Divider Border */}
+                  <td className="p-3 sticky left-[768px] z-20 bg-white group-hover:bg-slate-50 border-r-2 border-slate-500 shadow-md w-64 min-w-[256px] max-w-[256px] text-[11px] text-slate-800">
                     <p className="line-clamp-2 leading-relaxed">
                       {p.keyRemarks || <span className="text-slate-400 italic">No notes</span>}
                     </p>
                   </td>
 
-                  {/* Milestones */}
+                  {/* Milestones - Slidable Underneath */}
                   {p.milestones.map((m) => {
-                    if (!expandedPhases[m.phaseNumber]) return null;
-
                     const isDone = m.status === 'Completed' || !!m.actualDate;
                     const isPhaseEnd = m.orderIndex === 6 || m.orderIndex === 11 || m.orderIndex === 16 || m.orderIndex === 21;
 

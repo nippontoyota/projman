@@ -371,3 +371,40 @@ export const IconExternal: React.FC<IconProps> = ({ className = 'w-3 h-3', size,
     <path d="M13.5 8.5v4a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h4" />
   </svg>
 );
+
+// 19. Chevron Left Arrow
+export const IconChevronLeft: React.FC<IconProps> = ({ className = 'w-4 h-4', size, ...props }) => (
+  <svg
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.75"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    width={size}
+    height={size}
+    className={className}
+    {...props}
+  >
+    <path d="M10 12l-4-4 4-4" />
+  </svg>
+);
+
+// 20. Chevron Right Arrow
+export const IconChevronRight: React.FC<IconProps> = ({ className = 'w-4 h-4', size, ...props }) => (
+  <svg
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.75"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    width={size}
+    height={size}
+    className={className}
+    {...props}
+  >
+    <path d="M6 4l4 4-4 4" />
+  </svg>
+);
+

@@ -187,7 +187,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
               {/* Year Super Header */}
               <tr className="text-xs font-semibold text-slate-600 border-b border-slate-200/80">
                 <th
-                  className="p-3 sticky left-0 z-40 bg-slate-100 w-[680px] min-w-[680px] border-r-2 border-slate-400 text-black font-black"
+                  className="p-3 sticky left-0 z-40 bg-slate-100 w-[656px] min-w-[656px] border-r-2 border-slate-400 text-black font-black"
                   colSpan={4}
                 >
                   DEALERSHIP LOCATION ({filteredProjects.length} Tracks)
@@ -205,16 +205,16 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
 
               {/* Month Header */}
               <tr className="text-[11px] text-black font-bold uppercase tracking-wider">
-                <th className="p-3 sticky left-0 z-40 bg-slate-100 w-14 min-w-[56px] max-w-[56px] border-r border-slate-300 text-black font-extrabold text-center font-mono">
+                <th className="px-2 py-3 sticky left-0 z-40 bg-slate-100 w-16 min-w-[64px] max-w-[64px] border-r border-slate-300 text-black font-black text-center font-mono tracking-tight whitespace-nowrap">
                   Sl. No.
                 </th>
-                <th className="p-3 sticky left-14 z-40 bg-slate-100 w-64 min-w-[256px] max-w-[256px] border-r border-slate-300 font-extrabold text-black">
+                <th className="p-3 sticky left-16 z-40 bg-slate-100 w-60 min-w-[240px] max-w-[240px] border-r border-slate-300 font-extrabold text-black">
                   Location & Code
                 </th>
-                <th className="p-3 sticky left-[312px] z-40 bg-slate-100 w-36 min-w-[144px] max-w-[144px] border-r border-slate-300 font-extrabold text-black">
+                <th className="p-3 sticky left-[304px] z-40 bg-slate-100 w-36 min-w-[144px] max-w-[144px] border-r border-slate-300 font-extrabold text-black">
                   Facility
                 </th>
-                <th className="p-3 sticky left-[456px] z-40 bg-slate-100 w-56 min-w-[224px] max-w-[224px] border-r-2 border-slate-400 font-extrabold text-black shadow-xs">
+                <th className="p-3 sticky left-[448px] z-40 bg-slate-100 w-52 min-w-[208px] max-w-[208px] border-r-2 border-slate-400 font-extrabold text-black shadow-xs">
                   Status
                 </th>
 
@@ -256,12 +256,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                     className="hover:bg-slate-50 transition-colors group cursor-pointer"
                   >
                     {/* Index */}
-                    <td className="p-3 sticky left-0 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-black font-extrabold font-mono text-center w-14 min-w-[56px] max-w-[56px]">
+                    <td className="px-2 py-2.5 sticky left-0 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-black font-extrabold font-mono text-center text-xs w-16 min-w-[64px] max-w-[64px] whitespace-nowrap">
                       {pIdx + 1}
                     </td>
 
                     {/* Location & Code */}
-                    <td className="p-3 sticky left-14 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-bold text-black w-64 min-w-[256px] max-w-[256px]">
+                    <td className="p-3 sticky left-16 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-bold text-black w-60 min-w-[240px] max-w-[240px]">
                       <div className="flex items-center space-x-1.5 whitespace-nowrap">
                         <span className="truncate">{p.location.name}</span>
                         {hasBlocker && (
@@ -277,14 +277,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                     </td>
 
                     {/* Facility */}
-                    <td className="p-3 sticky left-[312px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 w-36 min-w-[144px] max-w-[144px]">
+                    <td className="p-3 sticky left-[304px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 w-36 min-w-[144px] max-w-[144px]">
                       <span className="px-2 py-0.5 rounded-xs text-[11px] font-bold bg-slate-100 text-slate-800 border border-slate-200 whitespace-nowrap inline-block">
                         {p.facilityType}
                       </span>
                     </td>
 
                     {/* Status */}
-                    <td className="p-3 sticky left-[456px] z-20 bg-white group-hover:bg-slate-50 border-r-2 border-slate-400 shadow-xs w-56 min-w-[224px] max-w-[224px]">
+                    <td className="p-3 sticky left-[448px] z-20 bg-white group-hover:bg-slate-50 border-r-2 border-slate-400 shadow-xs w-52 min-w-[208px] max-w-[208px]">
                       <span className={`inline-block px-2 py-0.5 rounded-xs text-[10px] font-bold border whitespace-nowrap ${
                         p.currentStatus === 'Commissioned'
                           ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
