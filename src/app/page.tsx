@@ -78,8 +78,8 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans antialiased selection:bg-sky-500 selection:text-slate-950">
-      {/* Header with Role Switcher & Nav Tabs */}
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans antialiased selection:bg-blue-600 selection:text-white">
+      {/* Header */}
       <Header
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
@@ -92,12 +92,12 @@ export default function Home() {
         totalProjects={projects.length}
       />
 
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-[1720px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Main Content */}
+      <main className="flex-1 max-w-[1720px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-5">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-3">
-            <div className="w-9 h-9 border-3 border-sky-500/20 border-t-sky-500 rounded-full animate-spin" />
-            <p className="text-xs text-slate-400 font-medium">
+            <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            <p className="text-xs text-slate-500 font-medium">
               Loading Incheon Mobility master tracker...
             </p>
           </div>
@@ -105,10 +105,10 @@ export default function Home() {
           <AnimatePresence mode="wait">
             <motion.div
               key={currentTab}
-              initial={{ opacity: 0, y: 6 }}
+              initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.18, ease: 'easeOut' }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.15, ease: 'easeOut' }}
             >
               {currentTab === 'gantt' && (
                 <GanttChart
