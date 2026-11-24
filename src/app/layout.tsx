@@ -3,9 +3,8 @@ import './globals.css';
 import { ToastProvider } from '@/context/ToastContext';
 
 export const metadata: Metadata = {
-  title: 'Incheon Mobility | River Dealership Expansion Tracker',
-  description:
-    'Executive Project Management, Gantt Timeline & Milestone Tracker for River EV Showroom Launches in Kerala.',
+  title: 'Incheon Mobility | Dealership Projects',
+  description: 'Project Management & Milestone Tracker for Dealership Rollouts.',
 };
 
 export default function RootLayout({
@@ -14,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full bg-slate-50 light" style={{ colorScheme: 'light' }}>
-      <body className="min-h-full bg-slate-50 text-slate-900 flex flex-col antialiased">
+    <html lang="en" className="h-full bg-white light" style={{ colorScheme: 'light' }}>
+      <body className="min-h-full bg-white text-slate-900 flex flex-col antialiased">
         <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
