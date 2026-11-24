@@ -61,7 +61,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-3 border-b border-slate-200"
       >
         <div className="flex items-baseline space-x-2">
-          <h1 className="text-base font-semibold text-slate-900 tracking-tight">
+          <h1 className="text-base font-bold text-black tracking-tight">
             Portfolio Overview
           </h1>
           <span className="text-xs text-slate-400 font-mono">
@@ -79,16 +79,16 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* Total Projects */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-lg p-3.5"
+          className="bg-white border border-slate-200 rounded-xs p-3.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
               Total Projects
             </span>
             <IconFacility className="w-3.5 h-3.5 text-slate-400" />
           </div>
           <div className="mt-2 flex items-baseline space-x-2">
-            <span className="text-2xl font-bold text-slate-900 font-mono">{metrics.totalTracks}</span>
+            <span className="text-2xl font-black text-black font-mono">{metrics.totalTracks}</span>
             <span className="text-xs text-slate-400">8 cities</span>
           </div>
         </motion.div>
@@ -96,19 +96,19 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* Completed Showrooms */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-lg p-3.5"
+          className="bg-white border border-slate-200 rounded-xs p-3.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
               Completed Showrooms
             </span>
             <IconCheck className="w-3.5 h-3.5 text-emerald-600" />
           </div>
           <div className="mt-2 flex items-baseline space-x-2">
-            <span className="text-2xl font-bold text-emerald-600 font-mono">
+            <span className="text-2xl font-black text-emerald-600 font-mono">
               {metrics.commissionedCount}
             </span>
-            <span className="text-xs text-emerald-600 font-mono">
+            <span className="text-xs text-emerald-600 font-mono font-semibold">
               ({Math.round((metrics.commissionedCount / metrics.totalTracks) * 100)}%)
             </span>
           </div>
@@ -117,16 +117,16 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* In Progress */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-lg p-3.5"
+          className="bg-white border border-slate-200 rounded-xs p-3.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
               In Progress
             </span>
-            <IconDashboard className="w-3.5 h-3.5 text-blue-600" />
+            <IconDashboard className="w-3.5 h-3.5 text-slate-700" />
           </div>
           <div className="mt-2 flex items-baseline space-x-2">
-            <span className="text-2xl font-bold text-slate-900 font-mono">{metrics.openProjectsCount}</span>
+            <span className="text-2xl font-black text-black font-mono">{metrics.openProjectsCount}</span>
             <span className="text-xs text-slate-400">projects</span>
           </div>
         </motion.div>
@@ -134,16 +134,16 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* Days Remaining */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-lg p-3.5"
+          className="bg-white border border-slate-200 rounded-xs p-3.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
               Days Remaining
             </span>
             <IconRadar className="w-3.5 h-3.5 text-amber-600" />
           </div>
           <div className="mt-2 flex items-baseline space-x-2">
-            <span className="text-2xl font-bold text-amber-600 font-mono">{metrics.daysToTarget}</span>
+            <span className="text-2xl font-black text-amber-600 font-mono">{metrics.daysToTarget}</span>
             <span className="text-xs text-slate-400">days</span>
           </div>
         </motion.div>
@@ -151,16 +151,16 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* Open Issues */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-lg p-3.5"
+          className="bg-white border border-slate-200 rounded-xs p-3.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
               Open Issues
             </span>
             <IconEscalation className="w-3.5 h-3.5 text-rose-600" />
           </div>
           <div className="mt-2 flex items-baseline space-x-2">
-            <span className="text-2xl font-bold text-rose-600 font-mono">{openBlockers.length}</span>
+            <span className="text-2xl font-black text-rose-600 font-mono">{openBlockers.length}</span>
             <span className="text-xs text-rose-600">blockers</span>
           </div>
         </motion.div>
@@ -171,11 +171,11 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* Status Breakdown */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-lg p-4"
+          className="bg-white border border-slate-200 rounded-xs p-4"
         >
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-slate-900 text-xs">Status Breakdown</h3>
-            <span className="text-[11px] text-slate-400 font-mono">
+            <h3 className="font-bold text-black text-xs">Status Breakdown</h3>
+            <span className="text-[11px] text-slate-400 font-mono font-semibold">
               15 Projects
             </span>
           </div>
@@ -184,15 +184,15 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
             {portfolioBreakdown.map((item) => (
               <div
                 key={item.status}
-                className="bg-slate-50/70 p-3 rounded-lg border border-slate-200/80"
+                className="bg-slate-50/70 p-3 rounded-xs border border-slate-200/80"
               >
                 <div className="flex items-center justify-between text-xs mb-1.5">
-                  <span className="font-semibold text-slate-900">{item.status}</span>
+                  <span className="font-bold text-black">{item.status}</span>
                   <div className="flex items-center space-x-3 text-slate-600">
                     <span className="font-mono">
-                      <strong className="text-slate-900">{item.count}</strong> ({item.percentage}%)
+                      <strong className="text-black">{item.count}</strong> ({item.percentage}%)
                     </span>
-                    <span className="text-[11px] bg-white px-2 py-0.5 rounded font-mono text-slate-700 border border-slate-200">
+                    <span className="text-[11px] bg-white px-2 py-0.5 rounded-xs font-mono text-slate-700 border border-slate-200 font-semibold">
                       Avg: {item.avgElapsedDays}d
                     </span>
                   </div>
@@ -209,7 +209,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
                         ? 'bg-amber-500'
                         : item.status === 'Pre-Construction'
                         ? 'bg-rose-600'
-                        : 'bg-blue-600'
+                        : 'bg-black'
                     }`}
                     style={{ width: `${item.percentage}%` }}
                   />
@@ -222,10 +222,10 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* Stage-Wise Timeline Benchmarks */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-lg p-4"
+          className="bg-white border border-slate-200 rounded-xs p-4"
         >
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-slate-900 text-xs">Stage Durations (Average Days)</h3>
+            <h3 className="font-bold text-black text-xs">Stage Durations (Average Days)</h3>
           </div>
 
           <div className="overflow-x-auto">
@@ -245,7 +245,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
                     <td className="py-2.5 font-medium text-slate-800">
                       {b.stageName}
                     </td>
-                    <td className="py-2.5 text-center font-bold text-blue-700 font-mono">
+                    <td className="py-2.5 text-center font-black text-black font-mono">
                       {b.avgDays.toFixed(1)}d
                     </td>
                     <td className="py-2.5 text-center text-slate-600 font-mono">
@@ -254,7 +254,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
                     <td className="py-2.5 text-center text-slate-600 font-mono">
                       {b.maxDays}d
                     </td>
-                    <td className="py-2.5 text-right font-semibold text-slate-800 font-mono">
+                    <td className="py-2.5 text-right font-bold text-black font-mono">
                       {b.tracksCount}
                     </td>
                   </tr>
@@ -268,13 +268,13 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
       {/* Critical Bottlenecks Radar */}
       <motion.div
         variants={itemVariants}
-        className="bg-white border border-slate-200 rounded-lg p-4"
+        className="bg-white border border-slate-200 rounded-xs p-4"
       >
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-slate-900 text-sm">
+          <h3 className="font-bold text-black text-sm">
             Open Issues
           </h3>
-          <span className="text-xs text-rose-600 font-mono">
+          <span className="text-xs text-rose-600 font-mono font-semibold">
             ({openBlockers.length} issues)
           </span>
         </div>
@@ -283,21 +283,21 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
           {openBlockers.map((blk) => (
             <div
               key={blk.id}
-              className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-slate-50/50 -mx-2 px-2 rounded-lg transition-colors"
+              className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-slate-50/50 -mx-2 px-2 rounded-xs transition-colors"
             >
               <div className="space-y-0.5 max-w-xl">
                 <div className="flex items-center space-x-2">
-                  <span className="font-bold text-slate-950 text-xs">
+                  <span className="font-bold text-black text-xs">
                     {blk.project?.location.name}
                   </span>
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                  <span className="px-1.5 py-0.5 rounded-xs text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
                     {blk.category}
                   </span>
-                  <span className="text-[10px] font-semibold font-mono text-rose-700">
+                  <span className="text-[10px] font-bold font-mono text-rose-700">
                     [{blk.severity}]
                   </span>
                 </div>
-                <div className="text-xs font-semibold text-slate-800">
+                <div className="text-xs font-bold text-slate-900">
                   {blk.title}
                 </div>
                 <p className="text-[11px] text-slate-500 line-clamp-1">
@@ -311,7 +311,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
                     const p = projects.find((proj) => proj.id === blk.projectId);
                     if (p) onSelectProject(p);
                   }}
-                  className="text-blue-600 hover:text-blue-700 font-semibold text-xs shrink-0 self-start sm:self-center cursor-pointer"
+                  className="text-black hover:text-neutral-700 font-bold text-xs shrink-0 self-start sm:self-center cursor-pointer"
                 >
                   <span>View Details →</span>
                 </button>

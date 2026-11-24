@@ -83,7 +83,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
       {/* Controls Toolbar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center space-x-2">
-          <h2 className="text-sm font-semibold text-slate-900 tracking-tight">
+          <h2 className="text-sm font-bold text-black tracking-tight">
             Milestones
           </h2>
           <span className="text-xs font-mono text-slate-400">
@@ -100,7 +100,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-400 w-44 shadow-2xs"
+              className="pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-xs text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-black w-44 shadow-2xs"
             />
           </div>
 
@@ -133,10 +133,10 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
           <button
             key={phase.num}
             onClick={() => togglePhase(phase.num)}
-            className={`px-2.5 py-1 rounded text-xs font-medium border transition-colors cursor-pointer ${
+            className={`px-2.5 py-1 rounded-xs text-xs font-bold border transition-colors cursor-pointer ${
               expandedPhases[phase.num]
-                ? 'bg-slate-900 text-white border-slate-900'
-                : 'bg-white text-slate-500 border-slate-200 hover:text-slate-900'
+                ? 'bg-black text-white border-black'
+                : 'bg-white text-slate-500 border-slate-200 hover:text-black'
             }`}
           >
             {phase.name}
@@ -145,7 +145,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
       </div>
 
       {/* Main Table */}
-      <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-xs overflow-hidden">
         <div className="overflow-x-auto max-h-[750px]">
           <table className="w-full text-left border-collapse min-w-[1600px] text-xs">
             <thead className="sticky top-0 z-30 bg-slate-50 border-b border-slate-200">
@@ -171,22 +171,22 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
 
                 {/* Milestone Headers */}
                 {expandedPhases[1] && (
-                  <th className="p-3 bg-blue-50/60 text-blue-800 border-r border-slate-200 text-center font-bold" colSpan={6}>
+                  <th className="p-3 bg-slate-100 text-black border-r border-slate-200 text-center font-bold" colSpan={6}>
                     Phase 1: Property & Agreement
                   </th>
                 )}
                 {expandedPhases[2] && (
-                  <th className="p-3 bg-indigo-50/60 text-indigo-800 border-r border-slate-200 text-center font-bold" colSpan={5}>
+                  <th className="p-3 bg-slate-100 text-black border-r border-slate-200 text-center font-bold" colSpan={5}>
                     Phase 2: Design & GFC Approval
                   </th>
                 )}
                 {expandedPhases[3] && (
-                  <th className="p-3 bg-amber-50/60 text-amber-800 border-r border-slate-200 text-center font-bold" colSpan={5}>
+                  <th className="p-3 bg-slate-100 text-black border-r border-slate-200 text-center font-bold" colSpan={5}>
                     Phase 3: BOQ & PO Release
                   </th>
                 )}
                 {expandedPhases[4] && (
-                  <th className="p-3 bg-emerald-50/60 text-emerald-800 text-center font-bold" colSpan={5}>
+                  <th className="p-3 bg-slate-100 text-black text-center font-bold" colSpan={5}>
                     Phase 4: Site Execution & Handover
                   </th>
                 )}
@@ -207,20 +207,20 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                   <td className="p-3 sticky left-12 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-semibold text-slate-900">
                     <div className="flex items-center space-x-1.5">
                       <span>{p.location.name}</span>
-                      <IconExternal className="w-3 h-3 text-slate-400 group-hover:text-blue-600 transition-colors" />
+                      <IconExternal className="w-3 h-3 text-slate-400 group-hover:text-black transition-colors" />
                     </div>
                     <div className="text-[10px] text-slate-400 font-mono mt-0.5">{p.code}</div>
                   </td>
 
                   <td className="p-3 sticky left-56 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-slate-600">
-                    <span className="px-2 py-0.5 rounded text-[11px] bg-slate-100 font-medium border border-slate-200">
+                    <span className="px-2 py-0.5 rounded-xs text-[11px] bg-slate-100 font-semibold border border-slate-200">
                       {p.facilityType}
                     </span>
                   </td>
 
                   <td className="p-3 sticky left-84 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 shadow-xs">
                     <span
-                      className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold border ${getStatusBadge(
+                      className={`inline-block px-2 py-0.5 rounded-xs text-[10px] font-semibold border ${getStatusBadge(
                         p.currentStatus
                       )}`}
                     >
@@ -234,7 +234,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                       <div className="w-12 bg-slate-200 h-1.5 rounded-full overflow-hidden">
                         <div
                           className={`h-full ${
-                            p.workPercentage === 100 ? 'bg-emerald-600' : 'bg-blue-600'
+                            p.workPercentage === 100 ? 'bg-emerald-600' : 'bg-black'
                           }`}
                           style={{ width: `${p.workPercentage}%` }}
                         />

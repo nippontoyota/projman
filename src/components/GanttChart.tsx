@@ -132,10 +132,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
       };
     }
     return {
-      badge: 'bg-blue-50 text-blue-700 border-blue-200',
-      barBg: 'bg-blue-600',
-      textColor: 'text-blue-700',
-      dot: 'bg-blue-500',
+      badge: 'bg-slate-100 text-black border-slate-300',
+      barBg: 'bg-black',
+      textColor: 'text-black',
+      dot: 'bg-black',
     };
   };
 
@@ -144,7 +144,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
       {/* Integrated Controls Toolbar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center space-x-2">
-          <span className="text-sm font-semibold text-slate-900">Timeline</span>
+          <span className="text-sm font-bold text-black">Timeline</span>
           <span className="text-xs text-slate-400 font-mono">(Sep 2025 – Mar 2027)</span>
         </div>
 
@@ -157,7 +157,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
               placeholder="Search location..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-400 w-44 shadow-2xs"
+              className="pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-xs text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-black w-44 shadow-2xs"
             />
           </div>
 
@@ -180,7 +180,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
       </div>
 
       {/* Main Gantt Grid Table */}
-      <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-xs overflow-hidden">
         <div className="overflow-x-auto max-h-[760px]">
           <table className="w-full text-left border-collapse min-w-[1450px]">
             <thead className="sticky top-0 z-30 bg-slate-50 border-b border-slate-200">
@@ -195,7 +195,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                 <th className="text-center py-2 border-r border-slate-200 bg-slate-100/70 text-slate-700 font-bold" colSpan={4}>
                   2025
                 </th>
-                <th className="text-center py-2 border-r border-slate-200 bg-slate-50 text-blue-800 font-bold" colSpan={12}>
+                <th className="text-center py-2 border-r border-slate-200 bg-slate-50 text-black font-extrabold" colSpan={12}>
                   2026 (ACTIVE EXECUTION YEAR)
                 </th>
                 <th className="text-center py-2 bg-slate-100/70 text-slate-700 font-bold" colSpan={3}>
@@ -223,14 +223,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                     key={m.id}
                     className={`py-2 px-1 text-center w-14 font-semibold border-r border-slate-200/60 ${
                       m.isCurrent
-                        ? 'bg-blue-50 text-blue-800 font-bold border-blue-200'
+                        ? 'bg-neutral-100 text-black font-bold border-neutral-300'
                         : m.isTarget
                         ? 'bg-amber-50 text-amber-800 font-bold border-amber-200'
                         : 'text-slate-600'
                     }`}
                   >
                     <div>{m.label}</div>
-                    {m.isCurrent && <div className="text-[9px] text-blue-600 font-mono font-bold">Now</div>}
+                    {m.isCurrent && <div className="text-[9px] text-black font-mono font-bold">Now</div>}
                     {m.isTarget && <div className="text-[9px] text-amber-700 font-mono font-bold">Target</div>}
                   </th>
                 ))}
@@ -274,14 +274,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
 
                     {/* Facility */}
                     <td className="p-3 sticky left-56 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200">
-                      <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200 whitespace-nowrap">
+                      <span className="px-2 py-0.5 rounded-xs text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200 whitespace-nowrap">
                         {p.facilityType}
                       </span>
                     </td>
 
                     {/* Status */}
                     <td className="p-3 sticky left-84 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200">
-                      <span className="inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-800 border border-slate-200 whitespace-nowrap">
+                      <span className="inline-block px-2 py-0.5 rounded-xs text-[10px] font-semibold bg-slate-100 text-slate-800 border border-slate-200 whitespace-nowrap">
                         {p.currentStatus}
                       </span>
                     </td>
@@ -297,7 +297,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                           key={m.id}
                           className={`p-1.5 text-center relative border-r border-slate-100 ${
                             m.isCurrent
-                              ? 'bg-blue-50/40'
+                              ? 'bg-neutral-100/60'
                               : m.isTarget
                               ? 'bg-amber-50/40'
                               : ''
@@ -305,9 +305,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                         >
                           {isInSpan && (
                             <div
-                              className={`h-6 rounded ${healthStyle.barBg} shadow-2xs flex items-center justify-center text-white font-bold text-[10px] select-none transition-all ${
-                                isStart ? 'rounded-l-md' : ''
-                              } ${isEnd ? 'rounded-r-md' : ''}`}
+                              className={`h-6 rounded-xs ${healthStyle.barBg} shadow-2xs flex items-center justify-center text-white font-bold text-[10px] select-none transition-all`}
                             >
                               {isStart && (
                                 <span className="text-[10px] text-white px-1 font-bold">
@@ -348,20 +346,20 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 4 }}
-            className="p-3 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center justify-between text-xs"
+            className="p-3 bg-white border border-slate-200 rounded-xs shadow-sm flex items-center justify-between text-xs"
           >
             <div className="flex items-center space-x-3 text-slate-700">
-              <span className="font-bold text-slate-900">
+              <span className="font-bold text-black">
                 {hoveredProject.location.name} ({hoveredProject.facilityType})
               </span>
               <span className="text-slate-400 font-mono">
                 Code: {hoveredProject.code}
               </span>
               <span>
-                Elapsed: <strong className="text-slate-900 font-mono">{hoveredProject.elapsedDays}d</strong>
+                Elapsed: <strong className="text-black font-mono">{hoveredProject.elapsedDays}d</strong>
               </span>
               <span>
-                Work %: <strong className="text-slate-900 font-mono">{hoveredProject.workPercentage}%</strong>
+                Work %: <strong className="text-black font-mono">{hoveredProject.workPercentage}%</strong>
               </span>
               {hoveredProject.keyRemarks && (
                 <span className="text-slate-500 italic truncate max-w-md">
@@ -372,7 +370,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
 
             <button
               onClick={() => onSelectProject(hoveredProject)}
-              className="text-blue-600 hover:text-blue-700 font-semibold flex items-center space-x-1 cursor-pointer"
+              className="text-black hover:text-neutral-700 font-bold flex items-center space-x-1 cursor-pointer"
             >
               <span>Inspect Details →</span>
             </button>

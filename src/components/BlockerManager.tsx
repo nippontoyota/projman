@@ -90,7 +90,7 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
       {/* Header Toolbar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center space-x-2">
-          <h2 className="text-sm font-semibold text-slate-900 tracking-tight">
+          <h2 className="text-sm font-bold text-black tracking-tight">
             Bottlenecks
           </h2>
           <span className="text-xs font-mono text-slate-400">
@@ -127,7 +127,7 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
       </div>
 
       {/* High-Density Escalations Table */}
-      <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
@@ -165,13 +165,13 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
                     </div>
                   </td>
                   <td className="py-3 px-4 align-top">
-                    <span className="inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                    <span className="inline-block px-2 py-0.5 rounded-xs text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
                       {blk.category}
                     </span>
                   </td>
                   <td className="py-3 px-4 align-top text-center">
                     <span
-                      className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold font-mono ${
+                      className={`inline-block px-2 py-0.5 rounded-xs text-[10px] font-semibold font-mono ${
                         blk.severity === 'Critical'
                           ? 'bg-rose-50 text-rose-700 border border-rose-200'
                           : blk.severity === 'Major'
@@ -199,16 +199,16 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
                       {blk.status !== 'Resolved' && (
                         <button
                           onClick={() => handleResolve(blk.id)}
-                          className="px-2.5 py-1 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-colors cursor-pointer"
+                          className="px-2.5 py-1 rounded-xs text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-colors cursor-pointer"
                         >
                           Resolve
                         </button>
                       )}
                       <button
                         onClick={() => onSelectProject(blk.projectDetails)}
-                        className="px-2 py-1 text-slate-600 hover:text-slate-900 rounded hover:bg-slate-100 transition-colors cursor-pointer text-[11px] font-medium"
+                        className="px-2 py-1 text-slate-600 hover:text-black rounded-xs hover:bg-slate-100 transition-colors cursor-pointer text-[11px] font-bold"
                       >
-                        Track →
+                        Details →
                       </button>
                     </div>
                   </td>
@@ -224,12 +224,6 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
           </div>
         )}
       </div>
-
-      {filteredBlockers.length === 0 && (
-        <div className="bg-white border border-slate-200 rounded-xl p-12 text-center text-slate-500 text-sm">
-          No bottlenecks found matching the selected filters.
-        </div>
-      )}
     </div>
   );
 };
