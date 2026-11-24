@@ -2,11 +2,8 @@
 
 import React, { useState, useMemo } from 'react';
 import { Project, UserRole } from '@/types';
-import {
-  Search,
-  ExternalLink,
-  Layers,
-} from 'lucide-react';
+import { IconSearch, IconMatrix, IconExternal } from '@/components/ui/Icons';
+import { CustomSelect, SelectOption } from '@/components/ui/CustomSelect';
 
 interface ProjectTrackerProps {
   projects: Project[];
@@ -14,6 +11,23 @@ interface ProjectTrackerProps {
   onSelectProject: (p: Project) => void;
   onRefresh: () => void;
 }
+
+const STATUS_OPTIONS: SelectOption[] = [
+  { value: 'ALL', label: 'All Statuses' },
+  { value: 'Commissioned', label: 'Commissioned' },
+  { value: 'Ready for Handover', label: 'Ready for Handover' },
+  { value: 'BOQ Approved / PO Pending', label: 'BOQ Approved / PO Pending' },
+  { value: 'Pre-Construction', label: 'Pre-Construction' },
+  { value: 'Commercial Negotiation', label: 'Commercial Negotiation' },
+];
+
+const FACILITY_OPTIONS: SelectOption[] = [
+  { value: 'ALL', label: 'All Facilities' },
+  { value: 'Sales', label: 'Sales' },
+  { value: 'Service', label: 'Service' },
+  { value: 'Stock Yard', label: 'Stock Yard' },
+  { value: 'Sales & Service', label: 'Sales & Service' },
+];
 
 export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
   projects,
@@ -71,7 +85,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2">
-              <Layers className="w-5 h-5 text-blue-600" />
+              <IconMatrix className="w-4 h-4 text-slate-700" />
               <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
                 Dealership 21-Milestone Matrix
               </h2>
@@ -81,43 +95,34 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
             </p>
           </div>
 
-          {/* Filters */}
+          {/* Custom Filters */}
           <div className="flex flex-wrap items-center gap-2">
             <div className="relative">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
+              <IconSearch className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search location, code..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-8 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 w-52 shadow-2xs"
+                className="pl-8 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 w-48 shadow-2xs"
               />
             </div>
 
-            <select
+            <CustomSelect
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="py-1.5 px-3 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-blue-500 shadow-2xs cursor-pointer font-medium"
-            >
-              <option value="ALL">All Statuses</option>
-              <option value="Commissioned">Commissioned</option>
-              <option value="Ready for Handover">Ready for Handover</option>
-              <option value="BOQ Approved / PO Pending">BOQ Approved / PO Pending</option>
-              <option value="Pre-Construction">Pre-Construction</option>
-              <option value="Commercial Negotiation">Commercial Negotiation</option>
-            </select>
+              onChange={setStatusFilter}
+              options={STATUS_OPTIONS}
+              size="sm"
+              className="w-44"
+            />
 
-            <select
+            <CustomSelect
               value={facilityFilter}
-              onChange={(e) => setFacilityFilter(e.target.value)}
-              className="py-1.5 px-3 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-blue-500 shadow-2xs cursor-pointer font-medium"
-            >
-              <option value="ALL">All Facilities</option>
-              <option value="Sales">Sales</option>
-              <option value="Service">Service</option>
-              <option value="Stock Yard">Stock Yard</option>
-              <option value="Sales & Service">Sales & Service</option>
-            </select>
+              onChange={setFacilityFilter}
+              options={FACILITY_OPTIONS}
+              size="sm"
+              className="w-36"
+            />
           </div>
         </div>
 
@@ -210,7 +215,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                   <td className="p-3 sticky left-12 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-semibold text-slate-900">
                     <div className="flex items-center space-x-1.5">
                       <span>{p.location.name}</span>
-                      <ExternalLink className="w-3 h-3 text-slate-400 group-hover:text-blue-600 transition-colors" />
+                      <IconExternal className="w-3 h-3 text-slate-400 group-hover:text-blue-600 transition-colors" />
                     </div>
                     <div className="text-[10px] text-slate-400 font-mono mt-0.5">{p.code}</div>
                   </td>

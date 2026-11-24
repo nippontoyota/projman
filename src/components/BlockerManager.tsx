@@ -2,11 +2,8 @@
 
 import React, { useState, useMemo } from 'react';
 import { Project, Blocker, UserRole } from '@/types';
-import {
-  CheckCircle2,
-  ArrowRight,
-  ShieldAlert,
-} from 'lucide-react';
+import { IconEscalation, IconCheck } from '@/components/ui/Icons';
+import { CustomSelect, SelectOption } from '@/components/ui/CustomSelect';
 import { useToast } from '@/context/ToastContext';
 
 interface BlockerManagerProps {
@@ -15,6 +12,29 @@ interface BlockerManagerProps {
   onSelectProject: (p: Project) => void;
   onRefresh: () => void;
 }
+
+const CATEGORY_OPTIONS: SelectOption[] = [
+  { value: 'ALL', label: 'All Categories' },
+  { value: 'Landlord', label: 'Landlord Negotiation' },
+  { value: 'River OEM', label: 'River OEM Approvals' },
+  { value: 'Municipal / Legal', label: 'Municipal / Legal' },
+  { value: 'Civil Contractor', label: 'Civil Contractor' },
+  { value: 'Internal Management', label: 'Internal Management' },
+];
+
+const SEVERITY_OPTIONS: SelectOption[] = [
+  { value: 'ALL', label: 'All Severities' },
+  { value: 'Critical', label: 'Critical Only' },
+  { value: 'Major', label: 'Major' },
+  { value: 'Moderate', label: 'Moderate' },
+  { value: 'Minor', label: 'Minor' },
+];
+
+const STATUS_OPTIONS: SelectOption[] = [
+  { value: 'ALL', label: 'All Status' },
+  { value: 'Open', label: 'Open Issues' },
+  { value: 'Resolved', label: 'Resolved' },
+];
 
 export const BlockerManager: React.FC<BlockerManagerProps> = ({
   projects,
@@ -72,7 +92,7 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center space-x-2">
-              <ShieldAlert className="w-5 h-5 text-rose-600" />
+              <IconEscalation className="w-4 h-4 text-rose-600" />
               <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
                 Dealership Bottlenecks & Escalations Radar
               </h2>
@@ -82,42 +102,31 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
             </p>
           </div>
 
-          {/* Filter Pills */}
+          {/* In-House Custom Filter Dropdowns */}
           <div className="flex flex-wrap items-center gap-2">
-            <select
+            <CustomSelect
               value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="py-1.5 px-3 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-blue-500 shadow-2xs cursor-pointer font-medium"
-            >
-              <option value="ALL">All Categories</option>
-              <option value="Landlord">Landlord Negotiation</option>
-              <option value="River OEM">River OEM Approvals</option>
-              <option value="Municipal / Legal">Municipal / Legal</option>
-              <option value="Civil Contractor">Civil Contractor</option>
-              <option value="Internal Management">Internal Management</option>
-            </select>
+              onChange={setCategoryFilter}
+              options={CATEGORY_OPTIONS}
+              size="sm"
+              className="w-44"
+            />
 
-            <select
+            <CustomSelect
               value={severityFilter}
-              onChange={(e) => setSeverityFilter(e.target.value)}
-              className="py-1.5 px-3 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-blue-500 shadow-2xs cursor-pointer font-medium"
-            >
-              <option value="ALL">All Severities</option>
-              <option value="Critical">Critical Only</option>
-              <option value="Major">Major</option>
-              <option value="Moderate">Moderate</option>
-              <option value="Minor">Minor</option>
-            </select>
+              onChange={setSeverityFilter}
+              options={SEVERITY_OPTIONS}
+              size="sm"
+              className="w-36"
+            />
 
-            <select
+            <CustomSelect
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="py-1.5 px-3 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-blue-500 shadow-2xs cursor-pointer font-medium"
-            >
-              <option value="ALL">All Status</option>
-              <option value="Open">Open Issues</option>
-              <option value="Resolved">Resolved</option>
-            </select>
+              onChange={setStatusFilter}
+              options={STATUS_OPTIONS}
+              size="sm"
+              className="w-32"
+            />
           </div>
         </div>
       </div>
@@ -175,17 +184,17 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
                   </button>
                 ) : (
                   <span className="text-xs text-emerald-700 font-semibold flex items-center space-x-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <IconCheck className="w-3.5 h-3.5 text-emerald-600" />
                     <span>Resolved</span>
                   </span>
                 )}
 
                 <button
                   onClick={() => onSelectProject(blk.projectDetails)}
-                  className="p-1 text-slate-500 hover:text-slate-800 rounded hover:bg-slate-100 transition-colors cursor-pointer"
+                  className="px-2 py-1 text-slate-600 hover:text-slate-900 rounded hover:bg-slate-100 transition-colors cursor-pointer text-xs font-medium"
                   title="View Project Details"
                 >
-                  <ArrowRight className="w-4 h-4" />
+                  <span>Track Details →</span>
                 </button>
               </div>
             </div>
