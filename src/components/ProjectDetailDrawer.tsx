@@ -4,15 +4,46 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Project, UserRole, Milestone, ScheduleHealth, ProjectStatus } from '@/types';
 import {
-  X,
-  CheckCircle2,
-  AlertTriangle,
-  Trash2,
-  Save,
-  PlusCircle,
-  History,
-} from 'lucide-react';
+  IconClose,
+  IconCheck,
+  IconEscalation,
+  IconPlus,
+  IconTrash,
+  IconSave,
+} from '@/components/ui/Icons';
+import { CustomSelect, SelectOption } from '@/components/ui/CustomSelect';
 import { useToast } from '@/context/ToastContext';
+
+const PROJECT_STATUS_OPTIONS: SelectOption[] = [
+  { value: 'Commercial Negotiation', label: 'Commercial Negotiation' },
+  { value: 'Pre-Construction', label: 'Pre-Construction' },
+  { value: 'BOQ Approved / PO Pending', label: 'BOQ Approved / PO Pending' },
+  { value: 'Ready for Handover', label: 'Ready for Handover' },
+  { value: 'Commissioned', label: 'Commissioned' },
+];
+
+const SCHEDULE_HEALTH_OPTIONS: SelectOption[] = [
+  { value: 'Completed', label: 'Completed' },
+  { value: 'On Track', label: 'On Track' },
+  { value: 'Watchlist', label: 'Watchlist' },
+  { value: 'Delayed (>30d)', label: 'Delayed (>30d)' },
+  { value: 'Action Needed', label: 'Action Needed' },
+];
+
+const BLOCKER_CATEGORY_OPTIONS: SelectOption[] = [
+  { value: 'Landlord', label: 'Landlord Negotiation' },
+  { value: 'River OEM', label: 'River OEM Approvals' },
+  { value: 'Municipal / Legal', label: 'Municipal / Legal' },
+  { value: 'Civil Contractor', label: 'Civil Contractor' },
+  { value: 'Internal Management', label: 'Internal Management' },
+];
+
+const BLOCKER_SEVERITY_OPTIONS: SelectOption[] = [
+  { value: 'Critical', label: 'Critical (Immediate Block)' },
+  { value: 'Major', label: 'Major' },
+  { value: 'Moderate', label: 'Moderate' },
+  { value: 'Minor', label: 'Minor' },
+];
 
 interface ProjectDetailDrawerProps {
   project: Project | null;
@@ -235,14 +266,14 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                     className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                     title="Delete Project"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <IconTrash className="w-4 h-4" />
                   </button>
                 )}
                 <button
                   onClick={onClose}
                   className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
                 >
-                  <X className="w-5 h-5" />
+                  <IconClose className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -250,13 +281,13 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
             {/* Navigation Tabs */}
             <div className="flex items-center px-5 border-b border-slate-200 bg-white text-xs space-x-4">
               {[
-                { id: 'milestones', label: '21 Milestones', icon: CheckCircle2 },
+                { id: 'milestones', label: '21 Milestones', icon: IconCheck },
                 {
                   id: 'blockers',
                   label: `Blockers (${project.blockers.filter((b) => b.status !== 'Resolved').length})`,
-                  icon: AlertTriangle,
+                  icon: IconEscalation,
                 },
-                { id: 'audit', label: 'Audit Trail', icon: History },
+                { id: 'audit', label: 'Audit Trail', icon: IconCheck },
               ].map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
@@ -296,35 +327,25 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[11px] font-semibold text-slate-600 block mb-1">Status</label>
-                    <select
-                      disabled={userRole !== 'Admin'}
+                    <CustomSelect
+                      label="Status"
                       value={currentStatus}
-                      onChange={(e) => setCurrentStatus(e.target.value as ProjectStatus)}
-                      className="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-900 focus:outline-none focus:border-blue-500 disabled:bg-slate-100 disabled:text-slate-500 cursor-pointer shadow-2xs font-medium"
-                    >
-                      <option value="Commercial Negotiation">Commercial Negotiation</option>
-                      <option value="Pre-Construction">Pre-Construction</option>
-                      <option value="BOQ Approved / PO Pending">BOQ Approved / PO Pending</option>
-                      <option value="Ready for Handover">Ready for Handover</option>
-                      <option value="Commissioned">Commissioned</option>
-                    </select>
+                      onChange={(val) => setCurrentStatus(val as ProjectStatus)}
+                      options={PROJECT_STATUS_OPTIONS}
+                      disabled={userRole !== 'Admin'}
+                      size="sm"
+                    />
                   </div>
 
                   <div>
-                    <label className="text-[11px] font-semibold text-slate-600 block mb-1">Schedule Health</label>
-                    <select
-                      disabled={userRole !== 'Admin'}
+                    <CustomSelect
+                      label="Schedule Health"
                       value={scheduleHealth}
-                      onChange={(e) => setScheduleHealth(e.target.value as ScheduleHealth)}
-                      className="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-900 focus:outline-none focus:border-blue-500 disabled:bg-slate-100 disabled:text-slate-500 cursor-pointer shadow-2xs font-medium"
-                    >
-                      <option value="Completed">Completed</option>
-                      <option value="On Track">On Track</option>
-                      <option value="Watchlist">Watchlist</option>
-                      <option value="Delayed (>30d)">Delayed (&gt;30d)</option>
-                      <option value="Action Needed">Action Needed</option>
-                    </select>
+                      onChange={(val) => setScheduleHealth(val as ScheduleHealth)}
+                      options={SCHEDULE_HEALTH_OPTIONS}
+                      disabled={userRole !== 'Admin'}
+                      size="sm"
+                    />
                   </div>
 
                   <div>
@@ -368,7 +389,7 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                     disabled={isSaving}
                     className="flex items-center space-x-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs shadow-xs transition-colors disabled:opacity-50 cursor-pointer"
                   >
-                    <Save className="w-3.5 h-3.5" />
+                    <IconSave className="w-3.5 h-3.5" />
                     <span>{isSaving ? 'Saving...' : 'Save Updates'}</span>
                   </button>
                 </div>
@@ -461,7 +482,7 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                       onClick={() => setShowBlockerForm(!showBlockerForm)}
                       className="flex items-center space-x-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 transition-colors cursor-pointer"
                     >
-                      <PlusCircle className="w-3.5 h-3.5" />
+                      <IconPlus className="w-3.5 h-3.5" />
                       <span>Log Issue</span>
                     </button>
                   </div>
@@ -474,32 +495,23 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                       <div className="font-bold text-slate-900">Log Site Bottleneck</div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="text-[11px] font-semibold text-slate-600 block mb-1">Category</label>
-                          <select
+                          <CustomSelect
+                            label="Category"
                             value={blockerCategory}
-                            onChange={(e) => setBlockerCategory(e.target.value)}
-                            className="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-900 shadow-2xs"
-                          >
-                            <option value="Landlord">Landlord Negotiation</option>
-                            <option value="River OEM">River OEM Approvals</option>
-                            <option value="Municipal / Legal">Municipal / Legal</option>
-                            <option value="Civil Contractor">Civil Contractor</option>
-                            <option value="Internal Management">Internal Management</option>
-                          </select>
+                            onChange={setBlockerCategory}
+                            options={BLOCKER_CATEGORY_OPTIONS}
+                            size="sm"
+                          />
                         </div>
 
                         <div>
-                          <label className="text-[11px] font-semibold text-slate-600 block mb-1">Severity</label>
-                          <select
+                          <CustomSelect
+                            label="Severity"
                             value={blockerSeverity}
-                            onChange={(e) => setBlockerSeverity(e.target.value as any)}
-                            className="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-900 shadow-2xs"
-                          >
-                            <option value="Critical">Critical (Immediate Block)</option>
-                            <option value="Major">Major</option>
-                            <option value="Moderate">Moderate</option>
-                            <option value="Minor">Minor</option>
-                          </select>
+                            onChange={(val) => setBlockerSeverity(val as any)}
+                            options={BLOCKER_SEVERITY_OPTIONS}
+                            size="sm"
+                          />
                         </div>
                       </div>
 
