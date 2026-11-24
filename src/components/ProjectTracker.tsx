@@ -213,8 +213,8 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
         </div>
       </div>
 
-      {/* Dedicated Phase Slider Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-50 border border-black rounded-xs px-3 py-1.5 text-xs">
+      {/* Seamless Phase Slider */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 py-0.5 text-xs">
         {/* Phase Arrow Buttons & Navigator */}
         <div className="flex items-center space-x-2">
           {/* Previous Phase / Scroll Left Arrow Button */}

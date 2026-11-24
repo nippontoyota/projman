@@ -89,12 +89,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
     }
   };
 
-  const scrollToYear = (offset: number) => {
-    if (tableContainerRef.current) {
-      tableContainerRef.current.scrollTo({ left: offset, behavior: 'smooth' });
-    }
-  };
-
   // Filter projects
   const filteredProjects = useMemo(() => {
     return projects.filter((p) => {
@@ -218,69 +212,45 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
         </div>
       </div>
 
-      {/* Dedicated Timeline Slider Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-50 border border-black rounded-xs px-3 py-1.5 text-xs">
-        {/* Timeline Arrow Buttons & Navigator */}
-        <div className="flex items-center space-x-2">
-          {/* Scroll Left Arrow Button */}
-          <button
-            type="button"
-            onClick={handleSmoothScrollLeft}
-            disabled={scrollProgress === 0}
-            className="flex items-center justify-center w-7 h-7 rounded-xs bg-white border border-slate-300 hover:border-black hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-2xs"
-            title="Smooth scroll left"
-          >
-            <IconChevronLeft className="w-3.5 h-3.5 text-black" />
-          </button>
-
-          {/* Year Segmented Buttons */}
-          <div className="flex items-center bg-white p-0.5 rounded-xs border border-slate-300">
-            {[
-              { label: 'All', offset: 0 },
-              { label: '2025', offset: 0 },
-              { label: '2026', offset: 240 },
-              { label: 'Now (Nov-26)', offset: 680 },
-              { label: '2027 (Target)', offset: 980 },
-            ].map((item) => (
-              <button
-                key={item.label}
-                type="button"
-                onClick={() => scrollToYear(item.offset)}
-                className="px-2.5 py-1 rounded-xs text-[11px] font-bold text-slate-600 hover:text-black hover:bg-slate-100 transition-all cursor-pointer"
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Scroll Right Arrow Button */}
-          <button
-            type="button"
-            onClick={handleSmoothScrollRight}
-            disabled={scrollProgress === 100}
-            className="flex items-center justify-center w-7 h-7 rounded-xs bg-white border border-slate-300 hover:border-black hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-2xs"
-            title="Smooth scroll right"
-          >
-            <IconChevronRight className="w-3.5 h-3.5 text-black" />
-          </button>
-        </div>
+      {/* Seamless Timeline Slider */}
+      <div className="flex items-center justify-end space-x-2 py-0.5 text-xs">
+        {/* Scroll Left Arrow Button */}
+        <button
+          type="button"
+          onClick={handleSmoothScrollLeft}
+          disabled={scrollProgress === 0}
+          className="flex items-center justify-center w-7 h-7 rounded-xs bg-white border border-slate-300 hover:border-black hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-2xs"
+          title="Smooth scroll left"
+        >
+          <IconChevronLeft className="w-3.5 h-3.5 text-black" />
+        </button>
 
         {/* Smooth Slider Range Control */}
-        <div className="flex items-center space-x-2 shrink-0">
-          <input
-            type="range"
-            min={0}
-            max={100}
-            step={1}
-            value={scrollProgress}
-            onChange={(e) => handleSliderDrag(Number(e.target.value))}
-            className="w-32 accent-black cursor-pointer"
-            title="Smoothly slide across timeline months"
-          />
-          <span className="text-[10px] font-mono text-slate-500 font-semibold w-10 text-right">
-            {scrollProgress}%
-          </span>
-        </div>
+        <input
+          type="range"
+          min={0}
+          max={100}
+          step={1}
+          value={scrollProgress}
+          onChange={(e) => handleSliderDrag(Number(e.target.value))}
+          className="w-36 accent-black cursor-pointer"
+          title="Smoothly slide across timeline months"
+        />
+
+        {/* Scroll Right Arrow Button */}
+        <button
+          type="button"
+          onClick={handleSmoothScrollRight}
+          disabled={scrollProgress === 100}
+          className="flex items-center justify-center w-7 h-7 rounded-xs bg-white border border-slate-300 hover:border-black hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-2xs"
+          title="Smooth scroll right"
+        >
+          <IconChevronRight className="w-3.5 h-3.5 text-black" />
+        </button>
+
+        <span className="text-[10px] font-mono text-slate-500 font-semibold w-10 text-right">
+          {scrollProgress}%
+        </span>
       </div>
 
       {/* Main Gantt Grid Table */}
