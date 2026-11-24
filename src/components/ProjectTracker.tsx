@@ -17,12 +17,13 @@ interface ProjectTrackerProps {
   onRefresh: () => void;
 }
 
-const PHASES = [
-  { num: 1, title: 'Phase 1: Property & Agreement', shortName: 'Phase 1: Property', count: 6, scrollOffset: 0 },
-  { num: 2, title: 'Phase 2: Design & GFC Approval', shortName: 'Phase 2: Design', count: 5, scrollOffset: 288 },
-  { num: 3, title: 'Phase 3: BOQ & PO Release', shortName: 'Phase 3: BOQ & PO', count: 5, scrollOffset: 528 },
-  { num: 4, title: 'Phase 4: Site Execution & Handover', shortName: 'Phase 4: Execution', count: 5, scrollOffset: 768 },
-] as const;
+const PHASES: { id: 'ALL' | 1 | 2 | 3 | 4; title: string; shortName: string; count: number }[] = [
+  { id: 'ALL', title: 'All Phases (21 Milestones)', shortName: 'All Phases', count: 21 },
+  { id: 1, title: 'Phase 1: Property & Agreement (6 Milestones)', shortName: '1. Property', count: 6 },
+  { id: 2, title: 'Phase 2: Design & GFC Approval (5 Milestones)', shortName: '2. Design & GFC', count: 5 },
+  { id: 3, title: 'Phase 3: BOQ & PO Release (5 Milestones)', shortName: '3. BOQ & PO', count: 5 },
+  { id: 4, title: 'Phase 4: Site Execution & Handover (5 Milestones)', shortName: '4. Site Execution', count: 5 },
+];
 
 const STATUS_OPTIONS: SelectOption[] = [
   { value: 'ALL', label: 'All Statuses' },
@@ -49,42 +50,19 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [facilityFilter, setFacilityFilter] = useState('ALL');
-  const [activePhaseIndex, setActivePhaseIndex] = useState(0);
-  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const [phaseIndex, setPhaseIndex] = useState(0);
 
-  const scrollToPhase = (index: number) => {
-    setActivePhaseIndex(index);
-    if (tableContainerRef.current) {
-      tableContainerRef.current.scrollTo({
-        left: PHASES[index].scrollOffset,
-        behavior: 'smooth',
-      });
-    }
-  };
+  const selectedPhase = PHASES[phaseIndex].id;
 
   const handlePrevPhase = () => {
-    if (activePhaseIndex > 0) {
-      scrollToPhase(activePhaseIndex - 1);
+    if (phaseIndex > 0) {
+      setPhaseIndex(phaseIndex - 1);
     }
   };
 
   const handleNextPhase = () => {
-    if (activePhaseIndex < PHASES.length - 1) {
-      scrollToPhase(activePhaseIndex + 1);
-    }
-  };
-
-  const handleScroll = () => {
-    if (!tableContainerRef.current) return;
-    const sl = tableContainerRef.current.scrollLeft;
-    if (sl < 144) {
-      setActivePhaseIndex(0);
-    } else if (sl < 408) {
-      setActivePhaseIndex(1);
-    } else if (sl < 648) {
-      setActivePhaseIndex(2);
-    } else {
-      setActivePhaseIndex(3);
+    if (phaseIndex < PHASES.length - 1) {
+      setPhaseIndex(phaseIndex + 1);
     }
   };
 
@@ -168,10 +146,10 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-50 border border-black rounded-xs px-3 py-2 text-xs">
         <div className="flex items-center space-x-2 shrink-0">
           <span className="text-[11px] font-black uppercase tracking-wider text-black">
-            Phases:
+            Active Phase:
           </span>
           <span className="text-xs font-bold text-slate-800">
-            {PHASES[activePhaseIndex].title}
+            {PHASES[phaseIndex].title}
           </span>
         </div>
 
@@ -181,7 +159,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
           <button
             type="button"
             onClick={handlePrevPhase}
-            disabled={activePhaseIndex === 0}
+            disabled={phaseIndex === 0}
             className="flex items-center justify-center w-7 h-7 rounded-xs bg-white border border-slate-300 hover:border-black hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-2xs"
             title="Slide to Previous Phase"
           >
@@ -192,11 +170,11 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
           <div className="flex items-center bg-white p-0.5 rounded-xs border border-slate-300">
             {PHASES.map((phase, idx) => (
               <button
-                key={phase.num}
+                key={phase.id}
                 type="button"
-                onClick={() => scrollToPhase(idx)}
+                onClick={() => setPhaseIndex(idx)}
                 className={`px-2.5 py-1 rounded-xs text-[11px] font-bold transition-all cursor-pointer ${
-                  activePhaseIndex === idx
+                  phaseIndex === idx
                     ? 'bg-black text-white shadow-xs'
                     : 'text-slate-600 hover:text-black hover:bg-slate-100'
                 }`}
@@ -210,7 +188,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
           <button
             type="button"
             onClick={handleNextPhase}
-            disabled={activePhaseIndex === PHASES.length - 1}
+            disabled={phaseIndex === PHASES.length - 1}
             className="flex items-center justify-center w-7 h-7 rounded-xs bg-white border border-slate-300 hover:border-black hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-2xs"
             title="Slide to Next Phase"
           >
@@ -225,25 +203,29 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
             min={0}
             max={PHASES.length - 1}
             step={1}
-            value={activePhaseIndex}
-            onChange={(e) => scrollToPhase(Number(e.target.value))}
+            value={phaseIndex}
+            onChange={(e) => setPhaseIndex(Number(e.target.value))}
             className="w-24 accent-black cursor-pointer"
             title="Slide milestone phases"
           />
-          <span className="text-[10px] font-mono text-slate-500 font-semibold w-12 text-right">
-            {activePhaseIndex + 1} / 4
+          <span className="text-[10px] font-mono text-slate-500 font-semibold w-14 text-right">
+            {phaseIndex === 0 ? 'All (21)' : `${phaseIndex} of 4`}
           </span>
         </div>
       </div>
 
       {/* Main Table */}
       <div className="bg-white border border-black rounded-xs overflow-hidden">
-        <div
-          ref={tableContainerRef}
-          onScroll={handleScroll}
-          className="overflow-x-auto max-h-[750px]"
-        >
-          <table className="w-full text-left border-collapse min-w-[2032px] text-xs">
+        <div className="overflow-x-auto max-h-[750px]">
+          <table
+            className={`w-full text-left border-collapse text-xs ${
+              selectedPhase === 'ALL'
+                ? 'min-w-[2032px]'
+                : selectedPhase === 1
+                ? 'min-w-[1312px]'
+                : 'min-w-[1264px]'
+            }`}
+          >
             <thead className="sticky top-0 z-30 bg-slate-100 border-b-2 border-slate-400">
               <tr>
                 {/* Sl. No. - Constant */}
@@ -276,19 +258,27 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                   Remarks / Notes
                 </th>
 
-                {/* Milestone Headers - Slidable */}
-                <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[288px] max-w-[288px]" colSpan={6}>
-                  Phase 1: Property & Agreement
-                </th>
-                <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
-                  Phase 2: Design & GFC Approval
-                </th>
-                <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
-                  Phase 3: BOQ & PO Release
-                </th>
-                <th className="p-3 bg-slate-200/80 text-black text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
-                  Phase 4: Site Execution & Handover
-                </th>
+                {/* Selected Phase Headers */}
+                {(selectedPhase === 'ALL' || selectedPhase === 1) && (
+                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[288px] max-w-[288px]" colSpan={6}>
+                    Phase 1: Property & Agreement
+                  </th>
+                )}
+                {(selectedPhase === 'ALL' || selectedPhase === 2) && (
+                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
+                    Phase 2: Design & GFC Approval
+                  </th>
+                )}
+                {(selectedPhase === 'ALL' || selectedPhase === 3) && (
+                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
+                    Phase 3: BOQ & PO Release
+                  </th>
+                )}
+                {(selectedPhase === 'ALL' || selectedPhase === 4) && (
+                  <th className="p-3 bg-slate-200/80 text-black text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
+                    Phase 4: Site Execution & Handover
+                  </th>
+                )}
               </tr>
             </thead>
 
@@ -353,34 +343,36 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                     </p>
                   </td>
 
-                  {/* Milestones - Slidable Underneath */}
-                  {p.milestones.map((m) => {
-                    const isDone = m.status === 'Completed' || !!m.actualDate;
-                    const isPhaseEnd = m.orderIndex === 6 || m.orderIndex === 11 || m.orderIndex === 16 || m.orderIndex === 21;
+                  {/* Filtered Milestones of Selected Phase */}
+                  {p.milestones
+                    .filter((m) => selectedPhase === 'ALL' || m.phaseNumber === selectedPhase)
+                    .map((m) => {
+                      const isDone = m.status === 'Completed' || !!m.actualDate;
+                      const isPhaseEnd = m.orderIndex === 6 || m.orderIndex === 11 || m.orderIndex === 16 || m.orderIndex === 21;
 
-                    return (
-                      <td
-                        key={m.id}
-                        className={`py-2 px-1 w-12 min-w-[48px] max-w-[48px] whitespace-nowrap ${isPhaseEnd ? 'border-r-2 border-slate-400' : 'border-r border-slate-100'} text-center ${
-                          isDone ? 'bg-emerald-50/40' : ''
-                        }`}
-                        title={`${m.title}\nStatus: ${m.status}\nDate: ${
-                          m.actualDate ? m.actualDate.split('T')[0] : 'Pending'
-                        }`}
-                      >
-                        {isDone ? (
-                          <div className="flex flex-col items-center justify-center">
-                            <span className="text-[10px] font-mono text-emerald-700 font-extrabold whitespace-nowrap">
-                              {m.actualDate ? m.actualDate.split('T')[0].slice(5) : 'Done'}
-                            </span>
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-0.5" />
-                          </div>
-                        ) : (
-                          <div className="text-slate-300 text-[10px] font-bold">-</div>
-                        )}
-                      </td>
-                    );
-                  })}
+                      return (
+                        <td
+                          key={m.id}
+                          className={`py-2 px-1 w-12 min-w-[48px] max-w-[48px] whitespace-nowrap ${isPhaseEnd ? 'border-r-2 border-slate-400' : 'border-r border-slate-100'} text-center ${
+                            isDone ? 'bg-emerald-50/40' : ''
+                          }`}
+                          title={`${m.title}\nStatus: ${m.status}\nDate: ${
+                            m.actualDate ? m.actualDate.split('T')[0] : 'Pending'
+                          }`}
+                        >
+                          {isDone ? (
+                            <div className="flex flex-col items-center justify-center">
+                              <span className="text-[10px] font-mono text-emerald-700 font-extrabold whitespace-nowrap">
+                                {m.actualDate ? m.actualDate.split('T')[0].slice(5) : 'Done'}
+                              </span>
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-0.5" />
+                            </div>
+                          ) : (
+                            <div className="text-slate-300 text-[10px] font-bold">-</div>
+                          )}
+                        </td>
+                      );
+                    })}
                 </tr>
               ))}
             </tbody>
