@@ -147,24 +147,24 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
       </div>
 
       {/* Main Table */}
-      <div className="bg-white border border-slate-200 rounded-xs overflow-hidden">
+      <div className="bg-white border border-black rounded-xs overflow-hidden">
         <div className="overflow-x-auto max-h-[750px]">
-          <table className="w-full text-left border-collapse min-w-[2300px] text-xs">
+          <table className="w-full text-left border-collapse min-w-[2040px] text-xs">
             <thead className="sticky top-0 z-30 bg-slate-100 border-b-2 border-slate-400">
               <tr>
-                <th className="p-3 sticky left-0 z-40 bg-slate-100 w-14 border-r border-slate-300 text-center text-black font-extrabold text-[11px] font-mono uppercase tracking-wider">
+                <th className="p-3 sticky left-0 z-40 bg-slate-100 w-14 min-w-[56px] max-w-[56px] border-r border-slate-300 text-center text-black font-extrabold text-[11px] font-mono uppercase tracking-wider">
                   Sl. No.
                 </th>
-                <th className="p-3 sticky left-14 z-40 bg-slate-100 w-44 border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
+                <th className="p-3 sticky left-14 z-40 bg-slate-100 w-64 min-w-[256px] max-w-[256px] border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Location & Code
                 </th>
-                <th className="p-3 sticky left-[232px] z-40 bg-slate-100 w-28 border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
+                <th className="p-3 sticky left-[312px] z-40 bg-slate-100 w-36 min-w-[144px] max-w-[144px] border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Facility
                 </th>
-                <th className="p-3 sticky left-[344px] z-40 bg-slate-100 w-36 border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider shadow-xs">
+                <th className="p-3 sticky left-[456px] z-40 bg-slate-100 w-56 min-w-[224px] max-w-[224px] border-r-2 border-slate-400 text-black font-extrabold text-[11px] uppercase tracking-wider shadow-xs">
                   Status
                 </th>
-                <th className="p-3 w-28 border-r border-slate-300 text-center text-black font-extrabold text-[11px] uppercase tracking-wider">
+                <th className="p-3 w-28 min-w-[112px] border-r border-slate-300 text-center text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Progress %
                 </th>
                 <th className="p-3 w-72 min-w-[220px] border-r-2 border-slate-400 text-black font-extrabold text-[11px] uppercase tracking-wider">
@@ -173,22 +173,22 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
 
                 {/* Milestone Headers */}
                 {expandedPhases[1] && (
-                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[420px]" colSpan={6}>
+                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[288px] max-w-[288px]" colSpan={6}>
                     Phase 1: Property & Agreement
                   </th>
                 )}
                 {expandedPhases[2] && (
-                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[350px]" colSpan={5}>
+                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
                     Phase 2: Design & GFC Approval
                   </th>
                 )}
                 {expandedPhases[3] && (
-                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[350px]" colSpan={5}>
+                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
                     Phase 3: BOQ & PO Release
                   </th>
                 )}
                 {expandedPhases[4] && (
-                  <th className="p-3 bg-slate-200/80 text-black text-center font-extrabold text-xs min-w-[350px]" colSpan={5}>
+                  <th className="p-3 bg-slate-200/80 text-black text-center font-extrabold text-xs min-w-[240px] max-w-[240px]" colSpan={5}>
                     Phase 4: Site Execution & Handover
                   </th>
                 )}
@@ -202,27 +202,27 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                   onClick={() => onSelectProject(p)}
                   className="hover:bg-slate-50 transition-colors group cursor-pointer"
                 >
-                  <td className="p-3 sticky left-0 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-black font-extrabold font-mono text-center text-xs">
+                  <td className="p-3 sticky left-0 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-black font-extrabold font-mono text-center text-xs w-14 min-w-[56px] max-w-[56px]">
                     {idx + 1}
                   </td>
 
-                  <td className="p-3 sticky left-14 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-bold text-black">
-                    <div className="flex items-center space-x-1.5">
-                      <span>{p.location.name}</span>
-                      <IconExternal className="w-3 h-3 text-slate-400 group-hover:text-black transition-colors" />
+                  <td className="p-3 sticky left-14 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-bold text-black w-64 min-w-[256px] max-w-[256px]">
+                    <div className="flex items-center space-x-1.5 whitespace-nowrap">
+                      <span className="truncate">{p.location.name}</span>
+                      <IconExternal className="w-3 h-3 text-slate-400 group-hover:text-black transition-colors shrink-0" />
                     </div>
                     <div className="text-[10px] text-slate-500 font-mono font-semibold mt-0.5">{p.code}</div>
                   </td>
 
-                  <td className="p-3 sticky left-[232px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-slate-800">
-                    <span className="px-2 py-0.5 rounded-xs text-[11px] bg-slate-100 font-bold border border-slate-200">
+                  <td className="p-3 sticky left-[312px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-slate-800 w-36 min-w-[144px] max-w-[144px]">
+                    <span className="px-2 py-0.5 rounded-xs text-[11px] bg-slate-100 font-bold border border-slate-200 whitespace-nowrap inline-block">
                       {p.facilityType}
                     </span>
                   </td>
 
-                  <td className="p-3 sticky left-[344px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 shadow-xs">
+                  <td className="p-3 sticky left-[456px] z-20 bg-white group-hover:bg-slate-50 border-r-2 border-slate-400 shadow-xs w-56 min-w-[224px] max-w-[224px]">
                     <span
-                      className={`inline-block px-2 py-0.5 rounded-xs text-[10px] font-bold border ${getStatusBadge(
+                      className={`inline-block px-2 py-0.5 rounded-xs text-[10px] font-bold border whitespace-nowrap ${getStatusBadge(
                         p.currentStatus
                       )}`}
                     >
@@ -260,7 +260,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                     return (
                       <td
                         key={m.id}
-                        className={`p-2 min-w-[70px] whitespace-nowrap ${isPhaseEnd ? 'border-r-2 border-slate-400' : 'border-r border-slate-100'} text-center ${
+                        className={`py-2 px-1 w-12 min-w-[48px] max-w-[48px] whitespace-nowrap ${isPhaseEnd ? 'border-r-2 border-slate-400' : 'border-r border-slate-100'} text-center ${
                           isDone ? 'bg-emerald-50/40' : ''
                         }`}
                         title={`${m.title}\nStatus: ${m.status}\nDate: ${
@@ -269,13 +269,13 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                       >
                         {isDone ? (
                           <div className="flex flex-col items-center justify-center">
-                            <span className="text-[11px] font-mono text-emerald-700 font-extrabold whitespace-nowrap">
+                            <span className="text-[10px] font-mono text-emerald-700 font-extrabold whitespace-nowrap">
                               {m.actualDate ? m.actualDate.split('T')[0].slice(5) : 'Done'}
                             </span>
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-1" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-0.5" />
                           </div>
                         ) : (
-                          <div className="text-slate-300 text-xs font-bold">-</div>
+                          <div className="text-slate-300 text-[10px] font-bold">-</div>
                         )}
                       </td>
                     );

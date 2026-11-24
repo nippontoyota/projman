@@ -96,7 +96,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 8 }}
             transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-            className="relative z-10 bg-white border border-slate-200 rounded-xs w-full max-w-lg p-5 shadow-xl overflow-hidden text-slate-900"
+            className="relative z-10 bg-white border border-black rounded-xs w-full max-w-lg p-5 shadow-xl overflow-hidden text-slate-900"
           >
             {/* Close Button */}
             <button

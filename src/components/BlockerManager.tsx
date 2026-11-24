@@ -127,7 +127,7 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
       </div>
 
       {/* High-Density Escalations Table */}
-      <div className="bg-white border border-slate-200 rounded-xs overflow-hidden">
+      <div className="bg-white border border-black rounded-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>

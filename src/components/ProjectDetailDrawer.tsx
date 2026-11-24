@@ -256,7 +256,7 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 350 }}
-            className="relative z-10 bg-white border-l border-slate-200 w-full max-w-2xl h-full flex flex-col shadow-2xl overflow-hidden text-slate-900"
+            className="relative z-10 bg-white border-l border-black w-full max-w-2xl h-full flex flex-col shadow-2xl overflow-hidden text-slate-900"
           >
             {/* Header */}
             <div className="p-4 sm:p-5 border-b border-slate-200 bg-white flex items-center justify-between">

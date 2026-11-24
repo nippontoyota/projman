@@ -79,7 +79,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* Total Projects */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-xs p-3.5"
+          className="bg-white border border-black rounded-xs p-3.5"
         >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
@@ -96,7 +96,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* Completed Showrooms */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-xs p-3.5"
+          className="bg-white border border-black rounded-xs p-3.5"
         >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
@@ -117,7 +117,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* In Progress */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-xs p-3.5"
+          className="bg-white border border-black rounded-xs p-3.5"
         >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
@@ -134,7 +134,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* Days Remaining */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-xs p-3.5"
+          className="bg-white border border-black rounded-xs p-3.5"
         >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
@@ -151,7 +151,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* Open Issues */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-xs p-3.5"
+          className="bg-white border border-black rounded-xs p-3.5"
         >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
@@ -171,22 +171,22 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* Status Breakdown */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-xs p-4"
+          className="bg-white border border-black rounded-xs p-4 flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-3 shrink-0">
             <h3 className="font-bold text-black text-xs">Status Breakdown</h3>
             <span className="text-[11px] text-slate-400 font-mono font-semibold">
               15 Projects
             </span>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-3 flex-1 flex flex-col justify-around">
             {portfolioBreakdown.map((item) => (
               <div
                 key={item.status}
-                className="bg-slate-50/70 p-3 rounded-xs border border-slate-200/80"
+                className="bg-slate-50/70 p-2.5 rounded-xs border border-slate-200/80"
               >
-                <div className="flex items-center justify-between text-xs mb-1.5">
+                <div className="flex items-center justify-between text-xs mb-1">
                   <span className="font-bold text-black">{item.status}</span>
                   <div className="flex items-center space-x-3 text-slate-600">
                     <span className="font-mono">
@@ -222,39 +222,39 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* Stage-Wise Timeline Benchmarks */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-xs p-4"
+          className="bg-white border border-black rounded-xs p-4 flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-3 shrink-0">
             <h3 className="font-bold text-black text-xs">Stage Durations (Average Days)</h3>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
+          <div className="overflow-x-auto flex-1 flex flex-col">
+            <table className="w-full text-left text-xs h-full flex-1">
               <thead>
                 <tr className="border-b border-slate-200 text-slate-500 uppercase text-[10px] font-semibold">
-                  <th className="pb-2">Stage</th>
-                  <th className="pb-2 text-center">Avg Days</th>
-                  <th className="pb-2 text-center">Min Days</th>
-                  <th className="pb-2 text-center">Max Days</th>
-                  <th className="pb-2 text-right">Projects</th>
+                  <th className="pb-2 font-bold text-black">Stage</th>
+                  <th className="pb-2 text-center font-bold text-black">Avg Days</th>
+                  <th className="pb-2 text-center font-bold text-black">Min Days</th>
+                  <th className="pb-2 text-center font-bold text-black">Max Days</th>
+                  <th className="pb-2 text-right font-bold text-black">Projects</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {benchmarks.map((b) => (
                   <tr key={b.stageNumber} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-2.5 font-medium text-slate-800">
+                    <td className="py-3 font-semibold text-slate-900">
                       {b.stageName}
                     </td>
-                    <td className="py-2.5 text-center font-black text-black font-mono">
+                    <td className="py-3 text-center font-black text-black font-mono">
                       {b.avgDays.toFixed(1)}d
                     </td>
-                    <td className="py-2.5 text-center text-slate-600 font-mono">
+                    <td className="py-3 text-center text-slate-600 font-mono">
                       {b.minDays}d
                     </td>
-                    <td className="py-2.5 text-center text-slate-600 font-mono">
+                    <td className="py-3 text-center text-slate-600 font-mono">
                       {b.maxDays}d
                     </td>
-                    <td className="py-2.5 text-right font-bold text-black font-mono">
+                    <td className="py-3 text-right font-bold text-black font-mono">
                       {b.tracksCount}
                     </td>
                   </tr>
@@ -268,7 +268,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
       {/* Critical Bottlenecks Radar */}
       <motion.div
         variants={itemVariants}
-        className="bg-white border border-slate-200 rounded-xs p-4"
+        className="bg-white border border-black rounded-xs p-4"
       >
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-bold text-black text-sm">
