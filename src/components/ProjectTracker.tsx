@@ -79,78 +79,73 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
   };
 
   return (
-    <div className="space-y-4">
-      {/* Controls Bar */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center space-x-2.5">
-            <h2 className="text-base font-bold text-slate-950 tracking-tight">
-              21-Milestone Matrix
-            </h2>
-            <span className="text-[11px] font-mono text-slate-500 px-2 py-0.5 bg-slate-100 rounded border border-slate-200">
-              {filteredProjects.length} tracks
-            </span>
-          </div>
-
-          {/* Custom Filters */}
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="relative">
-              <IconSearch className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search location, code..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-8 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 w-48 shadow-2xs"
-              />
-            </div>
-
-            <CustomSelect
-              value={statusFilter}
-              onChange={setStatusFilter}
-              options={STATUS_OPTIONS}
-              size="sm"
-              className="w-44"
-            />
-
-            <CustomSelect
-              value={facilityFilter}
-              onChange={setFacilityFilter}
-              options={FACILITY_OPTIONS}
-              size="sm"
-              className="w-36"
-            />
-          </div>
+    <div className="space-y-3">
+      {/* Controls Toolbar */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="flex items-center space-x-2">
+          <h2 className="text-sm font-semibold text-slate-900 tracking-tight">
+            Milestones
+          </h2>
+          <span className="text-xs font-mono text-slate-400">
+            ({filteredProjects.length} tracks)
+          </span>
         </div>
 
-        {/* Phase Toggle Controls */}
-        <div className="mt-3.5 pt-3 border-t border-slate-100 flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mr-2">
-            Phases:
-          </span>
-          {[
-            { num: 1, name: 'Phase 1: Property & Agreement (6)' },
-            { num: 2, name: 'Phase 2: Design & GFC (5)' },
-            { num: 3, name: 'Phase 3: BOQ & PO Release (5)' },
-            { num: 4, name: 'Phase 4: Site Execution & Handover (5)' },
-          ].map((phase) => (
-            <button
-              key={phase.num}
-              onClick={() => togglePhase(phase.num)}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
-                expandedPhases[phase.num]
-                  ? 'bg-blue-50 text-blue-700 border-blue-200'
-                  : 'bg-white text-slate-500 border-slate-200 hover:text-slate-800'
-              }`}
-            >
-              {phase.name}
-            </button>
-          ))}
+        {/* Custom Filters */}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative">
+            <IconSearch className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-400 w-44 shadow-2xs"
+            />
+          </div>
+
+          <CustomSelect
+            value={statusFilter}
+            onChange={setStatusFilter}
+            options={STATUS_OPTIONS}
+            size="sm"
+            className="w-44"
+          />
+
+          <CustomSelect
+            value={facilityFilter}
+            onChange={setFacilityFilter}
+            options={FACILITY_OPTIONS}
+            size="sm"
+            className="w-36"
+          />
         </div>
       </div>
 
+      {/* Phase Toggle Controls */}
+      <div className="flex flex-wrap items-center gap-1.5 pb-1">
+        {[
+          { num: 1, name: 'Phase 1: Property (6)' },
+          { num: 2, name: 'Phase 2: Design (5)' },
+          { num: 3, name: 'Phase 3: BOQ & PO (5)' },
+          { num: 4, name: 'Phase 4: Site Execution (5)' },
+        ].map((phase) => (
+          <button
+            key={phase.num}
+            onClick={() => togglePhase(phase.num)}
+            className={`px-2.5 py-1 rounded text-xs font-medium border transition-colors cursor-pointer ${
+              expandedPhases[phase.num]
+                ? 'bg-slate-900 text-white border-slate-900'
+                : 'bg-white text-slate-500 border-slate-200 hover:text-slate-900'
+            }`}
+          >
+            {phase.name}
+          </button>
+        ))}
+      </div>
+
       {/* Main Table */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
         <div className="overflow-x-auto max-h-[750px]">
           <table className="w-full text-left border-collapse min-w-[1600px] text-xs">
             <thead className="sticky top-0 z-30 bg-slate-50 border-b border-slate-200">
