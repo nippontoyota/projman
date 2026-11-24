@@ -182,7 +182,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
       {/* Main Gantt Grid Table */}
       <div className="bg-white border border-slate-200 rounded-xs overflow-hidden">
         <div className="overflow-x-auto max-h-[760px]">
-          <table className="w-full text-left border-collapse min-w-[1450px]">
+          <table className="w-full text-left border-collapse min-w-[1600px]">
             <thead className="sticky top-0 z-30 bg-slate-100 border-b-2 border-slate-400">
               {/* Year Super Header */}
               <tr className="text-xs font-semibold text-slate-600 border-b border-slate-200/80">
@@ -304,7 +304,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                       return (
                         <td
                           key={m.id}
-                          className={`p-1.5 text-center relative ${
+                          className={`p-1.5 min-w-[58px] text-center relative ${
                             isYearEnd ? 'border-r-2 border-slate-400' : 'border-r border-slate-100'
                           } ${
                             m.isCurrent

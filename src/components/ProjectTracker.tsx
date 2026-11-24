@@ -149,7 +149,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
       {/* Main Table */}
       <div className="bg-white border border-slate-200 rounded-xs overflow-hidden">
         <div className="overflow-x-auto max-h-[750px]">
-          <table className="w-full text-left border-collapse min-w-[1600px] text-xs">
+          <table className="w-full text-left border-collapse min-w-[2300px] text-xs">
             <thead className="sticky top-0 z-30 bg-slate-100 border-b-2 border-slate-400">
               <tr>
                 <th className="p-3 sticky left-0 z-40 bg-slate-100 w-14 border-r border-slate-300 text-center text-black font-extrabold text-[11px] font-mono uppercase tracking-wider">
@@ -167,28 +167,28 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                 <th className="p-3 w-28 border-r border-slate-300 text-center text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Progress %
                 </th>
-                <th className="p-3 w-64 border-r-2 border-slate-400 text-black font-extrabold text-[11px] uppercase tracking-wider">
+                <th className="p-3 w-72 min-w-[220px] border-r-2 border-slate-400 text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Remarks / Notes
                 </th>
 
                 {/* Milestone Headers */}
                 {expandedPhases[1] && (
-                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs" colSpan={6}>
+                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[420px]" colSpan={6}>
                     Phase 1: Property & Agreement
                   </th>
                 )}
                 {expandedPhases[2] && (
-                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs" colSpan={5}>
+                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[350px]" colSpan={5}>
                     Phase 2: Design & GFC Approval
                   </th>
                 )}
                 {expandedPhases[3] && (
-                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs" colSpan={5}>
+                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs min-w-[350px]" colSpan={5}>
                     Phase 3: BOQ & PO Release
                   </th>
                 )}
                 {expandedPhases[4] && (
-                  <th className="p-3 bg-slate-200/80 text-black text-center font-extrabold text-xs" colSpan={5}>
+                  <th className="p-3 bg-slate-200/80 text-black text-center font-extrabold text-xs min-w-[350px]" colSpan={5}>
                     Phase 4: Site Execution & Handover
                   </th>
                 )}
@@ -244,7 +244,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                     </div>
                   </td>
 
-                  <td className="p-3 border-r-2 border-slate-400 max-w-xs text-[11px] text-slate-800">
+                  <td className="p-3 border-r-2 border-slate-400 min-w-[220px] max-w-sm text-[11px] text-slate-800">
                     <p className="line-clamp-2 leading-relaxed">
                       {p.keyRemarks || <span className="text-slate-400 italic">No notes</span>}
                     </p>
@@ -260,7 +260,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                     return (
                       <td
                         key={m.id}
-                        className={`p-2 ${isPhaseEnd ? 'border-r-2 border-slate-400' : 'border-r border-slate-100'} text-center ${
+                        className={`p-2 min-w-[70px] whitespace-nowrap ${isPhaseEnd ? 'border-r-2 border-slate-400' : 'border-r border-slate-100'} text-center ${
                           isDone ? 'bg-emerald-50/40' : ''
                         }`}
                         title={`${m.title}\nStatus: ${m.status}\nDate: ${
@@ -268,14 +268,14 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                         }`}
                       >
                         {isDone ? (
-                          <div className="flex flex-col items-center">
-                            <span className="text-[10px] font-mono text-emerald-700 font-extrabold">
+                          <div className="flex flex-col items-center justify-center">
+                            <span className="text-[11px] font-mono text-emerald-700 font-extrabold whitespace-nowrap">
                               {m.actualDate ? m.actualDate.split('T')[0].slice(5) : 'Done'}
                             </span>
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-0.5" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-1" />
                           </div>
                         ) : (
-                          <div className="text-slate-300 text-[10px] font-bold">-</div>
+                          <div className="text-slate-300 text-xs font-bold">-</div>
                         )}
                       </td>
                     );
