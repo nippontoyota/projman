@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FacilityType } from '@/types';
 import { X, Building2, MapPin, Tag, Calendar, PlusCircle } from 'lucide-react';
+import { useToast } from '@/context/ToastContext';
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -23,6 +24,8 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   const [initialRemarks, setInitialRemarks] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const toast = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,10 +56,16 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
         throw new Error(data.error || 'Failed to create project');
       }
 
+      toast.success(
+        'Project Track Initialized',
+        `${brandName} - ${locationName.trim()} (${facilityType}) created with 21 lifecycle milestones.`
+      );
       onProjectCreated();
       onClose();
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      const msg = err instanceof Error ? err.message : 'An error occurred';
+      setError(msg);
+      toast.error('Project Creation Failed', msg);
     } finally {
       setIsSubmitting(false);
     }

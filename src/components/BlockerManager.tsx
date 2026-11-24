@@ -7,6 +7,7 @@ import {
   ArrowRight,
   ShieldAlert,
 } from 'lucide-react';
+import { useToast } from '@/context/ToastContext';
 
 interface BlockerManagerProps {
   projects: Project[];
@@ -24,6 +25,7 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
   const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [severityFilter, setSeverityFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
+  const toast = useToast();
 
   const allBlockers = useMemo(() => {
     const list: (Blocker & { projectDetails: Project })[] = [];
@@ -51,9 +53,15 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'Resolved', userRole }),
       });
-      if (res.ok) onRefresh();
+      if (res.ok) {
+        toast.success('Blocker Resolved', 'Bottleneck marked resolved and unblocked');
+        onRefresh();
+      } else {
+        toast.error('Resolve Failed', 'Could not update blocker status');
+      }
     } catch (err) {
       console.error(err);
+      toast.error('Network Error', 'Failed to reach blocker endpoint');
     }
   };
 

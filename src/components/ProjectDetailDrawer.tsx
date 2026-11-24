@@ -12,6 +12,7 @@ import {
   PlusCircle,
   History,
 } from 'lucide-react';
+import { useToast } from '@/context/ToastContext';
 
 interface ProjectDetailDrawerProps {
   project: Project | null;
@@ -51,6 +52,8 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'milestones' | 'blockers' | 'audit'>('milestones');
 
+  const toast = useToast();
+
   if (!project) return null;
 
   const handleSaveProject = async () => {
@@ -70,10 +73,14 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
       });
 
       if (!res.ok) throw new Error('Failed to update project');
+      toast.success(
+        'Project Updated',
+        `Master parameters and target dates saved for ${project.location.name}`
+      );
       onUpdateSuccess();
     } catch (err) {
       console.error(err);
-      alert('Error updating project');
+      toast.error('Save Failed', 'Could not update project master parameters');
     } finally {
       setIsSaving(false);
     }
@@ -95,10 +102,14 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
       });
 
       if (!res.ok) throw new Error('Failed to update milestone');
+      toast.success(
+        isCompleted ? 'Milestone Completed' : 'Milestone Marked Pending',
+        `"${milestone.title}" updated for ${project.location.name}`
+      );
       onUpdateSuccess();
     } catch (err) {
       console.error(err);
-      alert('Failed to update milestone');
+      toast.error('Update Failed', 'Failed to update milestone checkpoint');
     }
   };
 
@@ -121,13 +132,17 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
       });
 
       if (!res.ok) throw new Error('Failed to log blocker');
+      toast.warning(
+        'Blocker Escalated',
+        `Logged [${blockerSeverity}] bottleneck: "${blockerTitle}"`
+      );
       setBlockerTitle('');
       setBlockerDesc('');
       setShowBlockerForm(false);
       onUpdateSuccess();
     } catch (err) {
       console.error(err);
-      alert('Error logging blocker');
+      toast.error('Error', 'Unable to record project blocker');
     }
   };
 
@@ -143,10 +158,11 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
       });
 
       if (!res.ok) throw new Error('Failed to resolve blocker');
+      toast.success('Blocker Cleared', 'Bottleneck marked as resolved and unblocked');
       onUpdateSuccess();
     } catch (err) {
       console.error(err);
-      alert('Error resolving blocker');
+      toast.error('Error', 'Unable to resolve blocker');
     }
   };
 
@@ -160,11 +176,12 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
         method: 'DELETE',
       });
       if (!res.ok) throw new Error('Failed to delete project');
+      toast.info('Project Deleted', `Dealership track ${project.code} removed from system`);
       onUpdateSuccess();
       onClose();
     } catch (err) {
       console.error(err);
-      alert('Failed to delete project');
+      toast.error('Delete Failed', 'Failed to delete project track');
     }
   };
 
