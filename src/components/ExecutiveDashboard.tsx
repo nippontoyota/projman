@@ -58,144 +58,125 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
       {/* Top Banner */}
       <motion.div
         variants={itemVariants}
-        className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4"
+        className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-3 border-b border-slate-200"
       >
-        <div>
-          <h1 className="text-lg sm:text-xl font-bold text-slate-950 tracking-tight">
-            Expansion Portfolio Overview
+        <div className="flex items-baseline space-x-2">
+          <h1 className="text-base font-semibold text-slate-900 tracking-tight">
+            Portfolio Overview
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Target Completion: <strong className="text-slate-800">31 Mar 2027</strong> ({metrics.daysToTarget} days remaining)
-          </p>
+          <span className="text-xs text-slate-400 font-mono">
+            (Target: 31 Mar 2027 · {metrics.daysToTarget}d remaining)
+          </span>
         </div>
 
-        <div className="flex items-center space-x-2 text-xs text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 self-start md:self-auto">
-          <span>Reporting Baseline:</span>
-          <span className="font-bold text-slate-800 font-mono">19 Nov 2026</span>
+        <div className="text-xs text-slate-400 font-mono">
+          Baseline: 19 Nov 2026
         </div>
       </motion.div>
 
       {/* 5 KPI Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
-        {/* Total Tracks */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        {/* Total Projects */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs"
+          className="bg-white border border-slate-200 rounded-lg p-3.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-              Total Tracks
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+              Total Projects
             </span>
             <IconFacility className="w-3.5 h-3.5 text-slate-400" />
           </div>
-          <div className="mt-2.5 flex items-baseline space-x-2">
-            <span className="text-2xl sm:text-3xl font-bold text-slate-900 font-mono">{metrics.totalTracks}</span>
-            <span className="text-xs text-slate-500">8 cities</span>
-          </div>
-          <div className="mt-1 text-[11px] text-slate-500">
-            Sales, Service & Stock Yards
+          <div className="mt-2 flex items-baseline space-x-2">
+            <span className="text-2xl font-bold text-slate-900 font-mono">{metrics.totalTracks}</span>
+            <span className="text-xs text-slate-400">8 cities</span>
           </div>
         </motion.div>
 
-        {/* Commissioned */}
+        {/* Completed Showrooms */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-emerald-200 rounded-xl p-4 shadow-xs"
+          className="bg-white border border-slate-200 rounded-lg p-3.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider">
-              Commissioned
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+              Completed Showrooms
             </span>
             <IconCheck className="w-3.5 h-3.5 text-emerald-600" />
           </div>
-          <div className="mt-2.5 flex items-baseline space-x-2">
-            <span className="text-2xl sm:text-3xl font-bold text-emerald-700 font-mono">
+          <div className="mt-2 flex items-baseline space-x-2">
+            <span className="text-2xl font-bold text-emerald-600 font-mono">
               {metrics.commissionedCount}
             </span>
-            <span className="text-xs text-emerald-600 font-semibold font-mono">
+            <span className="text-xs text-emerald-600 font-mono">
               ({Math.round((metrics.commissionedCount / metrics.totalTracks) * 100)}%)
             </span>
           </div>
-          <div className="mt-1 text-[11px] text-slate-500">
-            Aluva, Muvattupuzha, Alappuzha
-          </div>
         </motion.div>
 
-        {/* Open Pipeline */}
+        {/* In Progress */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs"
+          className="bg-white border border-slate-200 rounded-lg p-3.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-              Active Pipeline
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+              In Progress
             </span>
             <IconDashboard className="w-3.5 h-3.5 text-blue-600" />
           </div>
-          <div className="mt-2.5 flex items-baseline space-x-2">
-            <span className="text-2xl sm:text-3xl font-bold text-slate-900 font-mono">{metrics.openProjectsCount}</span>
-            <span className="text-xs text-slate-500">projects</span>
-          </div>
-          <div className="mt-1 text-[11px] text-slate-500">
-            Pre-construction & negotiation
+          <div className="mt-2 flex items-baseline space-x-2">
+            <span className="text-2xl font-bold text-slate-900 font-mono">{metrics.openProjectsCount}</span>
+            <span className="text-xs text-slate-400">projects</span>
           </div>
         </motion.div>
 
-        {/* Days to Target */}
+        {/* Days Remaining */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs"
+          className="bg-white border border-slate-200 rounded-lg p-3.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-              Days to Target
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+              Days Remaining
             </span>
             <IconRadar className="w-3.5 h-3.5 text-amber-600" />
           </div>
-          <div className="mt-2.5 flex items-baseline space-x-2">
-            <span className="text-2xl sm:text-3xl font-bold text-amber-600 font-mono">{metrics.daysToTarget}</span>
-            <span className="text-xs text-slate-500">Days</span>
-          </div>
-          <div className="mt-1 text-[11px] text-slate-500">
-            Target: 31-March-2027
+          <div className="mt-2 flex items-baseline space-x-2">
+            <span className="text-2xl font-bold text-amber-600 font-mono">{metrics.daysToTarget}</span>
+            <span className="text-xs text-slate-400">days</span>
           </div>
         </motion.div>
 
-        {/* Bottlenecks */}
+        {/* Open Issues */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-rose-200 rounded-xl p-4 shadow-xs"
+          className="bg-white border border-slate-200 rounded-lg p-3.5"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-rose-700 uppercase tracking-wider">
-              Active Issues
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+              Open Issues
             </span>
             <IconEscalation className="w-3.5 h-3.5 text-rose-600" />
           </div>
-          <div className="mt-2.5 flex items-baseline space-x-2">
-            <span className="text-2xl sm:text-3xl font-bold text-rose-700 font-mono">{openBlockers.length}</span>
-            <span className="text-xs text-rose-600 font-semibold">Blockers</span>
-          </div>
-          <div className="mt-1 text-[11px] text-slate-500">
-            Pala, Nedumangad, Cherthala, Pattom
+          <div className="mt-2 flex items-baseline space-x-2">
+            <span className="text-2xl font-bold text-rose-600 font-mono">{openBlockers.length}</span>
+            <span className="text-xs text-rose-600">blockers</span>
           </div>
         </motion.div>
       </div>
 
       {/* Mid Section: Portfolio Status & Benchmarks */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Status Breakdown */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs"
+          className="bg-white border border-slate-200 rounded-lg p-4"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="font-bold text-slate-900 text-sm">Portfolio Status Breakdown</h3>
-              <p className="text-xs text-slate-500">Project track distribution & average elapsed days</p>
-            </div>
-            <span className="text-[11px] font-semibold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded border border-slate-200 font-mono">
-              15 Tracks
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-slate-900 text-xs">Status Breakdown</h3>
+            <span className="text-[11px] text-slate-400 font-mono">
+              15 Projects
             </span>
           </div>
 
@@ -241,27 +222,21 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         {/* Stage-Wise Timeline Benchmarks */}
         <motion.div
           variants={itemVariants}
-          className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs"
+          className="bg-white border border-slate-200 rounded-lg p-4"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="font-bold text-slate-900 text-sm">Stage-Wise Timeline Benchmarks</h3>
-              <p className="text-xs text-slate-500">Empirical benchmark duration per expansion phase</p>
-            </div>
-            <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 uppercase tracking-wider font-mono">
-              SLA Standard
-            </span>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-slate-900 text-xs">Stage Durations (Average Days)</h3>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-200 text-slate-500 uppercase text-[10px] font-semibold">
-                  <th className="pb-2">Project Stage</th>
+                  <th className="pb-2">Stage</th>
                   <th className="pb-2 text-center">Avg Days</th>
                   <th className="pb-2 text-center">Min Days</th>
                   <th className="pb-2 text-center">Max Days</th>
-                  <th className="pb-2 text-right">Tracks</th>
+                  <th className="pb-2 text-right">Projects</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -293,14 +268,14 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
       {/* Critical Bottlenecks Radar */}
       <motion.div
         variants={itemVariants}
-        className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs"
+        className="bg-white border border-slate-200 rounded-lg p-4"
       >
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-bold text-slate-950 text-sm">
-            Critical Bottlenecks & Escalations
+          <h3 className="font-semibold text-slate-900 text-sm">
+            Open Issues
           </h3>
-          <span className="text-[11px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded font-mono">
-            {openBlockers.length} issues
+          <span className="text-xs text-rose-600 font-mono">
+            ({openBlockers.length} issues)
           </span>
         </div>
 
@@ -338,7 +313,7 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
                   }}
                   className="text-blue-600 hover:text-blue-700 font-semibold text-xs shrink-0 self-start sm:self-center cursor-pointer"
                 >
-                  <span>View Track →</span>
+                  <span>View Details →</span>
                 </button>
               )}
             </div>
