@@ -142,20 +142,15 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
   return (
     <div className="space-y-4">
       {/* Top Filter & Legend Card */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs">
+      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div>
-            <div className="flex items-center space-x-2">
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
-                Visual Project Gantt Timeline
-              </h2>
-              <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-mono font-medium border border-slate-200">
-                Sep 2025 – Mar 2027
-              </span>
-            </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Monthly duration from property identification to facility commissioning or fixed target date.
-            </p>
+          <div className="flex items-center space-x-2.5">
+            <h2 className="text-base font-bold text-slate-950 tracking-tight">
+              Gantt Timeline
+            </h2>
+            <span className="text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-mono font-medium border border-slate-200">
+              Sep 2025 – Mar 2027
+            </span>
           </div>
 
           {/* Search & Custom In-House Filters */}

@@ -83,16 +83,13 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
       {/* Controls Bar */}
       <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center space-x-2">
-              <IconMatrix className="w-4 h-4 text-slate-700" />
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
-                Dealership 21-Milestone Matrix
-              </h2>
-            </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Comprehensive phase-by-phase operational tracker from site acquisition to showroom commissioning.
-            </p>
+          <div className="flex items-center space-x-2.5">
+            <h2 className="text-base font-bold text-slate-950 tracking-tight">
+              21-Milestone Matrix
+            </h2>
+            <span className="text-[11px] font-mono text-slate-500 px-2 py-0.5 bg-slate-100 rounded border border-slate-200">
+              {filteredProjects.length} tracks
+            </span>
           </div>
 
           {/* Custom Filters */}
