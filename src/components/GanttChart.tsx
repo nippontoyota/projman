@@ -183,57 +183,63 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
       <div className="bg-white border border-slate-200 rounded-xs overflow-hidden">
         <div className="overflow-x-auto max-h-[760px]">
           <table className="w-full text-left border-collapse min-w-[1450px]">
-            <thead className="sticky top-0 z-30 bg-slate-50 border-b border-slate-200">
+            <thead className="sticky top-0 z-30 bg-slate-100 border-b-2 border-slate-400">
               {/* Year Super Header */}
               <tr className="text-xs font-semibold text-slate-600 border-b border-slate-200/80">
                 <th
-                  className="p-3 sticky left-0 z-40 bg-slate-50 w-72 border-r border-slate-200 text-slate-800"
+                  className="p-3 sticky left-0 z-40 bg-slate-100 w-[488px] border-r-2 border-slate-400 text-black font-black"
                   colSpan={4}
                 >
                   DEALERSHIP LOCATION ({filteredProjects.length} Tracks)
                 </th>
-                <th className="text-center py-2 border-r border-slate-200 bg-slate-100/70 text-slate-700 font-bold" colSpan={4}>
+                <th className="text-center py-2 border-r-2 border-slate-400 bg-slate-200/80 text-black font-black" colSpan={4}>
                   2025
                 </th>
-                <th className="text-center py-2 border-r border-slate-200 bg-slate-50 text-black font-extrabold" colSpan={12}>
+                <th className="text-center py-2 border-r-2 border-slate-400 bg-slate-100 text-black font-black" colSpan={12}>
                   2026 (ACTIVE EXECUTION YEAR)
                 </th>
-                <th className="text-center py-2 bg-slate-100/70 text-slate-700 font-bold" colSpan={3}>
+                <th className="text-center py-2 bg-slate-200/80 text-black font-black" colSpan={3}>
                   2027 (TARGET)
                 </th>
               </tr>
 
               {/* Month Header */}
-              <tr className="text-[11px] text-slate-600 font-medium uppercase tracking-wider">
-                <th className="p-3 sticky left-0 z-40 bg-slate-50 w-12 border-r border-slate-200 text-slate-500 text-center font-mono">
-                  #
+              <tr className="text-[11px] text-black font-bold uppercase tracking-wider">
+                <th className="p-3 sticky left-0 z-40 bg-slate-100 w-14 border-r border-slate-300 text-black font-extrabold text-center font-mono">
+                  Sl. No.
                 </th>
-                <th className="p-3 sticky left-12 z-40 bg-slate-50 w-44 border-r border-slate-200 font-bold text-slate-800">
+                <th className="p-3 sticky left-14 z-40 bg-slate-100 w-44 border-r border-slate-300 font-extrabold text-black">
                   Location
                 </th>
-                <th className="p-3 sticky left-56 z-40 bg-slate-50 w-28 border-r border-slate-200">
+                <th className="p-3 sticky left-[232px] z-40 bg-slate-100 w-28 border-r border-slate-300 font-extrabold text-black">
                   Facility
                 </th>
-                <th className="p-3 sticky left-84 z-40 bg-slate-50 w-36 border-r border-slate-200 shadow-xs">
+                <th className="p-3 sticky left-[344px] z-40 bg-slate-100 w-36 border-r-2 border-slate-400 font-extrabold text-black shadow-xs">
                   Status
                 </th>
 
-                {MONTHS.map((m) => (
-                  <th
-                    key={m.id}
-                    className={`py-2 px-1 text-center w-14 font-semibold border-r border-slate-200/60 ${
-                      m.isCurrent
-                        ? 'bg-neutral-100 text-black font-bold border-neutral-300'
-                        : m.isTarget
-                        ? 'bg-amber-50 text-amber-800 font-bold border-amber-200'
-                        : 'text-slate-600'
-                    }`}
-                  >
-                    <div>{m.label}</div>
-                    {m.isCurrent && <div className="text-[9px] text-black font-mono font-bold">Now</div>}
-                    {m.isTarget && <div className="text-[9px] text-amber-700 font-mono font-bold">Target</div>}
-                  </th>
-                ))}
+                {MONTHS.map((m) => {
+                  const isYearEnd = m.id === '2025-12' || m.id === '2026-12';
+
+                  return (
+                    <th
+                      key={m.id}
+                      className={`py-2 px-1 text-center w-14 font-bold ${
+                        isYearEnd ? 'border-r-2 border-slate-400' : 'border-r border-slate-200/60'
+                      } ${
+                        m.isCurrent
+                          ? 'bg-neutral-200 text-black font-black'
+                          : m.isTarget
+                          ? 'bg-amber-100 text-amber-900 font-black'
+                          : 'text-black'
+                      }`}
+                    >
+                      <div>{m.label}</div>
+                      {m.isCurrent && <div className="text-[9px] text-black font-mono font-black">Now</div>}
+                      {m.isTarget && <div className="text-[9px] text-amber-800 font-mono font-black">Target</div>}
+                    </th>
+                  );
+                })}
               </tr>
             </thead>
 
@@ -252,12 +258,12 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                     className="hover:bg-slate-50 transition-colors group cursor-pointer"
                   >
                     {/* Index */}
-                    <td className="p-3 sticky left-0 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-slate-400 font-mono text-center">
+                    <td className="p-3 sticky left-0 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-black font-extrabold font-mono text-center">
                       {pIdx + 1}
                     </td>
 
                     {/* Location & Code */}
-                    <td className="p-3 sticky left-12 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-semibold text-slate-900">
+                    <td className="p-3 sticky left-14 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-bold text-black">
                       <div className="flex items-center space-x-1.5">
                         <span>{p.location.name}</span>
                         {hasBlocker && (
@@ -267,21 +273,25 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                           />
                         )}
                       </div>
-                      <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                      <div className="text-[10px] text-slate-500 font-mono font-semibold mt-0.5">
                         {p.code}
                       </div>
                     </td>
 
                     {/* Facility */}
-                    <td className="p-3 sticky left-56 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200">
-                      <span className="px-2 py-0.5 rounded-xs text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200 whitespace-nowrap">
+                    <td className="p-3 sticky left-[232px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200">
+                      <span className="px-2 py-0.5 rounded-xs text-[11px] font-bold bg-slate-100 text-slate-800 border border-slate-200 whitespace-nowrap">
                         {p.facilityType}
                       </span>
                     </td>
 
                     {/* Status */}
-                    <td className="p-3 sticky left-84 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200">
-                      <span className="inline-block px-2 py-0.5 rounded-xs text-[10px] font-semibold bg-slate-100 text-slate-800 border border-slate-200 whitespace-nowrap">
+                    <td className="p-3 sticky left-[344px] z-20 bg-white group-hover:bg-slate-50 border-r-2 border-slate-400">
+                      <span className={`inline-block px-2 py-0.5 rounded-xs text-[10px] font-bold border whitespace-nowrap ${
+                        p.currentStatus === 'Commissioned'
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                          : 'bg-slate-100 text-slate-800 border-slate-200'
+                      }`}>
                         {p.currentStatus}
                       </span>
                     </td>
@@ -291,11 +301,14 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                       const isInSpan = mIdx >= startIdx && mIdx <= endIdx;
                       const isStart = mIdx === startIdx;
                       const isEnd = mIdx === endIdx;
+                      const isYearEnd = m.id === '2025-12' || m.id === '2026-12';
 
                       return (
                         <td
                           key={m.id}
-                          className={`p-1.5 text-center relative border-r border-slate-100 ${
+                          className={`p-1.5 text-center relative ${
+                            isYearEnd ? 'border-r-2 border-slate-400' : 'border-r border-slate-100'
+                          } ${
                             m.isCurrent
                               ? 'bg-neutral-100/60'
                               : m.isTarget
