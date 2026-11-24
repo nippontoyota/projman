@@ -6,16 +6,11 @@ import { Project, UserRole, Milestone, ScheduleHealth, ProjectStatus } from '@/t
 import {
   X,
   CheckCircle2,
-  Clock,
   AlertTriangle,
-  Calendar,
-  Building2,
   Trash2,
   Save,
   PlusCircle,
   History,
-  Shield,
-  FileText,
 } from 'lucide-react';
 
 interface ProjectDetailDrawerProps {
@@ -47,7 +42,6 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
     project?.fixedTargetDate ? project.fixedTargetDate.split('T')[0] : '2027-03-31'
   );
 
-  // Blocker form state
   const [showBlockerForm, setShowBlockerForm] = useState(false);
   const [blockerCategory, setBlockerCategory] = useState('Landlord');
   const [blockerSeverity, setBlockerSeverity] = useState<'Critical' | 'Major' | 'Moderate' | 'Minor'>('Critical');
@@ -59,7 +53,6 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
 
   if (!project) return null;
 
-  // Save project overall changes
   const handleSaveProject = async () => {
     setIsSaving(true);
     try {
@@ -86,7 +79,6 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
     }
   };
 
-  // Update milestone
   const handleMilestoneUpdate = async (milestone: Milestone, isCompleted: boolean) => {
     try {
       const newStatus = isCompleted ? 'Completed' : 'Pending';
@@ -110,7 +102,6 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
     }
   };
 
-  // Add Blocker
   const handleAddBlocker = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!blockerTitle) return;
@@ -140,7 +131,6 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
     }
   };
 
-  // Resolve Blocker
   const handleResolveBlocker = async (blockerId: string) => {
     try {
       const res = await fetch(`/api/blockers/${blockerId}`, {
@@ -160,7 +150,6 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
     }
   };
 
-  // Delete project (Admin only)
   const handleDeleteProject = async () => {
     if (!confirm(`Are you sure you want to delete project ${project.code}? This cannot be undone.`)) {
       return;
@@ -188,9 +177,9 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.15 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-slate-900/30 backdrop-blur-2xs"
           />
 
           {/* Drawer Panel */}
@@ -198,35 +187,35 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="relative z-10 bg-slate-900 border-l border-slate-800 w-full max-w-2xl h-full flex flex-col shadow-2xl overflow-hidden"
+            transition={{ type: 'spring', damping: 30, stiffness: 350 }}
+            className="relative z-10 bg-white border-l border-slate-200 w-full max-w-2xl h-full flex flex-col shadow-2xl overflow-hidden text-slate-900"
           >
-            {/* Drawer Header */}
-            <div className="p-5 border-b border-slate-800 bg-slate-950 flex items-center justify-between">
-              <div className="flex items-center space-x-3.5">
-                <div className="w-10 h-10 rounded-xl bg-sky-500/15 text-sky-400 border border-sky-500/30 flex items-center justify-center font-bold font-mono">
+            {/* Header */}
+            <div className="p-4 sm:p-5 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold font-mono text-sm shadow-xs">
                   {project.location.name.slice(0, 2).toUpperCase()}
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
-                    <h2 className="text-base font-bold text-white tracking-tight">
+                    <h2 className="text-base font-bold text-slate-900 tracking-tight">
                       {project.location.name} – {project.facilityType}
                     </h2>
-                    <span className="text-xs px-2 py-0.5 rounded font-mono bg-slate-800 text-slate-300">
+                    <span className="text-xs px-2 py-0.5 rounded font-mono bg-white text-slate-700 border border-slate-200 shadow-2xs">
                       {project.code}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400">
-                    Brand: <strong className="text-slate-200">{project.brand.name}</strong> • State: Kerala
+                  <p className="text-xs text-slate-500">
+                    Brand: <strong className="text-slate-800">{project.brand.name}</strong> • State: Kerala
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1">
                 {userRole === 'Admin' && (
                   <button
                     onClick={handleDeleteProject}
-                    className="p-2 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+                    className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                     title="Delete Project"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -234,15 +223,15 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                 )}
                 <button
                   onClick={onClose}
-                  className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+                  className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
             </div>
 
-            {/* Sub Navigation */}
-            <div className="flex items-center px-5 border-b border-slate-800 bg-slate-900/60 text-xs space-x-4">
+            {/* Navigation Tabs */}
+            <div className="flex items-center px-5 border-b border-slate-200 bg-white text-xs space-x-4">
               {[
                 { id: 'milestones', label: '21 Milestones', icon: CheckCircle2 },
                 {
@@ -250,7 +239,7 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                   label: `Blockers (${project.blockers.filter((b) => b.status !== 'Resolved').length})`,
                   icon: AlertTriangle,
                 },
-                { id: 'audit', label: 'Audit History', icon: History },
+                { id: 'audit', label: 'Audit Trail', icon: History },
               ].map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
@@ -259,8 +248,8 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as any)}
-                    className={`relative py-3 font-semibold transition-colors flex items-center space-x-1.5 ${
-                      isActive ? 'text-sky-400' : 'text-slate-400 hover:text-slate-200'
+                    className={`relative py-3 font-semibold transition-colors flex items-center space-x-1.5 cursor-pointer ${
+                      isActive ? 'text-blue-700' : 'text-slate-500 hover:text-slate-800'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -268,7 +257,7 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                     {isActive && (
                       <motion.div
                         layoutId="drawerTabIndicator"
-                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-sky-500"
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600"
                         transition={{ type: 'spring', stiffness: 500, damping: 35 }}
                       />
                     )}
@@ -277,25 +266,25 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
               })}
             </div>
 
-            {/* Content Body */}
-            <div className="flex-1 overflow-y-auto p-5 space-y-6">
-              {/* Project Master Parameters Card */}
-              <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-slate-300">Project Master Parameters</span>
-                  <span className="text-[11px] text-slate-400">
-                    Active Role: <strong className={userRole === 'Admin' ? 'text-purple-400 font-mono' : 'text-sky-400 font-mono'}>{userRole}</strong>
+            {/* Body */}
+            <div className="flex-1 overflow-y-auto p-5 space-y-5">
+              {/* Master Controls Card */}
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3.5 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-slate-900">Project Master Controls</span>
+                  <span className="text-[11px] text-slate-500">
+                    Mode: <strong className="text-slate-800 font-mono">{userRole}</strong>
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 text-xs">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">Current Status</label>
+                    <label className="text-[11px] font-semibold text-slate-600 block mb-1">Status</label>
                     <select
                       disabled={userRole !== 'Admin'}
                       value={currentStatus}
                       onChange={(e) => setCurrentStatus(e.target.value as ProjectStatus)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-white focus:outline-none focus:border-sky-500 disabled:opacity-60"
+                      className="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-900 focus:outline-none focus:border-blue-500 disabled:bg-slate-100 disabled:text-slate-500 cursor-pointer shadow-2xs font-medium"
                     >
                       <option value="Commercial Negotiation">Commercial Negotiation</option>
                       <option value="Pre-Construction">Pre-Construction</option>
@@ -306,12 +295,12 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                   </div>
 
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">Schedule Health</label>
+                    <label className="text-[11px] font-semibold text-slate-600 block mb-1">Schedule Health</label>
                     <select
                       disabled={userRole !== 'Admin'}
                       value={scheduleHealth}
                       onChange={(e) => setScheduleHealth(e.target.value as ScheduleHealth)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-white focus:outline-none focus:border-sky-500 disabled:opacity-60"
+                      className="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-900 focus:outline-none focus:border-blue-500 disabled:bg-slate-100 disabled:text-slate-500 cursor-pointer shadow-2xs font-medium"
                     >
                       <option value="Completed">Completed</option>
                       <option value="On Track">On Track</option>
@@ -322,51 +311,49 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                   </div>
 
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">Progress %</label>
+                    <label className="text-[11px] font-semibold text-slate-600 block mb-1">Progress %</label>
                     <input
                       type="number"
                       min="0"
                       max="100"
                       value={workPercentage}
                       onChange={(e) => setWorkPercentage(Number(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-white font-mono focus:outline-none focus:border-sky-500"
+                      className="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-900 font-mono focus:outline-none focus:border-blue-500 shadow-2xs"
                     />
                   </div>
 
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">Target Completion</label>
+                    <label className="text-[11px] font-semibold text-slate-600 block mb-1">Target Completion</label>
                     <input
                       type="date"
                       disabled={userRole !== 'Admin'}
                       value={fixedTargetDate}
                       onChange={(e) => setFixedTargetDate(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-white font-mono focus:outline-none focus:border-sky-500 disabled:opacity-60"
+                      className="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-900 font-mono focus:outline-none focus:border-blue-500 disabled:bg-slate-100 disabled:text-slate-500 shadow-2xs"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Remarks / Action Items</label>
+                  <label className="text-[11px] font-semibold text-slate-600 block mb-1">Remarks / Action Items</label>
                   <textarea
                     rows={2}
                     value={keyRemarks}
                     onChange={(e) => setKeyRemarks(e.target.value)}
                     placeholder="Enter latest site progress notes..."
-                    className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-sky-500"
+                    className="w-full bg-white border border-slate-300 rounded-lg p-2 text-xs text-slate-900 focus:outline-none focus:border-blue-500 shadow-2xs"
                   />
                 </div>
 
                 <div className="flex justify-end">
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                  <button
                     onClick={handleSaveProject}
                     disabled={isSaving}
-                    className="flex items-center space-x-1.5 px-3.5 py-1.5 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold rounded-lg text-xs shadow transition-all disabled:opacity-50 cursor-pointer"
+                    className="flex items-center space-x-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs shadow-xs transition-colors disabled:opacity-50 cursor-pointer"
                   >
                     <Save className="w-3.5 h-3.5" />
                     <span>{isSaving ? 'Saving...' : 'Save Updates'}</span>
-                  </motion.button>
+                  </button>
                 </div>
               </div>
 
@@ -374,8 +361,8 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
               {activeTab === 'milestones' && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between text-xs">
-                    <h3 className="font-bold text-white">Lifecycle Milestone Checkpoints</h3>
-                    <span className="text-slate-400 font-mono">
+                    <h3 className="font-bold text-slate-900">Lifecycle Milestone Checkpoints</h3>
+                    <span className="text-slate-500 font-mono">
                       {project.milestones.filter((m) => m.status === 'Completed').length} /{' '}
                       {project.milestones.length} Completed
                     </span>
@@ -392,20 +379,20 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                     ];
 
                     return (
-                      <div key={phaseNum} className="border border-slate-800 rounded-xl overflow-hidden bg-slate-950/60">
-                        <div className="bg-slate-950 px-3.5 py-2 text-xs font-bold text-sky-400 border-b border-slate-800">
+                      <div key={phaseNum} className="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-xs">
+                        <div className="bg-slate-50 px-3.5 py-2 text-xs font-bold text-slate-800 border-b border-slate-200">
                           {phaseNames[phaseNum]}
                         </div>
 
-                        <div className="divide-y divide-slate-800/60">
+                        <div className="divide-y divide-slate-100">
                           {phaseMilestones.map((m) => {
                             const isDone = m.status === 'Completed';
 
                             return (
                               <div
                                 key={m.id}
-                                className={`p-3 flex items-center justify-between text-xs hover:bg-slate-800/40 transition-colors ${
-                                  isDone ? 'bg-emerald-950/10' : ''
+                                className={`p-3 flex items-center justify-between text-xs hover:bg-slate-50 transition-colors ${
+                                  isDone ? 'bg-emerald-50/20' : ''
                                 }`}
                               >
                                 <div className="flex items-center space-x-3 flex-1 pr-3">
@@ -413,14 +400,14 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                                     type="checkbox"
                                     checked={isDone}
                                     onChange={(e) => handleMilestoneUpdate(m, e.target.checked)}
-                                    className="w-4 h-4 text-emerald-500 bg-slate-900 border-slate-700 rounded focus:ring-emerald-500 cursor-pointer"
+                                    className="w-4 h-4 text-emerald-600 bg-white border-slate-300 rounded focus:ring-emerald-500 cursor-pointer"
                                   />
                                   <div>
-                                    <div className={`font-medium ${isDone ? 'text-white' : 'text-slate-300'}`}>
+                                    <div className={`font-medium ${isDone ? 'text-slate-900' : 'text-slate-600'}`}>
                                       {m.title}
                                     </div>
                                     {m.actualDate && (
-                                      <div className="text-[10px] text-emerald-400 font-mono mt-0.5">
+                                      <div className="text-[10px] text-emerald-700 font-mono font-semibold mt-0.5">
                                         Completed: {m.actualDate.split('T')[0]}
                                       </div>
                                     )}
@@ -431,8 +418,8 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                                   <span
                                     className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
                                       isDone
-                                        ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                                        : 'bg-slate-800 text-slate-400 border-slate-700'
+                                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                        : 'bg-slate-100 text-slate-600 border-slate-200'
                                     }`}
                                   >
                                     {m.status}
@@ -452,29 +439,29 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
               {activeTab === 'blockers' && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-bold text-white text-xs">Logged Bottlenecks & Delays</h3>
+                    <h3 className="font-bold text-slate-900 text-xs">Logged Bottlenecks & Delays</h3>
                     <button
                       onClick={() => setShowBlockerForm(!showBlockerForm)}
-                      className="flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-rose-500/20 text-rose-400 border border-rose-500/30 hover:bg-rose-500/30 transition-colors cursor-pointer"
+                      className="flex items-center space-x-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 transition-colors cursor-pointer"
                     >
                       <PlusCircle className="w-3.5 h-3.5" />
-                      <span>Log Blocker</span>
+                      <span>Log Issue</span>
                     </button>
                   </div>
 
                   {showBlockerForm && (
                     <form
                       onSubmit={handleAddBlocker}
-                      className="bg-slate-950 p-4 rounded-xl border border-rose-500/30 space-y-3 text-xs"
+                      className="bg-slate-50 p-4 rounded-xl border border-rose-200 space-y-3 text-xs"
                     >
-                      <div className="font-bold text-white">Log Bottleneck / Site Issue</div>
+                      <div className="font-bold text-slate-900">Log Site Bottleneck</div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="text-[11px] text-slate-400 block mb-1">Category</label>
+                          <label className="text-[11px] font-semibold text-slate-600 block mb-1">Category</label>
                           <select
                             value={blockerCategory}
                             onChange={(e) => setBlockerCategory(e.target.value)}
-                            className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-white"
+                            className="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-900 shadow-2xs"
                           >
                             <option value="Landlord">Landlord Negotiation</option>
                             <option value="River OEM">River OEM Approvals</option>
@@ -485,11 +472,11 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                         </div>
 
                         <div>
-                          <label className="text-[11px] text-slate-400 block mb-1">Severity</label>
+                          <label className="text-[11px] font-semibold text-slate-600 block mb-1">Severity</label>
                           <select
                             value={blockerSeverity}
                             onChange={(e) => setBlockerSeverity(e.target.value as any)}
-                            className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-white"
+                            className="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-900 shadow-2xs"
                           >
                             <option value="Critical">Critical (Immediate Block)</option>
                             <option value="Major">Major</option>
@@ -500,25 +487,25 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                       </div>
 
                       <div>
-                        <label className="text-[11px] text-slate-400 block mb-1">Title</label>
+                        <label className="text-[11px] font-semibold text-slate-600 block mb-1">Title</label>
                         <input
                           type="text"
                           placeholder="e.g. Landlord delay in lease draft signing"
                           value={blockerTitle}
                           onChange={(e) => setBlockerTitle(e.target.value)}
                           required
-                          className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-white"
+                          className="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-900 shadow-2xs"
                         />
                       </div>
 
                       <div>
-                        <label className="text-[11px] text-slate-400 block mb-1">Details & Resolution Plan</label>
+                        <label className="text-[11px] font-semibold text-slate-600 block mb-1">Details & Plan</label>
                         <textarea
                           rows={2}
-                          placeholder="Describe the blocker and who owns resolution..."
+                          placeholder="Describe the issue and resolution plan..."
                           value={blockerDesc}
                           onChange={(e) => setBlockerDesc(e.target.value)}
-                          className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-white"
+                          className="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-900 shadow-2xs"
                         />
                       </div>
 
@@ -526,13 +513,13 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                         <button
                           type="button"
                           onClick={() => setShowBlockerForm(false)}
-                          className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400"
+                          className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700"
                         >
                           Cancel
                         </button>
                         <button
                           type="submit"
-                          className="px-4 py-1.5 rounded-lg bg-rose-500 text-white font-bold"
+                          className="px-4 py-1.5 rounded-lg bg-rose-600 text-white font-semibold shadow-xs"
                         >
                           Submit Blocker
                         </button>
@@ -540,36 +527,36 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                     </form>
                   )}
 
-                  <div className="space-y-3">
+                  <div className="space-y-2.5">
                     {project.blockers.map((blk) => (
                       <div
                         key={blk.id}
-                        className={`p-3.5 rounded-xl border text-xs space-y-2 ${
+                        className={`p-3.5 rounded-lg border text-xs space-y-1.5 ${
                           blk.status === 'Resolved'
-                            ? 'bg-slate-950/40 border-slate-800/60 opacity-60'
-                            : 'bg-slate-950 border-rose-500/30'
+                            ? 'bg-slate-50 border-slate-200 opacity-60'
+                            : 'bg-white border-slate-200 border-l-4 border-l-rose-500 shadow-2xs'
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2">
-                            <span className="font-bold text-white">{blk.title}</span>
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                            <span className="font-bold text-slate-900">{blk.title}</span>
+                            <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase bg-slate-100 text-slate-700 border border-slate-200">
                               {blk.category}
                             </span>
                           </div>
-                          <span className="text-[10px] font-mono text-slate-400">
+                          <span className="text-[10px] font-mono text-slate-500 font-semibold">
                             {blk.severity}
                           </span>
                         </div>
 
-                        <p className="text-[11px] text-slate-300">{blk.description}</p>
+                        <p className="text-[11px] text-slate-600">{blk.description}</p>
 
-                        <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[10px] text-slate-400">
-                          <span>Status: <strong className={blk.status === 'Resolved' ? 'text-emerald-400' : 'text-rose-400'}>{blk.status}</strong></span>
+                        <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
+                          <span>Status: <strong className={blk.status === 'Resolved' ? 'text-emerald-700' : 'text-rose-700'}>{blk.status}</strong></span>
                           {blk.status !== 'Resolved' && (
                             <button
                               onClick={() => handleResolveBlocker(blk.id)}
-                              className="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 font-semibold cursor-pointer"
+                              className="px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 font-semibold cursor-pointer"
                             >
                               Mark Resolved
                             </button>
@@ -587,18 +574,18 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                 </div>
               )}
 
-              {/* TAB 3: AUDIT HISTORY */}
+              {/* TAB 3: AUDIT */}
               {activeTab === 'audit' && (
-                <div className="space-y-3">
-                  <h3 className="font-bold text-white text-xs">Change & Audit Trail</h3>
+                <div className="space-y-2.5">
+                  <h3 className="font-bold text-slate-900 text-xs">Activity & Audit Trail</h3>
                   <div className="space-y-2">
                     {project.auditLogs?.map((log) => (
-                      <div key={log.id} className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs">
-                        <div className="flex items-center justify-between text-slate-400 text-[10px] mb-1">
-                          <span className="font-bold text-sky-400 font-mono">{log.userRole}</span>
+                      <div key={log.id} className="p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs">
+                        <div className="flex items-center justify-between text-slate-500 text-[10px] mb-1">
+                          <span className="font-bold text-blue-700 font-mono">{log.userRole}</span>
                           <span className="font-mono">{new Date(log.timestamp).toLocaleString()}</span>
                         </div>
-                        <div className="text-slate-300">{log.details}</div>
+                        <div className="text-slate-800">{log.details}</div>
                       </div>
                     ))}
 
