@@ -10,6 +10,8 @@ import { ProjectTracker } from '@/components/ProjectTracker';
 import { BlockerManager } from '@/components/BlockerManager';
 import { CreateProjectModal } from '@/components/CreateProjectModal';
 import { ProjectDetailDrawer } from '@/components/ProjectDetailDrawer';
+import { TopLoader } from '@/components/ui/TopLoader';
+import { useToast } from '@/context/ToastContext';
 import { exportProjectsToExcel } from '@/lib/excelExport';
 
 export default function Home() {
@@ -21,6 +23,8 @@ export default function Home() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const toast = useToast();
 
   // Fetch projects from database
   const loadData = useCallback(async () => {
@@ -42,10 +46,11 @@ export default function Home() {
       }
     } catch (err) {
       console.error('Failed to load project data:', err);
+      toast.error('Connection Error', 'Could not sync project tracks with server');
     } finally {
       setIsLoading(false);
     }
-  }, [selectedProject]);
+  }, [selectedProject, toast]);
 
   useEffect(() => {
     loadData();
@@ -53,25 +58,44 @@ export default function Home() {
 
   // Export to Excel
   const handleExportExcel = () => {
-    exportProjectsToExcel(projects, stats);
+    try {
+      exportProjectsToExcel(projects, stats);
+      toast.success(
+        'Spreadsheet Exported',
+        'Master Incheon Mobility rollout schedule saved as Excel (.xlsx)'
+      );
+    } catch (err) {
+      console.error(err);
+      toast.error('Export Failed', 'Unable to generate Excel file');
+    }
   };
 
   // Reset database to master dataset
   const handleResetData = async () => {
-    if (!confirm('Reset database to the original Incheon Mobility master dataset? Any custom changes will be restored.')) {
+    if (
+      !confirm(
+        'Reset database to the original Incheon Mobility master dataset? Any custom changes will be restored.'
+      )
+    ) {
       return;
     }
 
     setIsResetting(true);
     try {
       const res = await fetch('/api/seed/reset', { method: 'POST' });
-      if (res.ok) {
+      const json = await res.json();
+      if (res.ok && json.success) {
         await loadData();
-        alert('Master dataset restored successfully!');
+        toast.success(
+          'Database Restored',
+          '15 River EV showroom tracks & 315 milestone tasks reset to master'
+        );
+      } else {
+        toast.error('Reset Failed', json.error || 'Server rejected reset request');
       }
     } catch (err) {
       console.error(err);
-      alert('Failed to reset dataset');
+      toast.error('Network Error', 'Failed to reach reset endpoint');
     } finally {
       setIsResetting(false);
     }
@@ -79,6 +103,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans antialiased selection:bg-blue-600 selection:text-white">
+      {/* Sleek Global Modern TopLoader */}
+      <TopLoader isLoading={isLoading || isResetting} />
+
       {/* Header */}
       <Header
         currentTab={currentTab}
