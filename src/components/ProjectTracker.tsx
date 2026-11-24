@@ -214,16 +214,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
       </div>
 
       {/* Dedicated Phase Slider Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-50 border border-black rounded-xs px-3 py-2 text-xs">
-        <div className="flex items-center space-x-2 shrink-0">
-          <span className="text-[11px] font-black uppercase tracking-wider text-black">
-            {selectedPhase === 'ALL' ? 'Showing:' : 'Active Phase:'}
-          </span>
-          <span className="text-xs font-bold text-slate-800">
-            {selectedPhase === 'ALL' ? visiblePhaseTitle : PHASES[phaseIndex].title}
-          </span>
-        </div>
-
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-50 border border-black rounded-xs px-3 py-1.5 text-xs">
         {/* Phase Arrow Buttons & Navigator */}
         <div className="flex items-center space-x-2">
           {/* Previous Phase / Scroll Left Arrow Button */}
@@ -278,7 +269,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                 step={1}
                 value={scrollProgress}
                 onChange={(e) => handleSliderDrag(Number(e.target.value))}
-                className="w-28 accent-black cursor-pointer"
+                className="w-32 accent-black cursor-pointer"
                 title="Smoothly slide across milestone phases"
               />
               <span className="text-[10px] font-mono text-slate-500 font-semibold w-10 text-right">
@@ -294,7 +285,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                 step={1}
                 value={phaseIndex}
                 onChange={(e) => handleSliderDrag(Number(e.target.value))}
-                className="w-28 accent-black cursor-pointer"
+                className="w-32 accent-black cursor-pointer"
                 title="Select phase"
               />
               <span className="text-[10px] font-mono text-slate-500 font-semibold w-12 text-right">
