@@ -320,7 +320,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                 </th>
 
                 {/* Location & Code - Constant */}
-                <th className="p-3 sticky left-16 z-40 bg-slate-100 w-60 min-w-[240px] max-w-[240px] border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
+                <th className="p-3 sticky left-[64px] z-40 bg-slate-100 w-60 min-w-[240px] max-w-[240px] border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Location & Code
                 </th>
 
@@ -381,7 +381,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                   </td>
 
                   {/* Location & Code - Constant */}
-                  <td className="p-3 sticky left-16 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-bold text-black w-60 min-w-[240px] max-w-[240px]">
+                  <td className="p-3 sticky left-[64px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-bold text-black w-60 min-w-[240px] max-w-[240px]">
                     <div className="flex items-center space-x-1.5 whitespace-nowrap">
                       <span className="truncate">{p.location.name}</span>
                       <IconExternal className="w-3 h-3 text-slate-400 group-hover:text-black transition-colors shrink-0" />

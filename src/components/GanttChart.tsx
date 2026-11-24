@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Project, ScheduleHealth } from '@/types';
-import { IconSearch, IconChevronLeft, IconChevronRight } from '@/components/ui/Icons';
+import { IconSearch, IconChevronLeft, IconChevronRight, IconExternal } from '@/components/ui/Icons';
 import { CustomSelect, SelectOption } from '@/components/ui/CustomSelect';
 
 interface GanttChartProps {
@@ -262,14 +262,33 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
         >
           <table className="w-full text-left border-collapse min-w-[1900px]">
             <thead className="sticky top-0 z-30 bg-slate-100 border-b-2 border-slate-400">
-              {/* Year Super Header */}
+              {/* Row 1: 4 Fixed Columns (rowSpan=2) + Year Super Headers */}
               <tr className="text-xs font-semibold text-slate-600 border-b border-slate-200/80">
                 <th
-                  className="p-3 sticky left-0 z-40 bg-slate-100 w-[656px] min-w-[656px] border-r-2 border-slate-400 text-black font-black"
-                  colSpan={4}
+                  rowSpan={2}
+                  className="px-2 py-3 sticky left-0 top-0 z-50 bg-slate-100 w-16 min-w-[64px] max-w-[64px] border-r border-slate-300 text-black font-black text-center font-mono tracking-tight whitespace-nowrap align-middle"
                 >
-                  DEALERSHIP LOCATION ({filteredProjects.length} Tracks)
+                  Sl. No.
                 </th>
+                <th
+                  rowSpan={2}
+                  className="p-3 sticky left-[64px] top-0 z-50 bg-slate-100 w-60 min-w-[240px] max-w-[240px] border-r border-slate-300 font-extrabold text-black align-middle text-[11px] uppercase tracking-wider"
+                >
+                  Location & Code
+                </th>
+                <th
+                  rowSpan={2}
+                  className="p-3 sticky left-[304px] top-0 z-50 bg-slate-100 w-36 min-w-[144px] max-w-[144px] border-r border-slate-300 font-extrabold text-black align-middle text-[11px] uppercase tracking-wider"
+                >
+                  Facility
+                </th>
+                <th
+                  rowSpan={2}
+                  className="p-3 sticky left-[448px] top-0 z-50 bg-slate-100 w-52 min-w-[208px] max-w-[208px] border-r-2 border-slate-400 font-extrabold text-black shadow-xs align-middle text-[11px] uppercase tracking-wider"
+                >
+                  Status
+                </th>
+
                 <th className="text-center py-2 border-r-2 border-slate-400 bg-slate-200/80 text-black font-black" colSpan={4}>
                   2025
                 </th>
@@ -281,21 +300,8 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                 </th>
               </tr>
 
-              {/* Month Header */}
+              {/* Row 2: Month Columns Only */}
               <tr className="text-[11px] text-black font-bold uppercase tracking-wider">
-                <th className="px-2 py-3 sticky left-0 z-40 bg-slate-100 w-16 min-w-[64px] max-w-[64px] border-r border-slate-300 text-black font-black text-center font-mono tracking-tight whitespace-nowrap">
-                  Sl. No.
-                </th>
-                <th className="p-3 sticky left-16 z-40 bg-slate-100 w-60 min-w-[240px] max-w-[240px] border-r border-slate-300 font-extrabold text-black">
-                  Location & Code
-                </th>
-                <th className="p-3 sticky left-[304px] z-40 bg-slate-100 w-36 min-w-[144px] max-w-[144px] border-r border-slate-300 font-extrabold text-black">
-                  Facility
-                </th>
-                <th className="p-3 sticky left-[448px] z-40 bg-slate-100 w-52 min-w-[208px] max-w-[208px] border-r-2 border-slate-400 font-extrabold text-black shadow-xs">
-                  Status
-                </th>
-
                 {MONTHS.map((m) => {
                   const isYearEnd = m.id === '2025-12' || m.id === '2026-12';
 
@@ -339,9 +345,10 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                     </td>
 
                     {/* Location & Code */}
-                    <td className="p-3 sticky left-16 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-bold text-black w-60 min-w-[240px] max-w-[240px]">
+                    <td className="p-3 sticky left-[64px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-bold text-black w-60 min-w-[240px] max-w-[240px]">
                       <div className="flex items-center space-x-1.5 whitespace-nowrap">
                         <span className="truncate">{p.location.name}</span>
+                        <IconExternal className="w-3 h-3 text-slate-400 group-hover:text-black transition-colors shrink-0" />
                         {hasBlocker && (
                           <span
                             className="w-2 h-2 rounded-full bg-rose-500 shrink-0"
