@@ -58,30 +58,20 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
       {/* Top Banner */}
       <motion.div
         variants={itemVariants}
-        className="bg-white border border-slate-200 rounded-xl p-5 sm:p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4"
+        className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4"
       >
         <div>
-          <div className="flex items-center space-x-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-600" />
-            <span className="text-[11px] font-bold tracking-wider text-blue-700 uppercase">
-              Executive Project Portfolio
-            </span>
-          </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-1">
-            Incheon Mobility – River Dealership Expansion Overview
+          <h1 className="text-lg sm:text-xl font-bold text-slate-950 tracking-tight">
+            Expansion Portfolio Overview
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Kerala Network Expansion Program • Fixed Target Date:{' '}
-            <strong className="text-slate-800">31 March 2027</strong> ({metrics.daysToTarget} Days Remaining)
+          <p className="text-xs text-slate-500 mt-0.5">
+            Target Completion: <strong className="text-slate-800">31 Mar 2027</strong> ({metrics.daysToTarget} days remaining)
           </p>
         </div>
 
-        <div className="flex items-center space-x-2.5 bg-slate-50 px-3.5 py-2 rounded-lg border border-slate-200 self-start md:self-auto">
-          <IconDashboard className="w-3.5 h-3.5 text-slate-600" />
-          <div className="text-xs">
-            <div className="text-slate-400 text-[10px]">Reporting Baseline</div>
-            <div className="font-bold text-slate-800 font-mono">19 November 2026</div>
-          </div>
+        <div className="flex items-center space-x-2 text-xs text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 self-start md:self-auto">
+          <span>Reporting Baseline:</span>
+          <span className="font-bold text-slate-800 font-mono">19 Nov 2026</span>
         </div>
       </motion.div>
 
@@ -305,62 +295,52 @@ export const ExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({
         variants={itemVariants}
         className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs"
       >
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-2">
-            <IconEscalation className="w-4 h-4 text-rose-600" />
-            <div>
-              <h3 className="font-bold text-slate-900 text-sm">
-                Critical Bottlenecks & Escalations
-              </h3>
-              <p className="text-xs text-slate-500">
-                Direct impediments requiring executive escalation to prevent target breach
-              </p>
-            </div>
-          </div>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-bold text-slate-950 text-sm">
+            Critical Bottlenecks & Escalations
+          </h3>
           <span className="text-[11px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded font-mono">
-            {openBlockers.length} Active Issues
+            {openBlockers.length} issues
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+        <div className="divide-y divide-slate-100">
           {openBlockers.map((blk) => (
             <div
               key={blk.id}
-              className="bg-white border border-slate-200 border-l-4 border-l-rose-500 p-4 rounded-lg space-y-2 shadow-2xs hover:shadow-xs transition-shadow"
+              className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-slate-50/50 -mx-2 px-2 rounded-lg transition-colors"
             >
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-slate-900">
-                  {blk.project?.location.name}
-                </span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200">
-                  {blk.category}
-                </span>
-              </div>
-
-              <div>
-                <h4 className="text-xs font-semibold text-slate-800">
+              <div className="space-y-0.5 max-w-xl">
+                <div className="flex items-center space-x-2">
+                  <span className="font-bold text-slate-950 text-xs">
+                    {blk.project?.location.name}
+                  </span>
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                    {blk.category}
+                  </span>
+                  <span className="text-[10px] font-semibold font-mono text-rose-700">
+                    [{blk.severity}]
+                  </span>
+                </div>
+                <div className="text-xs font-semibold text-slate-800">
                   {blk.title}
-                </h4>
-                <p className="text-[11px] text-slate-600 mt-1 line-clamp-3 leading-relaxed">
+                </div>
+                <p className="text-[11px] text-slate-500 line-clamp-1">
                   {blk.description}
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                <span>Severity: <strong className="text-rose-700 font-mono">{blk.severity}</strong></span>
-                {blk.project && (
-                  <button
-                    onClick={() => {
-                      const p = projects.find((proj) => proj.id === blk.projectId);
-                      if (p) onSelectProject(p);
-                    }}
-                    className="text-blue-600 hover:text-blue-700 font-semibold flex items-center space-x-1 cursor-pointer"
-                  >
-                    <span>View Track</span>
-                    <span className="text-xs">→</span>
-                  </button>
-                )}
-              </div>
+              {blk.project && (
+                <button
+                  onClick={() => {
+                    const p = projects.find((proj) => proj.id === blk.projectId);
+                    if (p) onSelectProject(p);
+                  }}
+                  className="text-blue-600 hover:text-blue-700 font-semibold text-xs shrink-0 self-start sm:self-center cursor-pointer"
+                >
+                  <span>View Track →</span>
+                </button>
+              )}
             </div>
           ))}
         </div>
