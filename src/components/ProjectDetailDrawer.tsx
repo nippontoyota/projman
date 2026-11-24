@@ -82,8 +82,15 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
 
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'milestones' | 'blockers' | 'audit'>('milestones');
+  const [milestones, setMilestones] = useState<Milestone[]>(project?.milestones || []);
 
   const toast = useToast();
+
+  React.useEffect(() => {
+    if (project?.milestones) {
+      setMilestones(project.milestones);
+    }
+  }, [project?.milestones]);
 
   if (!project) return null;
 
@@ -118,28 +125,41 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
   };
 
   const handleMilestoneUpdate = async (milestone: Milestone, isCompleted: boolean) => {
-    try {
-      const newStatus = isCompleted ? 'Completed' : 'Pending';
-      const actualDate = isCompleted ? new Date().toISOString().split('T')[0] : null;
+    const prevMilestones = [...milestones];
+    const newStatus = isCompleted ? 'Completed' : 'Pending';
+    const nowIso = new Date().toISOString();
 
+    // 1. INSTANT OPTIMISTIC UPDATE: Ticks immediately without waiting for server round-trip!
+    setMilestones((prev) =>
+      prev.map((m) =>
+        m.id === milestone.id
+          ? {
+              ...m,
+              status: newStatus,
+              actualDate: isCompleted ? nowIso : null,
+            }
+          : m
+      )
+    );
+
+    // 2. Background API call
+    try {
       const res = await fetch(`/api/milestones/${milestone.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           status: newStatus,
-          actualDate,
+          actualDate: isCompleted ? nowIso.split('T')[0] : null,
           userRole,
         }),
       });
 
       if (!res.ok) throw new Error('Failed to update milestone');
-      toast.success(
-        isCompleted ? 'Milestone Completed' : 'Milestone Marked Pending',
-        `"${milestone.title}" updated for ${project.location.name}`
-      );
       onUpdateSuccess();
     } catch (err) {
       console.error(err);
+      // Revert if error occurs
+      setMilestones(prevMilestones);
       toast.error('Update Failed', 'Failed to update milestone checkpoint');
     }
   };
@@ -396,13 +416,13 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                   <div className="flex items-center justify-between text-xs">
                     <h3 className="font-bold text-black">Milestones</h3>
                     <span className="text-slate-500 font-mono font-semibold">
-                      {project.milestones.filter((m) => m.status === 'Completed').length} /{' '}
-                      {project.milestones.length} completed
+                      {milestones.filter((m) => m.status === 'Completed').length} /{' '}
+                      {milestones.length} completed
                     </span>
                   </div>
 
                   {[1, 2, 3, 4].map((phaseNum) => {
-                    const phaseMilestones = project.milestones.filter((m) => m.phaseNumber === phaseNum);
+                    const phaseMilestones = milestones.filter((m) => m.phaseNumber === phaseNum);
                     const phaseNames = [
                       '',
                       'Phase 1: Property & Agreement',
@@ -424,21 +444,23 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                             return (
                               <div
                                 key={m.id}
-                                className="p-3 flex items-center justify-between text-xs hover:bg-slate-50 transition-colors"
+                                className={`p-3 flex items-center justify-between text-xs hover:bg-slate-50 transition-colors ${
+                                  isDone ? 'bg-emerald-50/20' : ''
+                                }`}
                               >
                                 <div className="flex items-center space-x-3 flex-1 pr-3">
                                   <input
                                     type="checkbox"
                                     checked={isDone}
                                     onChange={(e) => handleMilestoneUpdate(m, e.target.checked)}
-                                    className="w-4 h-4 text-black bg-white border-slate-300 rounded-xs focus:ring-black cursor-pointer accent-black"
+                                    className="w-4 h-4 text-emerald-600 bg-white border-slate-300 rounded-xs focus:ring-emerald-500 cursor-pointer accent-emerald-600"
                                   />
                                   <div>
                                     <div className={`font-medium ${isDone ? 'text-black font-semibold' : 'text-slate-600'}`}>
                                       {m.title}
                                     </div>
                                     {m.actualDate && (
-                                      <div className="text-[10px] text-slate-500 font-mono mt-0.5">
+                                      <div className="text-[10px] text-emerald-700 font-mono mt-0.5">
                                         Completed: {m.actualDate.split('T')[0]}
                                       </div>
                                     )}
@@ -447,9 +469,9 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
 
                                 <div className="flex items-center space-x-2">
                                   <span
-                                    className={`px-2 py-0.5 rounded-xs text-[10px] font-semibold border ${
+                                    className={`px-2 py-0.5 rounded-xs text-[10px] font-bold border ${
                                       isDone
-                                        ? 'bg-slate-100 text-black border-slate-300'
+                                        ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
                                         : 'bg-slate-50 text-slate-500 border-slate-200'
                                     }`}
                                   >
