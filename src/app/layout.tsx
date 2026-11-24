@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { ToastProvider } from '@/context/ToastContext';
 
 export const metadata: Metadata = {
   title: 'Incheon Mobility | River Dealership Expansion Tracker',
@@ -13,9 +14,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full bg-slate-50">
+    <html lang="en" className="h-full bg-slate-50 light" style={{ colorScheme: 'light' }}>
       <body className="min-h-full bg-slate-50 text-slate-900 flex flex-col antialiased">
-        {children}
+        <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
   );
