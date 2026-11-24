@@ -83,7 +83,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
     <div className="space-y-3">
       {/* Controls Toolbar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 shrink-0">
           <h2 className="text-sm font-bold text-black tracking-tight">
             Milestones
           </h2>
@@ -92,19 +92,20 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
           </span>
         </div>
 
-        {/* Custom Filters */}
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="relative">
-            <IconSearch className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-xs text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-black w-44 shadow-2xs"
-            />
-          </div>
+        {/* Centered Bigger Search Bar */}
+        <div className="relative flex-1 max-w-sm mx-auto w-full">
+          <IconSearch className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
+          <input
+            type="text"
+            placeholder="Search location, code or notes..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-200 rounded-xs text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-black shadow-2xs"
+          />
+        </div>
 
+        {/* Custom Filters */}
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
           <CustomSelect
             value={statusFilter}
             onChange={setStatusFilter}

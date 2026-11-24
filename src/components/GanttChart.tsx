@@ -55,7 +55,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
   const [search, setSearch] = useState('');
   const [facilityFilter, setFacilityFilter] = useState<string>('ALL');
   const [healthFilter, setHealthFilter] = useState<string>('ALL');
-  const [hoveredProject, setHoveredProject] = useState<Project | null>(null);
 
   // Filter projects
   const filteredProjects = useMemo(() => {
@@ -142,25 +141,26 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
   return (
     <div className="space-y-3">
       {/* Integrated Controls Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center space-x-2">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="flex items-center space-x-2 shrink-0">
           <span className="text-sm font-bold text-black">Timeline</span>
           <span className="text-xs text-slate-400 font-mono">(Sep 2025 – Mar 2027)</span>
         </div>
 
-        {/* Search & Custom In-House Filters */}
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="relative">
-            <IconSearch className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search location..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-xs text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-black w-44 shadow-2xs"
-            />
-          </div>
+        {/* Centered Bigger Search Bar */}
+        <div className="relative flex-1 max-w-sm mx-auto w-full">
+          <IconSearch className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
+          <input
+            type="text"
+            placeholder="Search location or code..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-200 rounded-xs text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-black shadow-2xs"
+          />
+        </div>
 
+        {/* Custom In-House Filters */}
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
           <CustomSelect
             value={facilityFilter}
             onChange={setFacilityFilter}
@@ -253,8 +253,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                   <tr
                     key={p.id}
                     onClick={() => onSelectProject(p)}
-                    onMouseEnter={() => setHoveredProject(p)}
-                    onMouseLeave={() => setHoveredProject(null)}
                     className="hover:bg-slate-50 transition-colors group cursor-pointer"
                   >
                     {/* Index */}
@@ -351,45 +349,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
           </div>
         )}
       </div>
-
-      {/* Floating Hover Context Bar */}
-      <AnimatePresence>
-        {hoveredProject && (
-          <motion.div
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 4 }}
-            className="p-3 bg-white border border-slate-200 rounded-xs shadow-sm flex items-center justify-between text-xs"
-          >
-            <div className="flex items-center space-x-3 text-slate-700">
-              <span className="font-bold text-black">
-                {hoveredProject.location.name} ({hoveredProject.facilityType})
-              </span>
-              <span className="text-slate-400 font-mono">
-                Code: {hoveredProject.code}
-              </span>
-              <span>
-                Elapsed: <strong className="text-black font-mono">{hoveredProject.elapsedDays}d</strong>
-              </span>
-              <span>
-                Work %: <strong className="text-black font-mono">{hoveredProject.workPercentage}%</strong>
-              </span>
-              {hoveredProject.keyRemarks && (
-                <span className="text-slate-500 italic truncate max-w-md">
-                  "{hoveredProject.keyRemarks}"
-                </span>
-              )}
-            </div>
-
-            <button
-              onClick={() => onSelectProject(hoveredProject)}
-              className="text-black hover:text-neutral-700 font-bold flex items-center space-x-1 cursor-pointer"
-            >
-              <span>Inspect Details →</span>
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };
