@@ -66,15 +66,16 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Commissioned':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      case 'Completed':
+        return 'bg-emerald-50 text-emerald-700 border-emerald-300 font-bold';
       case 'Ready for Handover':
-        return 'bg-purple-50 text-purple-700 border-purple-200';
+        return 'bg-purple-50 text-purple-700 border-purple-200 font-bold';
       case 'BOQ Approved / PO Pending':
-        return 'bg-amber-50 text-amber-700 border-amber-200';
+        return 'bg-amber-50 text-amber-700 border-amber-200 font-bold';
       case 'Pre-Construction':
-        return 'bg-rose-50 text-rose-700 border-rose-200';
+        return 'bg-rose-50 text-rose-700 border-rose-200 font-bold';
       default:
-        return 'bg-blue-50 text-blue-700 border-blue-200';
+        return 'bg-slate-100 text-slate-800 border-slate-200 font-bold';
     }
   };
 
@@ -86,7 +87,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
           <h2 className="text-sm font-bold text-black tracking-tight">
             Milestones
           </h2>
-          <span className="text-xs font-mono text-slate-400">
+          <span className="text-xs font-mono text-slate-500 font-semibold">
             ({filteredProjects.length} tracks)
           </span>
         </div>
@@ -136,7 +137,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
             className={`px-2.5 py-1 rounded-xs text-xs font-bold border transition-colors cursor-pointer ${
               expandedPhases[phase.num]
                 ? 'bg-black text-white border-black'
-                : 'bg-white text-slate-500 border-slate-200 hover:text-black'
+                : 'bg-white text-slate-600 border-slate-200 hover:text-black'
             }`}
           >
             {phase.name}
@@ -148,45 +149,45 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
       <div className="bg-white border border-slate-200 rounded-xs overflow-hidden">
         <div className="overflow-x-auto max-h-[750px]">
           <table className="w-full text-left border-collapse min-w-[1600px] text-xs">
-            <thead className="sticky top-0 z-30 bg-slate-50 border-b border-slate-200">
+            <thead className="sticky top-0 z-30 bg-slate-100 border-b-2 border-slate-400">
               <tr>
-                <th className="p-3 sticky left-0 z-40 bg-slate-50 w-12 border-r border-slate-200 text-center text-slate-500 font-mono">
-                  #
+                <th className="p-3 sticky left-0 z-40 bg-slate-100 w-14 border-r border-slate-300 text-center text-black font-extrabold text-[11px] font-mono uppercase tracking-wider">
+                  Sl. No.
                 </th>
-                <th className="p-3 sticky left-12 z-40 bg-slate-50 w-44 border-r border-slate-200 text-slate-900 font-bold">
+                <th className="p-3 sticky left-14 z-40 bg-slate-100 w-44 border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Location & Code
                 </th>
-                <th className="p-3 sticky left-56 z-40 bg-slate-50 w-28 border-r border-slate-200 text-slate-600 font-semibold">
+                <th className="p-3 sticky left-[232px] z-40 bg-slate-100 w-28 border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Facility
                 </th>
-                <th className="p-3 sticky left-84 z-40 bg-slate-50 w-36 border-r border-slate-200 text-slate-600 font-semibold shadow-xs">
+                <th className="p-3 sticky left-[344px] z-40 bg-slate-100 w-36 border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider shadow-xs">
                   Status
                 </th>
-                <th className="p-3 w-28 border-r border-slate-200 text-center text-slate-600 font-semibold">
+                <th className="p-3 w-28 border-r border-slate-300 text-center text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Progress %
                 </th>
-                <th className="p-3 w-64 border-r border-slate-200 text-slate-600 font-semibold">
+                <th className="p-3 w-64 border-r-2 border-slate-400 text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Remarks / Notes
                 </th>
 
                 {/* Milestone Headers */}
                 {expandedPhases[1] && (
-                  <th className="p-3 bg-slate-100 text-black border-r border-slate-200 text-center font-bold" colSpan={6}>
+                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs" colSpan={6}>
                     Phase 1: Property & Agreement
                   </th>
                 )}
                 {expandedPhases[2] && (
-                  <th className="p-3 bg-slate-100 text-black border-r border-slate-200 text-center font-bold" colSpan={5}>
+                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs" colSpan={5}>
                     Phase 2: Design & GFC Approval
                   </th>
                 )}
                 {expandedPhases[3] && (
-                  <th className="p-3 bg-slate-100 text-black border-r border-slate-200 text-center font-bold" colSpan={5}>
+                  <th className="p-3 bg-slate-200/80 text-black border-r-2 border-slate-400 text-center font-extrabold text-xs" colSpan={5}>
                     Phase 3: BOQ & PO Release
                   </th>
                 )}
                 {expandedPhases[4] && (
-                  <th className="p-3 bg-slate-100 text-black text-center font-bold" colSpan={5}>
+                  <th className="p-3 bg-slate-200/80 text-black text-center font-extrabold text-xs" colSpan={5}>
                     Phase 4: Site Execution & Handover
                   </th>
                 )}
@@ -200,27 +201,27 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                   onClick={() => onSelectProject(p)}
                   className="hover:bg-slate-50 transition-colors group cursor-pointer"
                 >
-                  <td className="p-3 sticky left-0 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-slate-400 font-mono text-center">
+                  <td className="p-3 sticky left-0 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-black font-extrabold font-mono text-center text-xs">
                     {idx + 1}
                   </td>
 
-                  <td className="p-3 sticky left-12 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-semibold text-slate-900">
+                  <td className="p-3 sticky left-14 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-bold text-black">
                     <div className="flex items-center space-x-1.5">
                       <span>{p.location.name}</span>
                       <IconExternal className="w-3 h-3 text-slate-400 group-hover:text-black transition-colors" />
                     </div>
-                    <div className="text-[10px] text-slate-400 font-mono mt-0.5">{p.code}</div>
+                    <div className="text-[10px] text-slate-500 font-mono font-semibold mt-0.5">{p.code}</div>
                   </td>
 
-                  <td className="p-3 sticky left-56 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-slate-600">
-                    <span className="px-2 py-0.5 rounded-xs text-[11px] bg-slate-100 font-semibold border border-slate-200">
+                  <td className="p-3 sticky left-[232px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-slate-800">
+                    <span className="px-2 py-0.5 rounded-xs text-[11px] bg-slate-100 font-bold border border-slate-200">
                       {p.facilityType}
                     </span>
                   </td>
 
-                  <td className="p-3 sticky left-84 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 shadow-xs">
+                  <td className="p-3 sticky left-[344px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 shadow-xs">
                     <span
-                      className={`inline-block px-2 py-0.5 rounded-xs text-[10px] font-semibold border ${getStatusBadge(
+                      className={`inline-block px-2 py-0.5 rounded-xs text-[10px] font-bold border ${getStatusBadge(
                         p.currentStatus
                       )}`}
                     >
@@ -230,7 +231,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
 
                   <td className="p-3 border-r border-slate-200 text-center">
                     <div className="flex items-center justify-center space-x-2">
-                      <span className="font-bold text-slate-900 text-xs font-mono">{p.workPercentage}%</span>
+                      <span className="font-extrabold text-black text-xs font-mono">{p.workPercentage}%</span>
                       <div className="w-12 bg-slate-200 h-1.5 rounded-full overflow-hidden">
                         <div
                           className={`h-full ${
@@ -242,7 +243,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                     </div>
                   </td>
 
-                  <td className="p-3 border-r border-slate-200 max-w-xs text-[11px] text-slate-600">
+                  <td className="p-3 border-r-2 border-slate-400 max-w-xs text-[11px] text-slate-800">
                     <p className="line-clamp-2 leading-relaxed">
                       {p.keyRemarks || <span className="text-slate-400 italic">No notes</span>}
                     </p>
@@ -253,11 +254,12 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                     if (!expandedPhases[m.phaseNumber]) return null;
 
                     const isDone = m.status === 'Completed' || !!m.actualDate;
+                    const isPhaseEnd = m.orderIndex === 6 || m.orderIndex === 11 || m.orderIndex === 16 || m.orderIndex === 21;
 
                     return (
                       <td
                         key={m.id}
-                        className={`p-2 border-r border-slate-100 text-center ${
+                        className={`p-2 ${isPhaseEnd ? 'border-r-2 border-slate-400' : 'border-r border-slate-100'} text-center ${
                           isDone ? 'bg-emerald-50/40' : ''
                         }`}
                         title={`${m.title}\nStatus: ${m.status}\nDate: ${
@@ -266,13 +268,13 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                       >
                         {isDone ? (
                           <div className="flex flex-col items-center">
-                            <span className="text-[10px] font-mono text-emerald-700 font-semibold">
+                            <span className="text-[10px] font-mono text-emerald-700 font-extrabold">
                               {m.actualDate ? m.actualDate.split('T')[0].slice(5) : 'Done'}
                             </span>
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-0.5" />
                           </div>
                         ) : (
-                          <div className="text-slate-300 text-[10px]">-</div>
+                          <div className="text-slate-300 text-[10px] font-bold">-</div>
                         )}
                       </td>
                     );
