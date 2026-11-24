@@ -3,14 +3,8 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Project, ScheduleHealth } from '@/types';
-import {
-  Search,
-  CheckCircle2,
-  Clock,
-  AlertTriangle,
-  ArrowRight,
-  Calendar,
-} from 'lucide-react';
+import { IconSearch } from '@/components/ui/Icons';
+import { CustomSelect, SelectOption } from '@/components/ui/CustomSelect';
 
 interface GanttChartProps {
   projects: Project[];
@@ -38,6 +32,23 @@ const MONTHS = [
   { id: '2027-01', label: 'Jan-27', year: 2027 },
   { id: '2027-02', label: 'Feb-27', year: 2027 },
   { id: '2027-03', label: 'Mar-27', year: 2027, isTarget: true },
+];
+
+const FACILITY_OPTIONS: SelectOption[] = [
+  { value: 'ALL', label: 'All Facilities' },
+  { value: 'Sales', label: 'Sales Only' },
+  { value: 'Service', label: 'Service Only' },
+  { value: 'Stock Yard', label: 'Stock Yard' },
+  { value: 'Sales & Service', label: 'Sales & Service' },
+];
+
+const HEALTH_OPTIONS: SelectOption[] = [
+  { value: 'ALL', label: 'All Schedule Health' },
+  { value: 'Completed', label: 'Completed' },
+  { value: 'On Track', label: 'On Track' },
+  { value: 'Watchlist', label: 'Watchlist' },
+  { value: 'Delayed (>30d)', label: 'Delayed (>30d)' },
+  { value: 'Action Needed', label: 'Action Needed' },
 ];
 
 export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProject }) => {
@@ -147,43 +158,34 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
             </p>
           </div>
 
-          {/* Search & Filters */}
+          {/* Search & Custom In-House Filters */}
           <div className="flex flex-wrap items-center gap-2">
             <div className="relative">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
+              <IconSearch className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search city or code..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-8 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-48 shadow-2xs"
+                className="pl-8 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-44 shadow-2xs"
               />
             </div>
 
-            <select
+            <CustomSelect
               value={facilityFilter}
-              onChange={(e) => setFacilityFilter(e.target.value)}
-              className="py-1.5 px-3 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-blue-500 shadow-2xs cursor-pointer font-medium"
-            >
-              <option value="ALL">All Facilities</option>
-              <option value="Sales">Sales Only</option>
-              <option value="Service">Service Only</option>
-              <option value="Stock Yard">Stock Yard Only</option>
-              <option value="Sales & Service">Sales & Service</option>
-            </select>
+              onChange={setFacilityFilter}
+              options={FACILITY_OPTIONS}
+              size="sm"
+              className="w-36"
+            />
 
-            <select
+            <CustomSelect
               value={healthFilter}
-              onChange={(e) => setHealthFilter(e.target.value)}
-              className="py-1.5 px-3 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-blue-500 shadow-2xs cursor-pointer font-medium"
-            >
-              <option value="ALL">All Schedule Health</option>
-              <option value="Completed">Completed</option>
-              <option value="On Track">On Track</option>
-              <option value="Watchlist">Watchlist</option>
-              <option value="Delayed (>30d)">Delayed (&gt;30d)</option>
-              <option value="Action Needed">Action Needed</option>
-            </select>
+              onChange={setHealthFilter}
+              options={HEALTH_OPTIONS}
+              size="sm"
+              className="w-44"
+            />
           </div>
         </div>
 
@@ -431,8 +433,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
               onClick={() => onSelectProject(hoveredProject)}
               className="text-blue-600 hover:text-blue-700 font-semibold flex items-center space-x-1 cursor-pointer"
             >
-              <span>Inspect Details</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span>Inspect Details →</span>
             </button>
           </motion.div>
         )}
