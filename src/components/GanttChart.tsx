@@ -140,92 +140,48 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
   };
 
   return (
-    <div className="space-y-4">
-      {/* Top Filter & Legend Card */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div className="flex items-center space-x-2.5">
-            <h2 className="text-base font-bold text-slate-950 tracking-tight">
-              Gantt Timeline
-            </h2>
-            <span className="text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-mono font-medium border border-slate-200">
-              Sep 2025 – Mar 2027
-            </span>
-          </div>
-
-          {/* Search & Custom In-House Filters */}
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="relative">
-              <IconSearch className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search city or code..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-8 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-44 shadow-2xs"
-              />
-            </div>
-
-            <CustomSelect
-              value={facilityFilter}
-              onChange={setFacilityFilter}
-              options={FACILITY_OPTIONS}
-              size="sm"
-              className="w-36"
-            />
-
-            <CustomSelect
-              value={healthFilter}
-              onChange={setHealthFilter}
-              options={HEALTH_OPTIONS}
-              size="sm"
-              className="w-44"
-            />
-          </div>
+    <div className="space-y-3">
+      {/* Integrated Controls Toolbar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center space-x-2">
+          <span className="text-sm font-semibold text-slate-900">Timeline</span>
+          <span className="text-xs text-slate-400 font-mono">(Sep 2025 – Mar 2027)</span>
         </div>
 
-        {/* Legend */}
-        <div className="mt-3.5 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between text-xs gap-3">
-          <div className="flex flex-wrap items-center gap-3 text-slate-600">
-            <span className="font-semibold text-slate-800 text-[11px] uppercase tracking-wider">Health:</span>
-            <span className="flex items-center space-x-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
-              <span>Commissioned</span>
-            </span>
-            <span className="flex items-center space-x-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
-              <span>On Track</span>
-            </span>
-            <span className="flex items-center space-x-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-              <span>Watchlist</span>
-            </span>
-            <span className="flex items-center space-x-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-600" />
-              <span>Delayed (&gt;30d)</span>
-            </span>
-            <span className="flex items-center space-x-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-purple-600" />
-              <span>Action Needed</span>
-            </span>
+        {/* Search & Custom In-House Filters */}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative">
+            <IconSearch className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search location..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-400 w-44 shadow-2xs"
+            />
           </div>
 
-          <div className="flex items-center space-x-4 text-slate-500 text-[11px]">
-            <span className="flex items-center space-x-1.5">
-              <span className="w-2 h-2 rounded-full bg-blue-600" />
-              <span className="text-blue-700 font-semibold">Nov-26 (Reporting Date)</span>
-            </span>
-            <span className="flex items-center space-x-1.5">
-              <span className="w-2 h-2 rounded-full bg-amber-600" />
-              <span className="text-amber-800 font-semibold">31-Mar-27 (Fixed Target)</span>
-            </span>
-          </div>
+          <CustomSelect
+            value={facilityFilter}
+            onChange={setFacilityFilter}
+            options={FACILITY_OPTIONS}
+            size="sm"
+            className="w-36"
+          />
+
+          <CustomSelect
+            value={healthFilter}
+            onChange={setHealthFilter}
+            options={HEALTH_OPTIONS}
+            size="sm"
+            className="w-36"
+          />
         </div>
       </div>
 
       {/* Main Gantt Grid Table */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
-        <div className="overflow-x-auto max-h-[720px]">
+      <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
+        <div className="overflow-x-auto max-h-[760px]">
           <table className="w-full text-left border-collapse min-w-[1450px]">
             <thead className="sticky top-0 z-30 bg-slate-50 border-b border-slate-200">
               {/* Year Super Header */}
@@ -234,7 +190,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                   className="p-3 sticky left-0 z-40 bg-slate-50 w-72 border-r border-slate-200 text-slate-800"
                   colSpan={4}
                 >
-                  DEALERSHIP LOCATION & STATUS ({filteredProjects.length} Tracks)
+                  DEALERSHIP LOCATION ({filteredProjects.length} Tracks)
                 </th>
                 <th className="text-center py-2 border-r border-slate-200 bg-slate-100/70 text-slate-700 font-bold" colSpan={4}>
                   2025
@@ -259,7 +215,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                   Facility
                 </th>
                 <th className="p-3 sticky left-84 z-40 bg-slate-50 w-36 border-r border-slate-200 shadow-xs">
-                  Status & Health
+                  Status
                 </th>
 
                 {MONTHS.map((m) => (
@@ -323,21 +279,11 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                       </span>
                     </td>
 
-                    {/* Status & Health */}
-                    <td className="p-3 sticky left-84 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 shadow-xs">
-                      <div className="space-y-1">
-                        <span
-                          className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold border whitespace-nowrap ${healthStyle.badge}`}
-                        >
-                          {p.currentStatus}
-                        </span>
-                        <div className="flex items-center space-x-1.5 text-[10px] text-slate-500">
-                          <span className={`w-1.5 h-1.5 rounded-full ${healthStyle.dot}`} />
-                          <span className={`font-semibold ${healthStyle.textColor}`}>
-                            {p.scheduleHealth}
-                          </span>
-                        </div>
-                      </div>
+                    {/* Status */}
+                    <td className="p-3 sticky left-84 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200">
+                      <span className="inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-800 border border-slate-200 whitespace-nowrap">
+                        {p.currentStatus}
+                      </span>
                     </td>
 
                     {/* 19 Monthly Gantt Cells */}
