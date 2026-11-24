@@ -281,7 +281,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
         <div
           ref={leftTableContainerRef}
           onScroll={handleLeftScroll}
-          className="w-[656px] min-w-[656px] max-w-[656px] shrink-0 border-r-2 border-slate-400 shadow-xs overflow-y-auto overflow-x-hidden max-h-[760px] bg-white select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className="w-[704px] min-w-[704px] max-w-[704px] shrink-0 border-r-2 border-slate-400 shadow-xs overflow-y-auto overflow-x-hidden max-h-[760px] bg-white select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
           <table className="w-full text-left border-collapse table-fixed">
             <thead className="sticky top-0 z-30 bg-slate-100 border-b-2 border-slate-400">
@@ -305,7 +305,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                 <th className="px-3 py-2 w-36 min-w-[144px] max-w-[144px] border-r border-slate-300 align-middle">
                   Facility
                 </th>
-                <th className="px-3 py-2 w-52 min-w-[208px] max-w-[208px] align-middle">
+                <th className="px-3 py-2 w-64 min-w-[256px] max-w-[256px] align-middle">
                   Status
                 </th>
               </tr>
@@ -348,7 +348,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                         {p.facilityType}
                       </span>
                     </td>
-                    <td className="px-3 py-2 w-52 min-w-[208px] max-w-[208px] align-middle">
+                    <td className="px-3 py-2 w-64 min-w-[256px] max-w-[256px] align-middle">
                       <span
                         className={`inline-block px-2 py-0.5 rounded-xs text-[10px] font-bold border whitespace-nowrap ${
                           p.currentStatus === 'Commissioned'

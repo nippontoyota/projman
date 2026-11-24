@@ -306,10 +306,10 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
           <table
             className={`w-full text-left border-collapse text-xs ${
               selectedPhase === 'ALL'
-                ? 'min-w-[2032px]'
+                ? 'min-w-[2080px]'
                 : selectedPhase === 1
-                ? 'min-w-[1312px]'
-                : 'min-w-[1264px]'
+                ? 'min-w-[1360px]'
+                : 'min-w-[1312px]'
             }`}
           >
             <thead className="sticky top-0 z-30 bg-slate-100 border-b-2 border-slate-400">
@@ -330,17 +330,17 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                 </th>
 
                 {/* Status - Constant */}
-                <th className="p-3 sticky left-[448px] z-40 bg-slate-100 w-52 min-w-[208px] max-w-[208px] border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
+                <th className="p-3 sticky left-[448px] z-40 bg-slate-100 w-64 min-w-[256px] max-w-[256px] border-r border-slate-300 text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Status
                 </th>
 
                 {/* Progress % - Constant */}
-                <th className="p-3 sticky left-[656px] z-40 bg-slate-100 w-28 min-w-[112px] max-w-[112px] border-r border-slate-300 text-center text-black font-extrabold text-[11px] uppercase tracking-wider">
+                <th className="p-3 sticky left-[704px] z-40 bg-slate-100 w-28 min-w-[112px] max-w-[112px] border-r border-slate-300 text-center text-black font-extrabold text-[11px] uppercase tracking-wider">
                   Progress %
                 </th>
 
                 {/* Remarks / Notes - Constant with Divider Border */}
-                <th className="p-3 sticky left-[768px] z-40 bg-slate-100 w-64 min-w-[256px] max-w-[256px] border-r-2 border-slate-500 text-black font-extrabold text-[11px] uppercase tracking-wider shadow-md">
+                <th className="p-3 sticky left-[816px] z-40 bg-slate-100 w-64 min-w-[256px] max-w-[256px] border-r-2 border-slate-500 text-black font-extrabold text-[11px] uppercase tracking-wider shadow-md">
                   Remarks / Notes
                 </th>
 
@@ -397,7 +397,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                   </td>
 
                   {/* Status - Constant */}
-                  <td className="p-3 sticky left-[448px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 w-52 min-w-[208px] max-w-[208px]">
+                  <td className="p-3 sticky left-[448px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 w-64 min-w-[256px] max-w-[256px]">
                     <span
                       className={`inline-block px-2 py-0.5 rounded-xs text-[10px] font-bold border whitespace-nowrap ${getStatusBadge(
                         p.currentStatus
@@ -408,7 +408,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                   </td>
 
                   {/* Progress % - Constant */}
-                  <td className="p-3 sticky left-[656px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-center w-28 min-w-[112px] max-w-[112px]">
+                  <td className="p-3 sticky left-[704px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-center w-28 min-w-[112px] max-w-[112px]">
                     <div className="flex items-center justify-center space-x-2">
                       <span className="font-extrabold text-black text-xs font-mono">{p.workPercentage}%</span>
                       <div className="w-12 bg-slate-200 h-1.5 rounded-full overflow-hidden">
@@ -423,7 +423,7 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
                   </td>
 
                   {/* Remarks / Notes - Constant with Divider Border */}
-                  <td className="p-3 sticky left-[768px] z-20 bg-white group-hover:bg-slate-50 border-r-2 border-slate-500 shadow-md w-64 min-w-[256px] max-w-[256px] text-[11px] text-slate-800">
+                  <td className="p-3 sticky left-[816px] z-20 bg-white group-hover:bg-slate-50 border-r-2 border-slate-500 shadow-md w-64 min-w-[256px] max-w-[256px] text-[11px] text-slate-800">
                     <p className="line-clamp-2 leading-relaxed">
                       {p.keyRemarks || <span className="text-slate-400 italic">No notes</span>}
                     </p>
