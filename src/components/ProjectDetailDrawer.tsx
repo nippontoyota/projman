@@ -563,7 +563,7 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                         className={`p-3.5 rounded-lg border text-xs space-y-1.5 ${
                           blk.status === 'Resolved'
                             ? 'bg-slate-50 border-slate-200 opacity-60'
-                            : 'bg-white border-slate-200 border-l-4 border-l-rose-500 shadow-2xs'
+                            : 'bg-white border-slate-200 shadow-2xs'
                         }`}
                       >
                         <div className="flex items-center justify-between">

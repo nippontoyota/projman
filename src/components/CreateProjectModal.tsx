@@ -107,18 +107,10 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
             </button>
 
             {/* Modal Header */}
-            <div className="flex items-center space-x-3 mb-5">
-              <div className="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold shadow-xs">
-                <IconPlus className="w-4 h-4 stroke-[2]" />
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-slate-900 tracking-tight">
-                  Initialize Dealership Track
-                </h2>
-                <p className="text-xs text-slate-500">
-                  Admin setup: Create showroom schedule & auto-generate 21 milestones
-                </p>
-              </div>
+            <div className="mb-4">
+              <h2 className="text-base font-bold text-slate-950 tracking-tight">
+                New Dealership Track
+              </h2>
             </div>
 
             {error && (
