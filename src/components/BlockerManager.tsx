@@ -86,50 +86,48 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
   };
 
   return (
-    <div className="space-y-4">
-      {/* Header Bar */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center space-x-2.5">
-            <h2 className="text-base font-bold text-slate-950 tracking-tight">
-              Bottlenecks & Escalations
-            </h2>
-            <span className="text-[11px] font-mono text-rose-700 px-2 py-0.5 bg-rose-50 rounded border border-rose-200 font-semibold">
-              {filteredBlockers.filter((b) => b.status !== 'Resolved').length} open
-            </span>
-          </div>
+    <div className="space-y-3">
+      {/* Header Toolbar */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="flex items-center space-x-2">
+          <h2 className="text-sm font-semibold text-slate-900 tracking-tight">
+            Bottlenecks
+          </h2>
+          <span className="text-xs font-mono text-slate-400">
+            ({filteredBlockers.filter((b) => b.status !== 'Resolved').length} open)
+          </span>
+        </div>
 
-          {/* In-House Custom Filter Dropdowns */}
-          <div className="flex flex-wrap items-center gap-2">
-            <CustomSelect
-              value={categoryFilter}
-              onChange={setCategoryFilter}
-              options={CATEGORY_OPTIONS}
-              size="sm"
-              className="w-44"
-            />
+        {/* In-House Custom Filter Dropdowns */}
+        <div className="flex flex-wrap items-center gap-2">
+          <CustomSelect
+            value={categoryFilter}
+            onChange={setCategoryFilter}
+            options={CATEGORY_OPTIONS}
+            size="sm"
+            className="w-44"
+          />
 
-            <CustomSelect
-              value={severityFilter}
-              onChange={setSeverityFilter}
-              options={SEVERITY_OPTIONS}
-              size="sm"
-              className="w-36"
-            />
+          <CustomSelect
+            value={severityFilter}
+            onChange={setSeverityFilter}
+            options={SEVERITY_OPTIONS}
+            size="sm"
+            className="w-36"
+          />
 
-            <CustomSelect
-              value={statusFilter}
-              onChange={setStatusFilter}
-              options={STATUS_OPTIONS}
-              size="sm"
-              className="w-32"
-            />
-          </div>
+          <CustomSelect
+            value={statusFilter}
+            onChange={setStatusFilter}
+            options={STATUS_OPTIONS}
+            size="sm"
+            className="w-32"
+          />
         </div>
       </div>
 
       {/* High-Density Escalations Table */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
