@@ -56,37 +56,59 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
   const [facilityFilter, setFacilityFilter] = useState<string>('ALL');
   const [healthFilter, setHealthFilter] = useState<string>('ALL');
   const [scrollProgress, setScrollProgress] = useState(0);
-  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const leftTableContainerRef = useRef<HTMLDivElement>(null);
+  const rightTableContainerRef = useRef<HTMLDivElement>(null);
+  const isSyncingVerticalRef = useRef(false);
 
   const handleSmoothScrollLeft = () => {
-    if (tableContainerRef.current) {
-      tableContainerRef.current.scrollBy({ left: -240, behavior: 'smooth' });
+    if (rightTableContainerRef.current) {
+      rightTableContainerRef.current.scrollBy({ left: -240, behavior: 'smooth' });
     }
   };
 
   const handleSmoothScrollRight = () => {
-    if (tableContainerRef.current) {
-      tableContainerRef.current.scrollBy({ left: 240, behavior: 'smooth' });
+    if (rightTableContainerRef.current) {
+      rightTableContainerRef.current.scrollBy({ left: 240, behavior: 'smooth' });
     }
   };
 
   const handleSliderDrag = (val: number) => {
     setScrollProgress(val);
-    if (!tableContainerRef.current) return;
-    const { scrollWidth, clientWidth } = tableContainerRef.current;
+    if (!rightTableContainerRef.current) return;
+    const { scrollWidth, clientWidth } = rightTableContainerRef.current;
     const maxScroll = scrollWidth - clientWidth;
     if (maxScroll > 0) {
-      tableContainerRef.current.scrollLeft = (val / 100) * maxScroll;
+      rightTableContainerRef.current.scrollLeft = (val / 100) * maxScroll;
     }
   };
 
-  const handleTableScroll = () => {
-    if (!tableContainerRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = tableContainerRef.current;
+  const handleRightScroll = () => {
+    if (!rightTableContainerRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth, scrollTop } = rightTableContainerRef.current;
     const maxScroll = scrollWidth - clientWidth;
     if (maxScroll > 0) {
       setScrollProgress(Math.round((scrollLeft / maxScroll) * 100));
     }
+
+    if (!isSyncingVerticalRef.current && leftTableContainerRef.current) {
+      isSyncingVerticalRef.current = true;
+      leftTableContainerRef.current.scrollTop = scrollTop;
+      requestAnimationFrame(() => {
+        isSyncingVerticalRef.current = false;
+      });
+    }
+  };
+
+  const handleLeftScroll = () => {
+    if (!leftTableContainerRef.current || isSyncingVerticalRef.current) return;
+    isSyncingVerticalRef.current = true;
+    if (rightTableContainerRef.current) {
+      rightTableContainerRef.current.scrollTop = leftTableContainerRef.current.scrollTop;
+    }
+    requestAnimationFrame(() => {
+      isSyncingVerticalRef.current = false;
+    });
   };
 
   // Filter projects
@@ -253,99 +275,60 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
         </span>
       </div>
 
-      {/* Main Gantt Grid Table */}
-      <div className="bg-white border border-black rounded-xs overflow-hidden">
+      {/* Main Gantt Grid: Fixed Dealership Columns + Slidable Timeline (FROM 2025) */}
+      <div className="bg-white border border-black rounded-xs overflow-hidden flex">
+        {/* Fixed Left Panel: Dealership Info (Fixed, Never Slides Horizontally) */}
         <div
-          ref={tableContainerRef}
-          onScroll={handleTableScroll}
-          className="overflow-x-auto max-h-[760px]"
+          ref={leftTableContainerRef}
+          onScroll={handleLeftScroll}
+          className="w-[656px] min-w-[656px] max-w-[656px] shrink-0 border-r-2 border-slate-400 shadow-xs overflow-y-auto overflow-x-hidden max-h-[760px] bg-white select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
-          <table className="w-full text-left border-collapse min-w-[1900px]">
+          <table className="w-full text-left border-collapse table-fixed">
             <thead className="sticky top-0 z-30 bg-slate-100 border-b-2 border-slate-400">
-              {/* Row 1: 4 Fixed Columns (rowSpan=2) + Year Super Headers */}
-              <tr className="text-xs font-semibold text-slate-600 border-b border-slate-200/80">
+              {/* Row 1: Dealership Super Header */}
+              <tr className="text-xs font-semibold text-slate-600 border-b border-slate-200/80 h-8">
                 <th
-                  rowSpan={2}
-                  className="px-2 py-3 sticky left-0 top-0 z-50 bg-slate-100 w-16 min-w-[64px] max-w-[64px] border-r border-slate-300 text-black font-black text-center font-mono tracking-tight whitespace-nowrap align-middle"
+                  colSpan={4}
+                  className="px-3 py-1.5 text-black font-black text-xs uppercase tracking-wider bg-slate-100 align-middle"
                 >
+                  DEALERSHIP LOCATION ({filteredProjects.length} Tracks)
+                </th>
+              </tr>
+              {/* Row 2: Fixed 4 Column Headers */}
+              <tr className="text-[11px] text-black font-bold uppercase tracking-wider bg-slate-100 h-9">
+                <th className="px-2 py-2 w-16 min-w-[64px] max-w-[64px] border-r border-slate-300 text-center font-mono tracking-tight whitespace-nowrap align-middle">
                   Sl. No.
                 </th>
-                <th
-                  rowSpan={2}
-                  className="p-3 sticky left-[64px] top-0 z-50 bg-slate-100 w-60 min-w-[240px] max-w-[240px] border-r border-slate-300 font-extrabold text-black align-middle text-[11px] uppercase tracking-wider"
-                >
+                <th className="px-3 py-2 w-60 min-w-[240px] max-w-[240px] border-r border-slate-300 align-middle">
                   Location & Code
                 </th>
-                <th
-                  rowSpan={2}
-                  className="p-3 sticky left-[304px] top-0 z-50 bg-slate-100 w-36 min-w-[144px] max-w-[144px] border-r border-slate-300 font-extrabold text-black align-middle text-[11px] uppercase tracking-wider"
-                >
+                <th className="px-3 py-2 w-36 min-w-[144px] max-w-[144px] border-r border-slate-300 align-middle">
                   Facility
                 </th>
-                <th
-                  rowSpan={2}
-                  className="p-3 sticky left-[448px] top-0 z-50 bg-slate-100 w-52 min-w-[208px] max-w-[208px] border-r-2 border-slate-400 font-extrabold text-black shadow-xs align-middle text-[11px] uppercase tracking-wider"
-                >
+                <th className="px-3 py-2 w-52 min-w-[208px] max-w-[208px] align-middle">
                   Status
                 </th>
-
-                <th className="text-center py-2 border-r-2 border-slate-400 bg-slate-200/80 text-black font-black" colSpan={4}>
-                  2025
-                </th>
-                <th className="text-center py-2 border-r-2 border-slate-400 bg-slate-100 text-black font-black" colSpan={12}>
-                  2026 (ACTIVE EXECUTION YEAR)
-                </th>
-                <th className="text-center py-2 bg-slate-200/80 text-black font-black" colSpan={3}>
-                  2027 (TARGET)
-                </th>
-              </tr>
-
-              {/* Row 2: Month Columns Only */}
-              <tr className="text-[11px] text-black font-bold uppercase tracking-wider">
-                {MONTHS.map((m) => {
-                  const isYearEnd = m.id === '2025-12' || m.id === '2026-12';
-
-                  return (
-                    <th
-                      key={m.id}
-                      className={`py-2 px-1 text-center w-14 font-bold ${
-                        isYearEnd ? 'border-r-2 border-slate-400' : 'border-r border-slate-200/60'
-                      } ${
-                        m.isCurrent
-                          ? 'bg-neutral-200 text-black font-black'
-                          : m.isTarget
-                          ? 'bg-amber-100 text-amber-900 font-black'
-                          : 'text-black'
-                      }`}
-                    >
-                      <div>{m.label}</div>
-                      {m.isCurrent && <div className="text-[9px] text-black font-mono font-black">Now</div>}
-                      {m.isTarget && <div className="text-[9px] text-amber-800 font-mono font-black">Target</div>}
-                    </th>
-                  );
-                })}
               </tr>
             </thead>
-
             <tbody className="divide-y divide-slate-100 text-xs">
               {filteredProjects.map((p, pIdx) => {
-                const { startIdx, endIdx } = getProjectSpan(p);
-                const healthStyle = getHealthStyle(p.scheduleHealth, p.currentStatus);
                 const hasBlocker = p.blockers.some((b) => b.status !== 'Resolved');
+                const isHovered = hoveredId === p.id;
 
                 return (
                   <tr
                     key={p.id}
                     onClick={() => onSelectProject(p)}
-                    className="hover:bg-slate-50 transition-colors group cursor-pointer"
+                    onMouseEnter={() => setHoveredId(p.id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                    className={`h-14 cursor-pointer transition-colors ${
+                      isHovered ? 'bg-slate-50' : 'bg-white'
+                    }`}
                   >
-                    {/* Index */}
-                    <td className="px-2 py-2.5 sticky left-0 z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 text-black font-extrabold font-mono text-center text-xs w-16 min-w-[64px] max-w-[64px] whitespace-nowrap">
+                    <td className="px-2 py-2.5 w-16 min-w-[64px] max-w-[64px] border-r border-slate-200 text-black font-extrabold font-mono text-center text-xs whitespace-nowrap align-middle">
                       {pIdx + 1}
                     </td>
-
-                    {/* Location & Code */}
-                    <td className="p-3 sticky left-[64px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 font-bold text-black w-60 min-w-[240px] max-w-[240px]">
+                    <td className="px-3 py-2 w-60 min-w-[240px] max-w-[240px] border-r border-slate-200 font-bold text-black align-middle">
                       <div className="flex items-center space-x-1.5 whitespace-nowrap">
                         <span className="truncate">{p.location.name}</span>
                         <IconExternal className="w-3 h-3 text-slate-400 group-hover:text-black transition-colors shrink-0" />
@@ -360,32 +343,125 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                         {p.code}
                       </div>
                     </td>
-
-                    {/* Facility */}
-                    <td className="p-3 sticky left-[304px] z-20 bg-white group-hover:bg-slate-50 border-r border-slate-200 w-36 min-w-[144px] max-w-[144px]">
+                    <td className="px-3 py-2 w-36 min-w-[144px] max-w-[144px] border-r border-slate-200 align-middle">
                       <span className="px-2 py-0.5 rounded-xs text-[11px] font-bold bg-slate-100 text-slate-800 border border-slate-200 whitespace-nowrap inline-block">
                         {p.facilityType}
                       </span>
                     </td>
-
-                    {/* Status */}
-                    <td className="p-3 sticky left-[448px] z-20 bg-white group-hover:bg-slate-50 border-r-2 border-slate-400 shadow-xs w-52 min-w-[208px] max-w-[208px]">
-                      <span className={`inline-block px-2 py-0.5 rounded-xs text-[10px] font-bold border whitespace-nowrap ${
-                        p.currentStatus === 'Commissioned'
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
-                          : p.currentStatus === 'Ready for Handover'
-                          ? 'bg-purple-50 text-purple-700 border-purple-200'
-                          : p.currentStatus === 'BOQ Approved / PO Pending'
-                          ? 'bg-amber-50 text-amber-700 border-amber-200'
-                          : p.currentStatus === 'Pre-Construction'
-                          ? 'bg-rose-50 text-rose-700 border-rose-200'
-                          : 'bg-slate-100 text-slate-800 border-slate-200'
-                      }`}>
+                    <td className="px-3 py-2 w-52 min-w-[208px] max-w-[208px] align-middle">
+                      <span
+                        className={`inline-block px-2 py-0.5 rounded-xs text-[10px] font-bold border whitespace-nowrap ${
+                          p.currentStatus === 'Commissioned'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                            : p.currentStatus === 'Ready for Handover'
+                            ? 'bg-purple-50 text-purple-700 border-purple-200'
+                            : p.currentStatus === 'BOQ Approved / PO Pending'
+                            ? 'bg-amber-50 text-amber-700 border-amber-200'
+                            : p.currentStatus === 'Pre-Construction'
+                            ? 'bg-rose-50 text-rose-700 border-rose-200'
+                            : 'bg-slate-100 text-slate-800 border-slate-200'
+                        }`}
+                      >
                         {p.currentStatus}
                       </span>
                     </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+            {filteredProjects.length === 0 && (
+              <tbody>
+                <tr>
+                  <td colSpan={4} className="p-12 text-center text-slate-500 text-sm">
+                    No dealership projects found matching the criteria.
+                  </td>
+                </tr>
+              </tbody>
+            )}
+          </table>
+        </div>
 
-                    {/* 19 Monthly Gantt Cells */}
+        {/* Slidable Right Panel: Timeline Starting FROM 2025 */}
+        <div
+          ref={rightTableContainerRef}
+          onScroll={handleRightScroll}
+          className="flex-1 min-w-0 overflow-x-auto overflow-y-auto max-h-[760px] bg-white select-none"
+        >
+          <table className="w-full text-left border-collapse min-w-[1100px] table-fixed">
+            <thead className="sticky top-0 z-30 bg-slate-100 border-b-2 border-slate-400">
+              {/* Row 1: Year Headers Starting FROM 2025 */}
+              <tr className="text-xs font-semibold text-slate-600 border-b border-slate-200/80 h-8">
+                <th
+                  className="text-center py-1.5 border-r-2 border-slate-400 bg-slate-200/80 text-black font-black align-middle"
+                  colSpan={4}
+                >
+                  2025
+                </th>
+                <th
+                  className="text-center py-1.5 border-r-2 border-slate-400 bg-slate-100 text-black font-black align-middle"
+                  colSpan={12}
+                >
+                  2026 (ACTIVE EXECUTION YEAR)
+                </th>
+                <th
+                  className="text-center py-1.5 bg-slate-200/80 text-black font-black align-middle"
+                  colSpan={3}
+                >
+                  2027 (TARGET)
+                </th>
+              </tr>
+
+              {/* Row 2: Month Columns Only */}
+              <tr className="text-[11px] text-black font-bold uppercase tracking-wider h-9">
+                {MONTHS.map((m) => {
+                  const isYearEnd = m.id === '2025-12' || m.id === '2026-12';
+
+                  return (
+                    <th
+                      key={m.id}
+                      className={`py-1 px-1 text-center w-14 min-w-[56px] font-bold align-middle ${
+                        isYearEnd ? 'border-r-2 border-slate-400' : 'border-r border-slate-200/60'
+                      } ${
+                        m.isCurrent
+                          ? 'bg-neutral-200 text-black font-black'
+                          : m.isTarget
+                          ? 'bg-amber-100 text-amber-900 font-black'
+                          : 'text-black'
+                      }`}
+                    >
+                      <div className="leading-tight">{m.label}</div>
+                      {m.isCurrent && (
+                        <div className="text-[9px] text-black font-mono font-black leading-none">
+                          Now
+                        </div>
+                      )}
+                      {m.isTarget && (
+                        <div className="text-[9px] text-amber-800 font-mono font-black leading-none">
+                          Target
+                        </div>
+                      )}
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+
+            <tbody className="divide-y divide-slate-100 text-xs">
+              {filteredProjects.map((p) => {
+                const { startIdx, endIdx } = getProjectSpan(p);
+                const healthStyle = getHealthStyle(p.scheduleHealth, p.currentStatus);
+                const isHovered = hoveredId === p.id;
+
+                return (
+                  <tr
+                    key={p.id}
+                    onClick={() => onSelectProject(p)}
+                    onMouseEnter={() => setHoveredId(p.id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                    className={`h-14 cursor-pointer transition-colors ${
+                      isHovered ? 'bg-slate-50' : 'bg-white'
+                    }`}
+                  >
                     {MONTHS.map((m, mIdx) => {
                       const isInSpan = mIdx >= startIdx && mIdx <= endIdx;
                       const isStart = mIdx === startIdx;
@@ -395,7 +471,7 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                       return (
                         <td
                           key={m.id}
-                          className={`p-1.5 min-w-[58px] text-center relative ${
+                          className={`p-1.5 w-14 min-w-[56px] text-center relative align-middle ${
                             isYearEnd ? 'border-r-2 border-slate-400' : 'border-r border-slate-100'
                           } ${
                             m.isCurrent
@@ -431,14 +507,17 @@ export const GanttChart: React.FC<GanttChartProps> = ({ projects, onSelectProjec
                 );
               })}
             </tbody>
+            {filteredProjects.length === 0 && (
+              <tbody>
+                <tr>
+                  <td colSpan={19} className="p-12 text-center text-slate-400 text-xs italic">
+                    Timeline view empty
+                  </td>
+                </tr>
+              </tbody>
+            )}
           </table>
         </div>
-
-        {filteredProjects.length === 0 && (
-          <div className="p-16 text-center text-slate-500 text-sm">
-            No dealership projects found matching the criteria.
-          </div>
-        )}
       </div>
     </div>
   );
