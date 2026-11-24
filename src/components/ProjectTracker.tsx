@@ -44,7 +44,6 @@ const FACILITY_OPTIONS: SelectOption[] = [
 
 export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
   projects,
-  userRole,
   onSelectProject,
 }) => {
   const [search, setSearch] = useState('');
@@ -52,7 +51,6 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
   const [facilityFilter, setFacilityFilter] = useState('ALL');
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [visiblePhaseTitle, setVisiblePhaseTitle] = useState('All Phases (21 Milestones)');
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
   const selectedPhase = PHASES[phaseIndex].id;
@@ -61,13 +59,10 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
     setPhaseIndex(idx);
     const targetPhase = PHASES[idx];
     if (targetPhase.id === 'ALL') {
-      setVisiblePhaseTitle('All Phases (21 Milestones)');
       setScrollProgress(0);
       if (tableContainerRef.current) {
         tableContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
       }
-    } else {
-      setVisiblePhaseTitle(targetPhase.title);
     }
   };
 
@@ -124,16 +119,6 @@ export const ProjectTracker: React.FC<ProjectTrackerProps> = ({
     if (maxScroll > 0) {
       const progress = Math.round((scrollLeft / maxScroll) * 100);
       setScrollProgress(progress);
-
-      if (scrollLeft < 144) {
-        setVisiblePhaseTitle('Phase 1: Property & Agreement');
-      } else if (scrollLeft < 384) {
-        setVisiblePhaseTitle('Phase 2: Design & GFC Approval');
-      } else if (scrollLeft < 624) {
-        setVisiblePhaseTitle('Phase 3: BOQ & PO Release');
-      } else {
-        setVisiblePhaseTitle('Phase 4: Site Execution & Handover');
-      }
     }
   };
 

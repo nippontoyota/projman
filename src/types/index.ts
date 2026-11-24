@@ -32,12 +32,14 @@ export interface Location {
   state: string;
 }
 
+export type BlockerSeverity = 'Critical' | 'Major' | 'Moderate' | 'Minor';
+
 export interface Blocker {
   id: string;
   projectId: string;
   milestoneId?: string | null;
   category: string;
-  severity: 'Critical' | 'Major' | 'Moderate' | 'Minor';
+  severity: BlockerSeverity;
   title: string;
   description: string;
   status: 'Open' | 'Under Discussion' | 'Resolved';

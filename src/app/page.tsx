@@ -53,7 +53,9 @@ export default function Home() {
   }, [selectedProject, toast]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Export to Excel

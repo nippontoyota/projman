@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useMemo, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Project, ScheduleHealth } from '@/types';
 import { IconSearch, IconChevronLeft, IconChevronRight, IconExternal } from '@/components/ui/Icons';
 import { CustomSelect, SelectOption } from '@/components/ui/CustomSelect';

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FacilityType } from '@/types';
-import { IconClose, IconPlus, IconFacility, IconLocation } from '@/components/ui/Icons';
+import { IconClose, IconFacility, IconLocation } from '@/components/ui/Icons';
 import { CustomSelect, SelectOption } from '@/components/ui/CustomSelect';
 import { useToast } from '@/context/ToastContext';
 

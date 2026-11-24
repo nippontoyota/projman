@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Project, UserRole, Milestone, ScheduleHealth, ProjectStatus } from '@/types';
+import { Project, UserRole, Milestone, ScheduleHealth, ProjectStatus, BlockerSeverity } from '@/types';
 import {
   IconClose,
   IconCheck,
@@ -88,6 +88,7 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
 
   React.useEffect(() => {
     if (project?.milestones) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setMilestones(project.milestones);
     }
   }, [project?.milestones]);
@@ -310,7 +311,7 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                 return (
                   <button
                     key={tab.id}
-                    onClick={() => setActiveTab(tab.id as any)}
+                    onClick={() => setActiveTab(tab.id as 'milestones' | 'blockers' | 'audit')}
                     className={`relative py-3 font-semibold transition-colors flex items-center space-x-1.5 cursor-pointer ${
                       isActive ? 'text-black font-bold' : 'text-slate-500 hover:text-black'
                     }`}
@@ -523,7 +524,7 @@ export const ProjectDetailDrawer: React.FC<ProjectDetailDrawerProps> = ({
                           <CustomSelect
                             label="Severity"
                             value={blockerSeverity}
-                            onChange={(val) => setBlockerSeverity(val as any)}
+                            onChange={(val) => setBlockerSeverity(val as BlockerSeverity)}
                             options={BLOCKER_SEVERITY_OPTIONS}
                             size="sm"
                           />

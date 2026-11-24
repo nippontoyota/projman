@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { Project, Blocker, UserRole } from '@/types';
-import { IconEscalation, IconCheck } from '@/components/ui/Icons';
+import { IconCheck } from '@/components/ui/Icons';
 import { CustomSelect, SelectOption } from '@/components/ui/CustomSelect';
 import { useToast } from '@/context/ToastContext';
 
