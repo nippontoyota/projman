@@ -1,15 +1,9 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { motion, Variants } from 'framer-motion';
 import { Project, Blocker, UserRole } from '@/types';
 import {
-  AlertOctagon,
   CheckCircle2,
-  Clock,
-  Filter,
-  Flame,
-  Building2,
   ArrowRight,
   ShieldAlert,
 } from 'lucide-react';
@@ -20,21 +14,6 @@ interface BlockerManagerProps {
   onSelectProject: (p: Project) => void;
   onRefresh: () => void;
 }
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.05,
-    },
-  },
-};
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.25 } },
-};
 
 export const BlockerManager: React.FC<BlockerManagerProps> = ({
   projects,
@@ -79,28 +58,28 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Header Bar */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
+      <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2.5">
-              <ShieldAlert className="w-5 h-5 text-rose-400" />
-              <h2 className="text-xl font-bold text-white tracking-tight">
+            <div className="flex items-center space-x-2">
+              <ShieldAlert className="w-5 h-5 text-rose-600" />
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
                 Dealership Bottlenecks & Escalations Radar
               </h2>
             </div>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 mt-0.5">
               Active delays categorized by Landlord, River OEM approvals, Legal, and Contractor execution.
             </p>
           </div>
 
           {/* Filter Pills */}
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2">
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="py-1.5 px-3 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-sky-500 cursor-pointer"
+              className="py-1.5 px-3 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-blue-500 shadow-2xs cursor-pointer font-medium"
             >
               <option value="ALL">All Categories</option>
               <option value="Landlord">Landlord Negotiation</option>
@@ -113,7 +92,7 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
             <select
               value={severityFilter}
               onChange={(e) => setSeverityFilter(e.target.value)}
-              className="py-1.5 px-3 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-sky-500 cursor-pointer"
+              className="py-1.5 px-3 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-blue-500 shadow-2xs cursor-pointer font-medium"
             >
               <option value="ALL">All Severities</option>
               <option value="Critical">Critical Only</option>
@@ -125,7 +104,7 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="py-1.5 px-3 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-sky-500 cursor-pointer"
+              className="py-1.5 px-3 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 focus:outline-none focus:border-blue-500 shadow-2xs cursor-pointer font-medium"
             >
               <option value="ALL">All Status</option>
               <option value="Open">Open Issues</option>
@@ -136,52 +115,44 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
       </div>
 
       {/* Grid of Blockers */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-      >
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredBlockers.map((blk) => (
-          <motion.div
+          <div
             key={blk.id}
-            variants={cardVariants}
-            whileHover={{ y: -3 }}
-            className={`p-5 rounded-2xl border shadow-lg space-y-3 transition-all ${
+            className={`p-4 rounded-xl border shadow-xs space-y-2.5 transition-all ${
               blk.status === 'Resolved'
-                ? 'bg-slate-900/40 border-slate-800/80 opacity-60'
-                : 'bg-slate-900 border-rose-500/30 hover:border-rose-500/60'
+                ? 'bg-slate-50 border-slate-200 opacity-60'
+                : 'bg-white border-slate-200 border-l-4 border-l-rose-500 hover:shadow-sm'
             }`}
           >
             {/* Top Row: Location & Category */}
             <div className="flex items-center justify-between text-xs">
               <div className="flex items-center space-x-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-                <span className="font-bold text-white text-sm">
+                <span className="font-bold text-slate-900 text-sm">
                   {blk.projectDetails.location.name}
                 </span>
-                <span className="text-[10px] text-slate-400 font-mono">
+                <span className="text-[11px] text-slate-500 font-mono">
                   ({blk.projectDetails.facilityType})
                 </span>
               </div>
-              <span className="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-rose-500/15 text-rose-400 border border-rose-500/30">
+              <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200">
                 {blk.category}
               </span>
             </div>
 
             {/* Title & Description */}
             <div>
-              <h3 className="font-bold text-slate-100 text-sm">{blk.title}</h3>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+              <h3 className="font-semibold text-slate-900 text-xs sm:text-sm">{blk.title}</h3>
+              <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                 {blk.description}
               </p>
             </div>
 
             {/* Metadata Footer */}
-            <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-              <div className="flex items-center space-x-2">
-                <span className="text-slate-400 text-[11px]">Severity:</span>
-                <span className="font-bold text-rose-400 text-[11px] font-mono">
+            <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+              <div className="flex items-center space-x-1.5">
+                <span className="text-slate-500 text-[11px]">Severity:</span>
+                <span className="font-bold text-rose-700 text-[11px] font-mono">
                   {blk.severity}
                 </span>
               </div>
@@ -190,12 +161,12 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
                 {blk.status !== 'Resolved' ? (
                   <button
                     onClick={() => handleResolve(blk.id)}
-                    className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition-colors cursor-pointer"
+                    className="px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-colors cursor-pointer"
                   >
                     Mark Resolved
                   </button>
                 ) : (
-                  <span className="text-xs text-emerald-400 font-semibold flex items-center space-x-1">
+                  <span className="text-xs text-emerald-700 font-semibold flex items-center space-x-1">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>Resolved</span>
                   </span>
@@ -203,19 +174,19 @@ export const BlockerManager: React.FC<BlockerManagerProps> = ({
 
                 <button
                   onClick={() => onSelectProject(blk.projectDetails)}
-                  className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+                  className="p-1 text-slate-500 hover:text-slate-800 rounded hover:bg-slate-100 transition-colors cursor-pointer"
                   title="View Project Details"
                 >
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
+      </div>
 
       {filteredBlockers.length === 0 && (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-12 text-center text-slate-500 text-sm">
+        <div className="bg-white border border-slate-200 rounded-xl p-12 text-center text-slate-500 text-sm">
           No bottlenecks found matching the selected filters.
         </div>
       )}
