@@ -408,3 +408,83 @@ export const IconChevronRight: React.FC<IconProps> = ({ className = 'w-4 h-4', s
   </svg>
 );
 
+// 21. User Icon
+export const IconUser: React.FC<IconProps> = ({ className = 'w-4 h-4', size, ...props }) => (
+  <svg
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.35"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    width={size}
+    height={size}
+    className={className}
+    {...props}
+  >
+    <circle cx="8" cy="5" r="3" />
+    <path d="M2.5 14a5.5 5.5 0 0 1 11 0" />
+  </svg>
+);
+
+// 22. Lock Icon
+export const IconLock: React.FC<IconProps> = ({ className = 'w-4 h-4', size, ...props }) => (
+  <svg
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.35"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    width={size}
+    height={size}
+    className={className}
+    {...props}
+  >
+    <rect x="3" y="7" width="10" height="7" rx="1.5" />
+    <path d="M5.5 7V4.5a2.5 2.5 0 0 1 5 0V7" />
+  </svg>
+);
+
+// 23. Logout Icon
+export const IconLogout: React.FC<IconProps> = ({ className = 'w-4 h-4', size, ...props }) => (
+  <svg
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.35"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    width={size}
+    height={size}
+    className={className}
+    {...props}
+  >
+    <path d="M6 14H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3" />
+    <path d="M10.5 11.5L14 8l-3.5-3.5" />
+    <path d="M14 8H6" />
+  </svg>
+);
+
+// 24. Alert Circle Icon
+export const IconAlertCircle: React.FC<IconProps> = ({ className = 'w-4 h-4', size, ...props }) => (
+  <svg
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.35"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    width={size}
+    height={size}
+    className={className}
+    {...props}
+  >
+    <circle cx="8" cy="8" r="6" />
+    <line x1="8" y1="5" x2="8" y2="8.5" />
+    <circle cx="8" cy="11" r="0.5" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+
+

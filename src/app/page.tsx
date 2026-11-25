@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Project, DashboardStats, UserRole } from '@/types';
+import { Project, DashboardStats } from '@/types';
+import { useAuth } from '@/context/AuthContext';
+import { LoginPage } from '@/components/LoginPage';
 import { Header } from '@/components/Header';
 import { GanttChart } from '@/components/GanttChart';
 import { ExecutiveDashboard } from '@/components/ExecutiveDashboard';
@@ -15,10 +17,11 @@ import { useToast } from '@/context/ToastContext';
 import { exportProjectsToExcel } from '@/lib/excelExport';
 
 export default function Home() {
+  const { user, userRole, isLoading: isAuthLoading } = useAuth();
+
   const [projects, setProjects] = useState<Project[]>([]);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [currentTab, setCurrentTab] = useState<'gantt' | 'dashboard' | 'matrix' | 'blockers'>('gantt');
-  const [userRole, setUserRole] = useState<UserRole>('Admin');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
@@ -53,10 +56,10 @@ export default function Home() {
   }, [selectedProject, toast]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (user) {
+      loadData();
+    }
+  }, [user, loadData]);
 
   // Export to Excel
   const handleExportExcel = () => {
@@ -103,6 +106,23 @@ export default function Home() {
     }
   };
 
+  // If session is checking, show clean minimal loader
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center space-y-3">
+        <div className="w-8 h-8 border-2 border-black border-t-transparent rounded-full animate-spin" />
+        <p className="text-xs text-slate-500 font-mono uppercase tracking-wider">
+          Authenticating Incheon Mobility Session...
+        </p>
+      </div>
+    );
+  }
+
+  // If not logged in, render dedicated Login screen
+  if (!user) {
+    return <LoginPage />;
+  }
+
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans antialiased selection:bg-black selection:text-white">
       {/* Sleek Global Modern TopLoader */}
@@ -112,8 +132,6 @@ export default function Home() {
       <Header
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
-        userRole={userRole}
-        setUserRole={setUserRole}
         onOpenCreateModal={() => setIsCreateModalOpen(true)}
         onExportExcel={handleExportExcel}
         onResetData={handleResetData}
