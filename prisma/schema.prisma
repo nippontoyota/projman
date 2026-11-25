@@ -123,3 +123,16 @@ model Benchmark {
 
   @@map("projman_benchmarks")
 }
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  name      String
+  password  String   // plain or hash
+  role      String   @default("User") // "Admin" or "User"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("projman_users")
+}
+

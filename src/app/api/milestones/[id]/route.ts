@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getCurrentUser } from '@/lib/auth';
 
 export async function PATCH(
   request: NextRequest,
@@ -70,13 +71,16 @@ export async function PATCH(
     });
 
     // Log audit
+    const currentUser = await getCurrentUser();
+    const auditAuthor = currentUser ? `${currentUser.name} (${currentUser.role})` : userRole;
+
     if (auditDetails.length > 0) {
       await prisma.auditLog.create({
         data: {
           projectId: existing.projectId,
-          userRole,
+          userRole: auditAuthor,
           action: 'MILESTONE_UPDATED',
-          details: `${userRole} updated "${existing.title}": ${auditDetails.join('; ')}`,
+          details: `${auditAuthor} updated "${existing.title}": ${auditDetails.join('; ')}`,
         },
       });
     }

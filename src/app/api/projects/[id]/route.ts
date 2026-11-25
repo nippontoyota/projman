@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getCurrentUser } from '@/lib/auth';
 
 export async function GET(
   request: NextRequest,
@@ -100,13 +101,16 @@ export async function PATCH(
       },
     });
 
+    const currentUser = await getCurrentUser();
+    const auditAuthor = currentUser ? `${currentUser.name} (${currentUser.role})` : userRole;
+
     if (auditChanges.length > 0) {
       await prisma.auditLog.create({
         data: {
           projectId: id,
-          userRole,
+          userRole: auditAuthor,
           action: 'PROJECT_UPDATED',
-          details: `${userRole} updated: ${auditChanges.join('; ')}`,
+          details: `${auditAuthor} updated: ${auditChanges.join('; ')}`,
         },
       });
     }
@@ -123,6 +127,14 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const currentUser = await getCurrentUser();
+    if (currentUser && currentUser.role !== 'Admin') {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Only Administrators can delete projects' },
+        { status: 403 }
+      );
+    }
+
     const { id } = await context.params;
     await prisma.project.delete({ where: { id } });
     return NextResponse.json({ success: true, message: 'Project deleted successfully' });

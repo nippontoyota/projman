@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getCurrentUser } from '@/lib/auth';
 
 export async function PATCH(
   request: NextRequest,
@@ -34,12 +35,15 @@ export async function PATCH(
       data: updateData,
     });
 
+    const currentUser = await getCurrentUser();
+    const auditAuthor = currentUser ? `${currentUser.name} (${currentUser.role})` : userRole;
+
     await prisma.auditLog.create({
       data: {
         projectId: existing.projectId,
-        userRole,
+        userRole: auditAuthor,
         action: 'BLOCKER_UPDATED',
-        details: `${userRole} updated blocker "${existing.title}" status to ${status || existing.status}`,
+        details: `${auditAuthor} updated blocker "${existing.title}" status to ${status || existing.status}`,
       },
     });
 

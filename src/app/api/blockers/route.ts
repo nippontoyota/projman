@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getCurrentUser } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
@@ -72,12 +73,15 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    const currentUser = await getCurrentUser();
+    const auditAuthor = currentUser ? `${currentUser.name} (${currentUser.role})` : userRole;
+
     await prisma.auditLog.create({
       data: {
         projectId,
-        userRole,
+        userRole: auditAuthor,
         action: 'BLOCKER_LOGGED',
-        details: `${userRole} logged [${severity}] blocker: ${title}`,
+        details: `${auditAuthor} logged [${severity}] blocker: ${title}`,
       },
     });
 

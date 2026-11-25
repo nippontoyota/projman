@@ -15,6 +15,19 @@ async function main() {
   await prisma.location.deleteMany();
   await prisma.brand.deleteMany();
   await prisma.benchmark.deleteMany();
+  await prisma.user.deleteMany();
+
+  // 0. Seed Users for RBAC
+  const INITIAL_USERS = [
+    { username: 'admin', name: 'Administrator', password: 'test', role: 'Admin' },
+    { username: 'user1', name: 'User 1', password: 'test', role: 'User' },
+    { username: 'user2', name: 'User 2', password: 'test', role: 'User' },
+    { username: 'user3', name: 'User 3', password: 'test', role: 'User' },
+  ];
+
+  for (const u of INITIAL_USERS) {
+    await prisma.user.create({ data: u });
+  }
 
   // 1. Seed Brands
   const brandRiver = await prisma.brand.create({

@@ -18,6 +18,13 @@ export type MilestoneStatus = 'Pending' | 'In Progress' | 'Completed' | 'Awaitin
 
 export type UserRole = 'Admin' | 'User';
 
+export interface AuthUser {
+  id: string;
+  username: string;
+  name: string;
+  role: UserRole;
+}
+
 export interface Brand {
   id: string;
   name: string;

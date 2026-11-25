@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getCurrentUser } from '@/lib/auth';
 
 const DEFAULT_MILESTONES = [
   { phaseNumber: 1, phaseName: 'Property & Agreement', stepKey: 'property_identified', title: 'Property Identified', orderIndex: 1, benchmarkDays: 7 },
@@ -94,6 +95,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const currentUser = await getCurrentUser();
     const body = await request.json();
     const {
       brandName = 'River EV',
@@ -103,6 +105,14 @@ export async function POST(request: NextRequest) {
       userRole = 'Admin',
       initialRemarks,
     } = body;
+
+    const effectiveRole = currentUser ? currentUser.role : userRole;
+    if (effectiveRole !== 'Admin') {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Only Administrators can create new project tracks' },
+        { status: 403 }
+      );
+    }
 
     if (!locationName || !facilityType) {
       return NextResponse.json(
@@ -187,12 +197,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Create audit log
+    const auditAuthor = currentUser ? `${currentUser.name} (${currentUser.role})` : userRole;
     await prisma.auditLog.create({
       data: {
         projectId: project.id,
-        userRole,
+        userRole: auditAuthor,
         action: 'PROJECT_CREATED',
-        details: `Project ${code} created by ${userRole} for ${location.name} (${facilityType})`,
+        details: `Project ${code} created by ${auditAuthor} for ${location.name} (${facilityType})`,
       },
     });
 
