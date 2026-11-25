@@ -1,5 +1,5 @@
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -15,6 +15,8 @@ model Brand {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   projects  Project[]
+
+  @@map("projman_brands")
 }
 
 model Location {
@@ -25,6 +27,8 @@ model Location {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   projects  Project[]
+
+  @@map("projman_locations")
 }
 
 model Project {
@@ -50,6 +54,8 @@ model Project {
   milestones         Milestone[]
   blockers           Blocker[]
   auditLogs          AuditLog[]
+
+  @@map("projman_projects")
 }
 
 model Milestone {
@@ -70,6 +76,8 @@ model Milestone {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   blockers       Blocker[]
+
+  @@map("projman_milestones")
 }
 
 model Blocker {
@@ -87,6 +95,8 @@ model Blocker {
   resolvedAt  DateTime?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+
+  @@map("projman_blockers")
 }
 
 model AuditLog {
@@ -97,6 +107,8 @@ model AuditLog {
   action    String   // "UPDATE_STATUS", "UPDATE_MILESTONE", "CREATE_PROJECT", "LOG_BLOCKER"
   details   String
   timestamp DateTime @default(now())
+
+  @@map("projman_audit_logs")
 }
 
 model Benchmark {
@@ -108,4 +120,6 @@ model Benchmark {
   maxDays     Int
   tracksCount Int
   updatedAt   DateTime @updatedAt
+
+  @@map("projman_benchmarks")
 }
