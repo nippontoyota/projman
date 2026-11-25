@@ -10,7 +10,7 @@ export const DEFAULT_USERS: Record<string, { id: string; username: string; name:
   admin: {
     id: 'usr-admin',
     username: 'admin',
-    name: 'Administrator',
+    name: 'Admin',
     role: 'Admin',
     password: 'test',
   },

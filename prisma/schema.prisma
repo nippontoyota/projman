@@ -73,6 +73,7 @@ model Milestone {
   benchmarkDays  Int?      // standard benchmark
   elapsedDays    Int?      // actual duration
   remarks        String?
+  assignedTo     String?   @default("unassigned") // username (e.g. "user1", "user2", "user3", "admin")
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   blockers       Blocker[]

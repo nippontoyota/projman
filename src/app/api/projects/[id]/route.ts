@@ -130,7 +130,7 @@ export async function DELETE(
     const currentUser = await getCurrentUser();
     if (currentUser && currentUser.role !== 'Admin') {
       return NextResponse.json(
-        { success: false, error: 'Unauthorized: Only Administrators can delete projects' },
+        { success: false, error: 'Unauthorized: Only Admins can delete projects' },
         { status: 403 }
       );
     }

@@ -1,15 +1,14 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Project, DashboardStats } from '@/types';
 import { useAuth } from '@/context/AuthContext';
 import { LoginPage } from '@/components/LoginPage';
 import { Header } from '@/components/Header';
-import { GanttChart } from '@/components/GanttChart';
-import { ExecutiveDashboard } from '@/components/ExecutiveDashboard';
-import { ProjectTracker } from '@/components/ProjectTracker';
-import { BlockerManager } from '@/components/BlockerManager';
+import { ProjectListView } from '@/components/ProjectListView';
+import { UserDashboardView } from '@/components/UserDashboardView';
+import { ProjectDetailGanttView } from '@/components/ProjectDetailGanttView';
 import { CreateProjectModal } from '@/components/CreateProjectModal';
 import { ProjectDetailDrawer } from '@/components/ProjectDetailDrawer';
 import { TopLoader } from '@/components/ui/TopLoader';
@@ -21,13 +20,25 @@ export default function Home() {
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [currentTab, setCurrentTab] = useState<'gantt' | 'dashboard' | 'matrix' | 'blockers'>('gantt');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const selectedProjectIdRef = useRef<string | null>(null);
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const toast = useToast();
+
+  const handleSelectProject = useCallback((project: Project) => {
+    selectedProjectIdRef.current = project.id;
+    setSelectedProject(project);
+  }, []);
+
+  const handleBackToProjects = useCallback(() => {
+    selectedProjectIdRef.current = null;
+    setSelectedProject(null);
+  }, []);
 
   // Fetch projects from database
   const loadData = useCallback(async () => {
@@ -43,9 +54,13 @@ export default function Home() {
       if (projJson.success) setProjects(projJson.data);
       if (statsJson.success) setStats(statsJson.data);
 
-      if (selectedProject) {
-        const updated = projJson.data?.find((p: Project) => p.id === selectedProject.id);
-        if (updated) setSelectedProject(updated);
+      // Only refresh selectedProject if a project is STILL actively open (prevent race conditions when backing out)
+      if (selectedProjectIdRef.current) {
+        const activeId = selectedProjectIdRef.current;
+        const updated = projJson.data?.find((p: Project) => p.id === activeId);
+        if (updated && selectedProjectIdRef.current === activeId) {
+          setSelectedProject(updated);
+        }
       }
     } catch (err) {
       console.error('Failed to load project data:', err);
@@ -53,12 +68,13 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }, [selectedProject, toast]);
+  }, [toast]);
 
   useEffect(() => {
-    if (user) {
-      loadData();
-    }
+    if (!user) return;
+    loadData();
+    const interval = setInterval(loadData, 10000);
+    return () => clearInterval(interval);
   }, [user, loadData]);
 
   // Export to Excel
@@ -124,72 +140,73 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans antialiased selection:bg-black selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans antialiased selection:bg-black selection:text-white">
       {/* Sleek Global Modern TopLoader */}
       <TopLoader isLoading={isLoading || isResetting} />
 
-      {/* Header */}
+      {/* Header with Breadcrumb and Actions */}
       <Header
-        currentTab={currentTab}
-        setCurrentTab={setCurrentTab}
+        selectedProject={selectedProject}
+        onBackToProjects={handleBackToProjects}
         onOpenCreateModal={() => setIsCreateModalOpen(true)}
-        onExportExcel={handleExportExcel}
-        onResetData={handleResetData}
-        isResetting={isResetting}
         totalProjects={projects.length}
       />
 
-      {/* Main Content */}
-      <main className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-4">
+      {/* Main Content Viewport */}
+      <main className="flex-1 w-full px-4 sm:px-8 lg:px-12 py-7">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-3">
             <div className="w-8 h-8 border-2 border-black border-t-transparent rounded-full animate-spin" />
             <p className="text-xs text-slate-500 font-medium">
-              Loading Incheon Mobility master tracker...
+              Loading Incheon Mobility tracks...
             </p>
           </div>
         ) : (
           <AnimatePresence mode="wait">
-            <motion.div
-              key={currentTab}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.15, ease: 'easeOut' }}
-            >
-              {currentTab === 'gantt' && (
-                <GanttChart
-                  projects={projects}
-                  onSelectProject={(p) => setSelectedProject(p)}
+            {selectedProject && userRole === 'Admin' ? (
+              <motion.div
+                key={`project-detail-${selectedProject.id}`}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+              >
+                <ProjectDetailGanttView
+                  project={selectedProject}
+                  onBack={handleBackToProjects}
+                  onRefresh={loadData}
+                  onOpenEditDrawer={() => setIsEditDrawerOpen(true)}
                 />
-              )}
-
-              {currentTab === 'dashboard' && (
-                <ExecutiveDashboard
-                  stats={stats}
+              </motion.div>
+            ) : userRole === 'Admin' ? (
+              <motion.div
+                key="admin-project-list"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+              >
+                <ProjectListView
                   projects={projects}
-                  onSelectProject={(p) => setSelectedProject(p)}
-                />
-              )}
-
-              {currentTab === 'matrix' && (
-                <ProjectTracker
-                  projects={projects}
-                  userRole={userRole}
-                  onSelectProject={(p) => setSelectedProject(p)}
+                  onSelectProject={handleSelectProject}
+                  onOpenCreateModal={() => setIsCreateModalOpen(true)}
                   onRefresh={loadData}
                 />
-              )}
-
-              {currentTab === 'blockers' && (
-                <BlockerManager
+              </motion.div>
+            ) : (
+              <motion.div
+                key={`user-dashboard-${user?.username}`}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+              >
+                <UserDashboardView
                   projects={projects}
-                  userRole={userRole}
-                  onSelectProject={(p) => setSelectedProject(p)}
                   onRefresh={loadData}
                 />
-              )}
-            </motion.div>
+              </motion.div>
+            )}
           </AnimatePresence>
         )}
       </main>
@@ -201,11 +218,11 @@ export default function Home() {
         onProjectCreated={loadData}
       />
 
-      {/* Project Detail & Milestones Drawer */}
+      {/* Project Detail & Settings Drawer */}
       <ProjectDetailDrawer
         project={selectedProject}
-        isOpen={!!selectedProject}
-        onClose={() => setSelectedProject(null)}
+        isOpen={isEditDrawerOpen && !!selectedProject}
+        onClose={() => setIsEditDrawerOpen(false)}
         userRole={userRole}
         onUpdateSuccess={loadData}
       />

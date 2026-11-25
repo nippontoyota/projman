@@ -2,22 +2,26 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { IconCheck, IconChevronDown } from '@/components/ui/Icons';
 
 export interface SelectOption {
   value: string;
   label: string;
-  description?: string;
+  icon?: React.ReactNode;
   badge?: string;
+  badgeClass?: string;
 }
 
-interface CustomSelectProps {
+export interface CustomSelectProps {
   value: string;
-  onChange: (val: string) => void;
+  onChange: (value: string) => void;
   options: SelectOption[];
-  placeholder?: string;
   label?: string;
+  size?: 'sm' | 'md' | 'lg' | string;
+  placeholder?: string;
   className?: string;
-  size?: 'sm' | 'md';
+  buttonClassName?: string;
+  menuClassName?: string;
   disabled?: boolean;
 }
 
@@ -25,129 +29,151 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
   value,
   onChange,
   options,
-  placeholder = 'Select an option',
   label,
-  className = '',
   size = 'md',
+  placeholder = 'Select...',
+  className = '',
+  buttonClassName = '',
+  menuClassName = '',
   disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [openUpward, setOpenUpward] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const selectedOption = options.find((opt) => opt.value === value);
 
-  // Close when clicking outside
+  // Close on click outside
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleClickOutside = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
 
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  // Close on Escape key
+  // Close on Escape
   useEffect(() => {
+    if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setIsOpen(false);
     };
-    if (isOpen) {
-      window.addEventListener('keydown', handleKeyDown);
-    }
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
-  const heightClasses = size === 'sm' ? 'py-1.5 px-2.5 text-xs' : 'py-2 px-3 text-sm';
+  const toggleOpen = () => {
+    if (disabled) return;
+    if (!isOpen && containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      // If less than 200px space below, open upward
+      setOpenUpward(spaceBelow < 200);
+    }
+    setIsOpen(!isOpen);
+  };
+
+  const sizeClasses =
+    size === 'sm'
+      ? 'px-2.5 py-1 text-xs'
+      : size === 'lg'
+      ? 'px-3.5 py-2.5 text-sm'
+      : 'px-3 py-1.5 text-xs';
 
   return (
-    <div className={`relative ${className}`} ref={containerRef}>
+    <div
+      ref={containerRef}
+      className={`relative inline-block text-left w-full ${isOpen ? 'z-30' : 'z-10'} ${className}`}
+    >
       {label && (
-        <span className="block text-[11px] font-semibold text-slate-600 uppercase tracking-wider mb-1">
+        <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
           {label}
-        </span>
+        </label>
       )}
 
       {/* Trigger Button */}
       <button
         type="button"
         disabled={disabled}
-        onClick={() => !disabled && setIsOpen(!isOpen)}
-        className={`w-full bg-white border border-slate-200 rounded-xs flex items-center justify-between text-left text-slate-800 transition-all cursor-pointer shadow-2xs hover:border-slate-400 focus:outline-none focus:ring-1 focus:ring-black focus:border-black disabled:opacity-50 disabled:cursor-not-allowed ${heightClasses}`}
+        onClick={toggleOpen}
+        className={`w-full flex items-center justify-between ${sizeClasses} bg-white border border-slate-300 rounded-lg hover:border-slate-400 focus:outline-none focus:border-slate-900 transition-colors cursor-pointer text-slate-800 disabled:opacity-50 disabled:cursor-not-allowed ${
+          isOpen ? 'border-slate-900 ring-1 ring-slate-900 shadow-xs' : ''
+        } ${buttonClassName}`}
       >
-        <span className={`truncate font-medium ${!selectedOption ? 'text-slate-400' : 'text-slate-900'}`}>
-          {selectedOption ? selectedOption.label : placeholder}
-        </span>
+        <div className="flex items-center space-x-2 truncate pr-2">
+          {selectedOption?.icon && (
+            <span className="shrink-0">{selectedOption.icon}</span>
+          )}
+          <span className="truncate font-semibold text-slate-900">
+            {selectedOption ? selectedOption.label : placeholder}
+          </span>
+          {selectedOption?.badge && (
+            <span
+              className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold shrink-0 ${
+                selectedOption.badgeClass || 'bg-slate-100 text-slate-600'
+              }`}
+            >
+              {selectedOption.badge}
+            </span>
+          )}
+        </div>
 
-        {/* Minimal Bespoke Chevron SVG */}
-        <motion.svg
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.15, ease: 'easeOut' }}
-          className="w-3.5 h-3.5 text-slate-400 shrink-0 ml-2"
-          viewBox="0 0 16 16"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M4 6l4 4 4-4" />
-        </motion.svg>
+        <IconChevronDown
+          className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform duration-150 ${
+            isOpen ? 'rotate-180 text-slate-700' : ''
+          }`}
+        />
       </button>
 
-      {/* In-House Popover Menu */}
+      {/* Floating In-House Dropdown Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 3, scale: 0.99 }}
+            initial={{ opacity: 0, y: openUpward ? 4 : -4, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 2, scale: 0.99 }}
-            transition={{ duration: 0.12, ease: 'easeOut' }}
-            className="absolute left-0 right-0 z-50 mt-1 max-h-60 overflow-y-auto bg-white border border-black rounded-xs shadow-lg py-1 text-xs text-slate-800 focus:outline-none min-w-[160px]"
+            exit={{ opacity: 0, y: openUpward ? 4 : -4, scale: 0.97 }}
+            transition={{ duration: 0.12, ease: [0.16, 1, 0.3, 1] }}
+            className={`absolute left-0 right-0 ${
+              openUpward ? 'bottom-full mb-1' : 'top-full mt-1'
+            } z-50 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden py-1 max-h-56 overflow-y-auto ring-1 ring-black/5 ${menuClassName}`}
           >
-            {options.map((option) => {
-              const isSelected = option.value === value;
+            {options.map((opt) => {
+              const isSelected = opt.value === value;
               return (
                 <button
-                  key={option.value}
+                  key={opt.value}
                   type="button"
                   onClick={() => {
-                    onChange(option.value);
+                    onChange(opt.value);
                     setIsOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 flex items-center justify-between transition-colors cursor-pointer ${
+                  className={`w-full flex items-center justify-between px-3 py-2 text-xs text-left transition-colors cursor-pointer ${
                     isSelected
-                      ? 'bg-neutral-100 text-black font-semibold'
-                      : 'hover:bg-slate-50 text-slate-700'
+                      ? 'bg-slate-50 font-bold text-slate-900'
+                      : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
-                  <div className="flex flex-col pr-2">
-                    <span className="truncate">{option.label}</span>
-                    {option.description && (
-                      <span className="text-[10px] text-slate-400 font-normal">
-                        {option.description}
+                  <div className="flex items-center space-x-2 truncate pr-2">
+                    {opt.icon && <span className="shrink-0">{opt.icon}</span>}
+                    <span className="truncate">{opt.label}</span>
+                    {opt.badge && (
+                      <span
+                        className={`px-1.5 py-0.2 rounded text-[10px] font-mono font-bold shrink-0 ${
+                          opt.badgeClass || 'bg-slate-100 text-slate-600'
+                        }`}
+                      >
+                        {opt.badge}
                       </span>
                     )}
                   </div>
 
-                  {/* Active selection check indicator */}
                   {isSelected && (
-                    <svg
-                      className="w-3.5 h-3.5 text-black shrink-0 ml-1"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polyline points="3.5 8.5 6.5 11.5 12.5 4.5" />
-                    </svg>
+                    <IconCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0 stroke-[2.5]" />
                   )}
                 </button>
               );

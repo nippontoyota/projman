@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
     const effectiveRole = currentUser ? currentUser.role : userRole;
     if (effectiveRole !== 'Admin') {
       return NextResponse.json(
-        { success: false, error: 'Unauthorized: Only Administrators can create new project tracks' },
+        { success: false, error: 'Unauthorized: Only Admins can create new project tracks' },
         { status: 403 }
       );
     }
@@ -121,23 +121,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find or create Brand
+    // Find or create Brand (case-insensitive)
     let brand = await prisma.brand.findFirst({
-      where: { name: brandName },
+      where: { name: { equals: brandName.trim(), mode: 'insensitive' } },
     });
     if (!brand) {
       brand = await prisma.brand.create({
         data: {
-          name: brandName,
+          name: brandName.trim(),
           code: brandName.toUpperCase().replace(/\s+/g, '').slice(0, 5),
           color: '#0284C7',
         },
       });
     }
 
-    // Find or create Location
+    // Find or create Location (case-insensitive)
     let location = await prisma.location.findFirst({
-      where: { name: locationName.trim() },
+      where: { name: { equals: locationName.trim(), mode: 'insensitive' } },
     });
     if (!location) {
       location = await prisma.location.create({
@@ -158,8 +158,32 @@ export async function POST(request: NextRequest) {
 
     // Target date calculations
     const target = new Date(targetDate);
+    const projectStartDate = body.startDate ? new Date(body.startDate) : new Date();
     const now = new Date();
     const daysToTarget = Math.max(0, Math.ceil((target.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
+
+    // Sequential date validation across all provided tasks that have target dates assigned
+    if (Array.isArray(body.tasks) && body.tasks.length > 0) {
+      const sortedWithDates = [...body.tasks]
+        .filter((t) => typeof t.orderIndex === 'number' && t.plannedDate)
+        .sort((a, b) => a.orderIndex - b.orderIndex);
+
+      for (let i = 1; i < sortedWithDates.length; i++) {
+        const curr = sortedWithDates[i];
+        const prev = sortedWithDates[i - 1];
+        const currTime = new Date(curr.plannedDate).getTime();
+        const prevTime = new Date(prev.plannedDate).getTime();
+        if (currTime <= prevTime) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: `Sequential pipeline rule: Milestone #${curr.orderIndex} (${curr.title || 'Task'}) target date (${curr.plannedDate}) must be strictly after preceding Milestone #${prev.orderIndex} (${prev.plannedDate}).`,
+            },
+            { status: 400 }
+          );
+        }
+      }
+    }
 
     // Create project
     const project = await prisma.project.create({
@@ -173,25 +197,60 @@ export async function POST(request: NextRequest) {
         workPercentage: 0,
         elapsedDays: 0,
         daysToTarget,
-        startDate: now,
+        startDate: projectStartDate,
         fixedTargetDate: target,
         keyRemarks: initialRemarks || 'New project initiated. Commercial negotiation underway.',
       },
     });
 
-    // Create all 21 milestone tasks
+    // Create all 21 milestone tasks with custom dates & assignments if provided
+    interface TaskInput {
+      orderIndex: number;
+      title?: string;
+      phaseName?: string;
+      plannedDate?: string;
+      assignedTo?: string;
+      status?: string;
+    }
+    const taskMap = new Map<number, TaskInput>();
+    if (Array.isArray(body.tasks)) {
+      body.tasks.forEach((t: TaskInput) => {
+        if (typeof t.orderIndex === 'number') {
+          taskMap.set(t.orderIndex, t);
+        }
+      });
+    }
+
+    const hasCustomTasks = Array.isArray(body.tasks) && body.tasks.length > 0;
+
     for (const t of DEFAULT_MILESTONES) {
+      const custom = taskMap.get(t.orderIndex);
+      let plannedDate: Date | undefined = undefined;
+      let assignedTo = 'unassigned';
+      let status = 'Pending';
+
+      if (hasCustomTasks && custom) {
+        plannedDate = custom.plannedDate ? new Date(custom.plannedDate) : undefined;
+        assignedTo = custom.assignedTo && custom.assignedTo.trim() !== '' ? custom.assignedTo.trim() : 'unassigned';
+        status = custom.status || 'Pending';
+      } else {
+        plannedDate = t.orderIndex === 1 ? now : undefined;
+        assignedTo = t.orderIndex <= 11 ? 'user1' : t.orderIndex <= 16 ? 'user2' : 'user3';
+        status = 'Pending';
+      }
+
       await prisma.milestone.create({
         data: {
           projectId: project.id,
           phaseNumber: t.phaseNumber,
-          phaseName: t.phaseName,
+          phaseName: custom?.phaseName || t.phaseName,
           stepKey: t.stepKey,
-          title: t.title,
+          title: custom?.title || t.title,
           orderIndex: t.orderIndex,
           benchmarkDays: t.benchmarkDays,
-          status: t.orderIndex === 1 ? 'In Progress' : 'Pending',
-          plannedDate: t.orderIndex === 1 ? now : undefined,
+          status,
+          plannedDate,
+          assignedTo,
         },
       });
     }
@@ -220,6 +279,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, data: fullProject }, { status: 201 });
   } catch (error) {
     console.error('Error creating project:', error);
-    return NextResponse.json({ success: false, error: 'Failed to create project' }, { status: 500 });
+    const msg = error instanceof Error ? error.message : 'Failed to create project';
+    return NextResponse.json({ success: false, error: msg }, { status: 500 });
   }
 }

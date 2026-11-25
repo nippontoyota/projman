@@ -77,6 +77,7 @@ export interface Milestone {
   benchmarkDays?: number | null;
   elapsedDays?: number | null;
   remarks?: string | null;
+  assignedTo?: string | null;
   blockers?: Blocker[];
 }
 

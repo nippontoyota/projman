@@ -486,5 +486,23 @@ export const IconAlertCircle: React.FC<IconProps> = ({ className = 'w-4 h-4', si
   </svg>
 );
 
+// 25. Chevron Down Icon
+export const IconChevronDown: React.FC<IconProps> = ({ className = 'w-4 h-4', size, ...props }) => (
+  <svg
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    width={size}
+    height={size}
+    className={className}
+    {...props}
+  >
+    <polyline points="4 6 8 10 12 6" />
+  </svg>
+);
+
 
 

@@ -14,6 +14,7 @@ export async function PATCH(
       actualDate,
       plannedDate,
       remarks,
+      assignedTo,
       userRole = 'User',
     } = body;
 
@@ -24,6 +25,41 @@ export async function PATCH(
 
     if (!existing) {
       return NextResponse.json({ success: false, error: 'Milestone not found' }, { status: 404 });
+    }
+
+    const currentUser = await getCurrentUser();
+    const effectiveRole = currentUser?.role || userRole;
+
+    // Role check 1: If milestone is already Completed, only Admin can edit or modify it
+    if (effectiveRole !== 'Admin' && existing.status === 'Completed') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Milestone #${existing.orderIndex} ("${existing.title}") is already completed and locked. Only an Admin can modify completed milestones.`,
+        },
+        { status: 403 }
+      );
+    }
+
+    // Role check 2: Regular users cannot complete a milestone unless all previous milestones are completed
+    if (effectiveRole !== 'Admin' && status === 'Completed' && existing.orderIndex > 1) {
+      const prevIncomplete = await prisma.milestone.findFirst({
+        where: {
+          projectId: existing.projectId,
+          orderIndex: { lt: existing.orderIndex },
+          status: { not: 'Completed' },
+        },
+      });
+
+      if (prevIncomplete) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: `Sequential pipeline rule: Preceding milestone #${prevIncomplete.orderIndex} ("${prevIncomplete.title}") must be completed first.`,
+          },
+          { status: 400 }
+        );
+      }
     }
 
     const updateData: Record<string, unknown> = {};
@@ -43,11 +79,37 @@ export async function PATCH(
     }
 
     if (plannedDate !== undefined) {
+      if (plannedDate) {
+        const newPlannedTime = new Date(plannedDate).getTime();
+        // Check preceding milestone plannedDate
+        const prev = await prisma.milestone.findFirst({
+          where: {
+            projectId: existing.projectId,
+            orderIndex: { lt: existing.orderIndex },
+            plannedDate: { not: null },
+          },
+          orderBy: { orderIndex: 'desc' },
+        });
+        if (prev && prev.plannedDate && newPlannedTime <= new Date(prev.plannedDate).getTime()) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: `Target date must be after preceding milestone #${prev.orderIndex} (${prev.plannedDate.toISOString().split('T')[0]}).`,
+            },
+            { status: 400 }
+          );
+        }
+      }
       updateData.plannedDate = plannedDate ? new Date(plannedDate) : null;
     }
 
     if (remarks !== undefined) {
       updateData.remarks = remarks;
+    }
+
+    if (assignedTo !== undefined) {
+      updateData.assignedTo = assignedTo;
+      auditDetails.push(`Assigned to ${assignedTo}`);
     }
 
     const updated = await prisma.milestone.update({
@@ -71,7 +133,6 @@ export async function PATCH(
     });
 
     // Log audit
-    const currentUser = await getCurrentUser();
     const auditAuthor = currentUser ? `${currentUser.name} (${currentUser.role})` : userRole;
 
     if (auditDetails.length > 0) {
